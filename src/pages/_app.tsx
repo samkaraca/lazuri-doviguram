@@ -1,4 +1,3 @@
-import ContextProvider from "@/components/admin/context_provider";
 import "@/styles/globals.css";
 import { ThemeProvider, createTheme } from "@mui/material";
 import type { AppProps } from "next/app";
@@ -9,12 +8,10 @@ const theme = createTheme({ typography: { fontFamily: "" } });
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ContextProvider>
-      <main className={inter.className}>
-        <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </main>
-    </ContextProvider>
+    <main className={inter.className}>
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </main>
   );
 }
