@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   ActivityType,
   IExerciseItem,
+  IExerciseItemContent,
   ITextAppendix,
   initialActivityType,
 } from "../model/activity/activity";
@@ -14,9 +15,9 @@ export function useViewModel(): IViewModel {
   const [activityType, setActivityType] =
     useState<ActivityType>(initialActivityType);
   const [textAppendix, setTextAppendix] = useState<ITextAppendix | null>(null);
-  const [exercise, setExercise] = useState<IExerciseItem[]>(
-    [] as IExerciseItem[]
-  );
+  const [exercise, setExercise] = useState<
+    IExerciseItem<IExerciseItemContent>[]
+  >([] as IExerciseItem<IExerciseItemContent>[]);
   const [explanation, setExplanation] = useState<string>("");
   const activityCode = useRef("");
 

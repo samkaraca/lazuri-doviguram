@@ -5,9 +5,9 @@ export const initialActivityType: ActivityType = "type-in-blanks";
 
 export type ActivityType = FillOrDragActivityType | TrueFalseActivityType;
 
-export interface IExerciseItem {
+export interface IExerciseItem<T extends IExerciseItemContent> {
   id: string;
-  content: IExerciseItemContent;
+  content: T;
 }
 
 export interface IExerciseItemContent {}
@@ -28,5 +28,5 @@ export interface IActivity {
   code: string;
   explanation: string;
   textAppendix: ITextAppendix | null;
-  exercise: IExerciseItem[];
+  exercise: IExerciseItem<IExerciseItemContent>[];
 }

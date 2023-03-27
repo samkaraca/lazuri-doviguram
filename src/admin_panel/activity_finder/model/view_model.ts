@@ -1,4 +1,4 @@
-import { Directory } from "./directory";
+import { Directory, DirectoryType } from "./directory";
 import { Dispatch, FormEvent, SetStateAction } from "react";
 
 export interface IViewModel {
@@ -9,5 +9,5 @@ export interface IViewModel {
   newDirectoryName: string;
   setNewDirectoryName: Dispatch<SetStateAction<string>>;
   saveNewDirectory: (e: FormEvent<HTMLFormElement>) => void;
-  directory: Directory;
+  directory: Directory<DirectoryType>;
 }

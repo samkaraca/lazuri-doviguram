@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import {
   ActivityType,
   IExerciseItem,
+  IExerciseItemContent,
   ITextAppendix,
 } from "./activity/activity";
 
@@ -12,7 +13,7 @@ export interface IViewModel {
   setTextAppendix: Dispatch<SetStateAction<ITextAppendix | null>>;
   explanation: string;
   setExplanation: Dispatch<SetStateAction<string>>;
-  exercise: IExerciseItem[];
-  setExercise: Dispatch<SetStateAction<IExerciseItem[]>>;
+  exercise: IExerciseItem<IExerciseItemContent>[];
+  setExercise: Dispatch<SetStateAction<IExerciseItem<IExerciseItemContent>[]>>;
   save: () => void;
 }

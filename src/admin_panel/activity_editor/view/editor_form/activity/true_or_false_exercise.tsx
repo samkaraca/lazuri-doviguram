@@ -39,73 +39,77 @@ function TrueOrFalseActivity(viewModel: IViewModel) {
   return (
     <>
       <List>
-        {exercise.map((item) => {
-          const { id, content } = item;
-          return (
-            <ActivityListItemPaper key={id}>
-              <ListItem
-                secondaryAction={
-                  <Stack direction="row" position="relative" right="-0.8rem">
-                    <RadioGroup
-                      row
-                      value={content.isTrue}
-                      onChange={(e, value) =>
-                        setExercise((prev) => {
-                          const newExercise = [...prev];
-                          const exerciseItem = newExercise.find(
-                            (x) => x.id === id
-                          ) as IExerciseItem;
-                          const newExerciseContent =
-                            exerciseItem.content as ITrueOrFalseExerciseItemContent;
-                          newExerciseContent.isTrue =
-                            value === "true" ? true : false;
-                          return newExercise;
-                        })
-                      }
-                    >
-                      <FormControlLabel
-                        control={<Radio color="success" />}
-                        value="true"
-                        label="Doğru"
-                      />
-                      <FormControlLabel
-                        control={<Radio color="error" />}
-                        value="false"
-                        label="Yanlış"
-                      />
-                    </RadioGroup>
-                    <IconButton
-                      onClick={() => {
-                        setExercise((prev) => {
-                          const newExercise = [...prev].filter(
-                            (x) => x.id !== id
-                          );
-                          return newExercise;
-                        });
-                      }}
-                    >
-                      <Clear color="error" />
-                    </IconButton>
-                  </Stack>
-                }
-              >
-                <Input
-                  fullWidth
-                  sx={{ marginRight: "13rem" }}
-                  value={content.text}
-                  onChange={(e) =>
-                    setExercise((prev) => {
-                      const newExercise = [...prev];
-                      newExercise.find((x) => x.id === id)!.content.text =
-                        e.target.value;
-                      return newExercise;
-                    })
+        {(exercise as IExerciseItem<ITrueOrFalseExerciseItemContent>[]).map(
+          (item) => {
+            const { id, content } = item;
+            return (
+              <ActivityListItemPaper key={id}>
+                <ListItem
+                  secondaryAction={
+                    <Stack direction="row" position="relative" right="-0.8rem">
+                      <RadioGroup
+                        row
+                        value={content.isTrue}
+                        onChange={(e, value) =>
+                          setExercise((prev) => {
+                            const newExercise = [...prev];
+                            const exerciseItem = newExercise.find(
+                              (x) => x.id === id
+                            )!;
+                            const newExerciseContent =
+                              exerciseItem.content as ITrueOrFalseExerciseItemContent;
+                            newExerciseContent.isTrue =
+                              value === "true" ? true : false;
+                            return newExercise;
+                          })
+                        }
+                      >
+                        <FormControlLabel
+                          control={<Radio color="success" />}
+                          value="true"
+                          label="Doğru"
+                        />
+                        <FormControlLabel
+                          control={<Radio color="error" />}
+                          value="false"
+                          label="Yanlış"
+                        />
+                      </RadioGroup>
+                      <IconButton
+                        onClick={() => {
+                          setExercise((prev) => {
+                            const newExercise = [...prev].filter(
+                              (x) => x.id !== id
+                            );
+                            return newExercise;
+                          });
+                        }}
+                      >
+                        <Clear color="error" />
+                      </IconButton>
+                    </Stack>
                   }
-                />
-              </ListItem>
-            </ActivityListItemPaper>
-          );
-        })}
+                >
+                  <Input
+                    fullWidth
+                    sx={{ marginRight: "13rem" }}
+                    value={content.text}
+                    onChange={(e) =>
+                      setExercise((prev) => {
+                        const newExercise = [
+                          ...prev,
+                        ] as IExerciseItem<ITrueOrFalseExerciseItemContent>[];
+                        newExercise.find((x) => x.id === id)!.content.text =
+                          e.target.value;
+                        return newExercise;
+                      })
+                    }
+                  />
+                </ListItem>
+              </ActivityListItemPaper>
+            );
+          }
+        )}
       </List>
       <Fab
         onClick={() =>

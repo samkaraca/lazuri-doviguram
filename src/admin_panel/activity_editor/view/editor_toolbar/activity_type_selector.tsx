@@ -2,6 +2,7 @@ import { Box, FormHelperText, MenuItem, Select } from "@mui/material";
 import {
   ActivityType,
   IExerciseItem,
+  IExerciseItemContent,
   activityTypes,
   initialActivityType,
 } from "../../model/activity/activity";
@@ -10,7 +11,7 @@ import { Dispatch, SetStateAction } from "react";
 interface Props {
   activityType: ActivityType;
   setActivityType: Dispatch<SetStateAction<ActivityType>>;
-  setExercise: Dispatch<SetStateAction<IExerciseItem[]>>;
+  setExercise: Dispatch<SetStateAction<IExerciseItem<IExerciseItemContent>[]>>;
 }
 
 export function ActivityTypeSelector(props: Props) {
