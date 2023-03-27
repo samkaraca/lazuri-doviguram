@@ -4,7 +4,7 @@ export default function getRootDirectory(): Promise<
   Directory<ContentfullDirectoryType>
 > {
   return new Promise((resolve, reject) => {
-    fetch("http://localhost:3000/api/admin/temalar")
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/admin/temalar`)
       .then((res) => {
         res.json().then((directory) => resolve(directory));
       })

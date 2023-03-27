@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export default function LoginPage() {
   const [password, setPassword] = useState("");
