@@ -4,11 +4,11 @@ import {
 } from "@/admin_panel/activity_editor/model/activity/activity";
 import { auth } from "@/core/functions/api_functions";
 import { apps, initializeApp } from "firebase-admin";
-import { cert } from "firebase-admin/app";
+import { ServiceAccount, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const serviceAccount = require("../../../../lazuri-doviguram-firebase-adminsdk-ozmz7-da6de260f2");
+const serviceAccount = require("../../../../lazuri-doviguram-firebase-adminsdk-ozmz7-da6de260f2.json");
 
 if (!apps.length) {
   initializeApp({

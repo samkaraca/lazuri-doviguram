@@ -1,6 +1,6 @@
 import { initialRootDirectory } from "@/admin_panel/activity_finder/model/directory";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { initializeApp } from "firebase-admin/app";
+import { ServiceAccount, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { apps } from "firebase-admin";
 import { cert } from "firebase-admin/app";

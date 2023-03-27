@@ -1,5 +1,9 @@
-import { Dispatch, MutableRefObject, SetStateAction } from "react";
-import { ActivityType, ExerciseItem, ITextAppendix } from "./activity/activity";
+import { Dispatch, SetStateAction } from "react";
+import {
+  ActivityType,
+  IExerciseItem,
+  ITextAppendix,
+} from "./activity/activity";
 
 export interface IViewModel {
   activityType: ActivityType;
@@ -8,7 +12,7 @@ export interface IViewModel {
   setTextAppendix: Dispatch<SetStateAction<ITextAppendix | null>>;
   explanation: string;
   setExplanation: Dispatch<SetStateAction<string>>;
-  exercise: ExerciseItem[];
-  setExercise: Dispatch<SetStateAction<ExerciseItem[]>>;
+  exercise: IExerciseItem[];
+  setExercise: Dispatch<SetStateAction<IExerciseItem[]>>;
   save: () => void;
 }
