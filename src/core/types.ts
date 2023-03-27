@@ -1,1 +1,5 @@
-export type NullableDispatchContext = null | React.Dispatch<any>;
+import { ReactNode } from "react";
+
+export interface ElementChildren {
+  children: ReactNode;
+}

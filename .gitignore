@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# other
+lazuri-doviguram-firebase-adminsdk-ozmz7-da6de260f2.json

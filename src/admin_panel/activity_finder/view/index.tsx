@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Paper } from "@mui/material";
 import Image from "next/image";
-import FileList from "@/components/admin/file_list";
+import DirectoryList from "./directory_list";
 
 const BannerDiv = styled.div((props) => ({
   backgroundColor: "#5A738C",
@@ -44,28 +44,28 @@ const WidthDiv = styled.div((props: any) => ({
   },
 }));
 
-export default function Finder() {
+export default function View() {
   return (
     <MainDiv>
       <BannerDiv>
         <ImageContainer
           ratio="1"
           height="15rem"
-          position="3rem -1rem unset unset"
+          position="3rem 0rem unset unset"
         >
           <Image alt="haze hand" src="/admin/haze-hand.png" fill={true} />
         </ImageContainer>
       </BannerDiv>
       <WidthDiv
-        width="30%"
+        width="40%"
         absolute
         top="7rem"
         minHeight="30rem"
-        minWidth="35rem"
+        minWidth="20rem"
         centerH
       >
         <Paper>
-          <FileList />
+          <DirectoryList />
         </Paper>
       </WidthDiv>
     </MainDiv>
