@@ -10,9 +10,24 @@ import { useState } from "react";
 
 export default function LoginPage() {
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
   return (
-    <form method="POST" action="/api/admin/login">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        fetch("/api/admin/login", { method: "POST", body: password }).then(
+          (res) =>
+            res.json().then((j) => {
+              if (j.error) {
+                setError(true);
+              } else {
+                location.href = "/admin/temalar";
+              }
+            })
+        );
+      }}
+    >
       <Paper
         elevation={5}
         sx={{
@@ -40,6 +55,7 @@ export default function LoginPage() {
         </Stack>
         <Stack flexDirection="row" columnGap="1rem">
           <OutlinedInput
+            error={error}
             name="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}

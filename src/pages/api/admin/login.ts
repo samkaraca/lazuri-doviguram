@@ -5,7 +5,7 @@ import * as jose from "jose";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case "POST":
-      const password = req.body.password;
+      const password = req.body;
 
       if (password === process.env.ADMIN_PASSWORD!) {
         const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
@@ -16,10 +16,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
         setCookie("token", jwt, { req, res, maxAge: 60 * 60 * 24 * 360 });
 
-        return res.redirect(307, "/admin/temalar");
+        return res.status(200).send({ error: null });
       }
 
-      return res.redirect(307, "/admin/login");
+      return res.status(200).send({ error: "Wrong password" });
 
     default:
       return res.status(405).json({ error: "Unsopported request method" });
