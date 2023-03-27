@@ -8,11 +8,13 @@ import { ServiceAccount, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const serviceAccount = require("../../../../lazuri-doviguram-firebase-adminsdk-ozmz7-da6de260f2.json");
-
 if (!apps.length) {
   initializeApp({
-    credential: cert(serviceAccount),
+    credential: cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY!.replace(/\\n/g, "\n"),
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    }),
   });
 }
 
