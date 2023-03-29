@@ -22,7 +22,7 @@ export const initialRootDirectory: Directory<"root"> = {
   type: "root",
   contents: [],
   code: "temalar",
-  title: "Themes",
+  title: "Temalar",
 };
 
 export function goInDirectory(

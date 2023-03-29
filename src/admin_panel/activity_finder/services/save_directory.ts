@@ -4,7 +4,7 @@ export default function saveDirectory(
   rootDirectory: Directory<ContentfullDirectoryType>
 ): Promise<Directory<ContentfullDirectoryType>> {
   return new Promise((resolve, reject) => {
-    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/admin/temalar`, {
+    fetch("/api/admin/temalar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

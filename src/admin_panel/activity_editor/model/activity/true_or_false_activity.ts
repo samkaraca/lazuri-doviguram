@@ -1,10 +1,10 @@
 import { IExerciseItemContent } from "./activity";
 
-export type TrueFalse = "true" | "false";
+export type ITrueOrFalse = "true" | "false";
 
-export const initialTrueFalse: TrueFalse = "true";
+export const initialTrueOrFalse: ITrueOrFalse = "true";
 
-export type TrueFalseActivityType = "true-false";
+export type ITrueOrFalseActivityType = "true-or-false";
 
 export interface ITrueOrFalseExerciseItemContent extends IExerciseItemContent {
   text: string;

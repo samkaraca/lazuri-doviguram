@@ -2,9 +2,12 @@ import { Dispatch, SetStateAction } from "react";
 import {
   ActivityType,
   IExerciseItem,
-  IExerciseItemContent,
   ITextAppendix,
 } from "./activity/activity";
+import {
+  ITrueOrFalseExerciseItemContent,
+  ITypeOrDragExerciseItemContent,
+} from "./activity";
 
 export interface IViewModel {
   activityType: ActivityType;
@@ -13,7 +16,18 @@ export interface IViewModel {
   setTextAppendix: Dispatch<SetStateAction<ITextAppendix | null>>;
   explanation: string;
   setExplanation: Dispatch<SetStateAction<string>>;
-  exercise: IExerciseItem<IExerciseItemContent>[];
-  setExercise: Dispatch<SetStateAction<IExerciseItem<IExerciseItemContent>[]>>;
+  typeOrDragExercise: IExerciseItem<ITypeOrDragExerciseItemContent>[];
+  dispatchTypeOrDragExercise: Dispatch<{
+    type: "change" | "add" | "remove" | "reset";
+    id: string;
+    text: string;
+  }>;
+  trueOrFalseExercise: IExerciseItem<ITrueOrFalseExerciseItemContent>[];
+  dispatchTrueOrFalseExercise: Dispatch<{
+    type: "add" | "remove" | "reset" | "changeText" | "changeIsTrue";
+    isTrue: boolean;
+    text: string;
+    id: string;
+  }>;
   save: () => void;
 }

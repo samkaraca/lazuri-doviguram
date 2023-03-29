@@ -1,6 +1,6 @@
 import { Box, Divider, Checkbox, FormControlLabel } from "@mui/material";
 import { ActivityTypeSelector } from "./activity_type_selector";
-import { useViewModelContext } from "../../view_model";
+import useViewModelContext from "../../view_model";
 import SelectiveConsumer from "@/core/components/selective_consumer";
 import { IViewModel } from "../../model/view_model";
 
@@ -22,7 +22,8 @@ function EditorToolbar(viewModel: IViewModel) {
     setTextAppendix,
     activityType,
     setActivityType,
-    setExercise,
+    dispatchTypeOrDragExercise,
+    dispatchTrueOrFalseExercise,
   } = viewModel;
 
   return (
@@ -56,7 +57,8 @@ function EditorToolbar(viewModel: IViewModel) {
       <ActivityTypeSelector
         activityType={activityType}
         setActivityType={setActivityType}
-        setExercise={setExercise}
+        dispatchTypeOrDragExercise={dispatchTypeOrDragExercise}
+        dispatchTrueOrFalseExercise={dispatchTrueOrFalseExercise}
       />
       <Divider orientation="vertical" flexItem />
     </Box>

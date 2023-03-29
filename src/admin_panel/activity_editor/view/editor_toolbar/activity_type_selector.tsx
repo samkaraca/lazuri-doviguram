@@ -1,8 +1,6 @@
 import { Box, FormHelperText, MenuItem, Select } from "@mui/material";
 import {
   ActivityType,
-  IExerciseItem,
-  IExerciseItemContent,
   activityTypes,
   initialActivityType,
 } from "../../model/activity/activity";
@@ -11,11 +9,26 @@ import { Dispatch, SetStateAction } from "react";
 interface Props {
   activityType: ActivityType;
   setActivityType: Dispatch<SetStateAction<ActivityType>>;
-  setExercise: Dispatch<SetStateAction<IExerciseItem<IExerciseItemContent>[]>>;
+  dispatchTypeOrDragExercise: Dispatch<{
+    type: "change" | "add" | "remove" | "reset";
+    id: string;
+    text: string;
+  }>;
+  dispatchTrueOrFalseExercise: Dispatch<{
+    type: "add" | "remove" | "reset" | "changeText" | "changeIsTrue";
+    isTrue: boolean;
+    text: string;
+    id: string;
+  }>;
 }
 
 export function ActivityTypeSelector(props: Props) {
-  const { setActivityType, activityType, setExercise } = props;
+  const {
+    setActivityType,
+    activityType,
+    dispatchTypeOrDragExercise,
+    dispatchTrueOrFalseExercise,
+  } = props;
 
   return (
     <Box
@@ -32,7 +45,13 @@ export function ActivityTypeSelector(props: Props) {
         value={activityType}
         onChange={(e) => {
           setActivityType(e.target.value as ActivityType);
-          setExercise([]);
+          dispatchTypeOrDragExercise({ type: "reset", id: "", text: "" });
+          dispatchTrueOrFalseExercise({
+            type: "reset",
+            id: "",
+            text: "",
+            isTrue: false,
+          });
         }}
         size="small"
         defaultValue={initialActivityType}

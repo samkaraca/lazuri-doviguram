@@ -1,6 +1,6 @@
 import { Box, Divider, TextField } from "@mui/material";
 import { ChangeEvent } from "react";
-import { useViewModelContext } from "../../view_model";
+import useViewModelContext from "../../view_model";
 import SelectiveConsumer from "@/core/components/selective_consumer";
 import { IViewModel } from "../../model/view_model";
 

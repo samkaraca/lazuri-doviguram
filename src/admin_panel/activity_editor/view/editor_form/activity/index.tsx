@@ -1,8 +1,8 @@
 import { Paper } from "@mui/material";
 import TrueOrFalseExercise from "./true_or_false_exercise";
-import FillOrDragExercise from "./fill_or_drag_exercise";
+import FillOrDragExercise from "./type_or_drag_exercise";
 import { IViewModel } from "@/admin_panel/activity_editor/model/view_model";
-import { useViewModelContext } from "@/admin_panel/activity_editor/view_model";
+import useViewModelContext from "@/admin_panel/activity_editor/view_model";
 import SelectiveConsumer from "@/core/components/selective_consumer";
 
 export default function Consumer() {
@@ -30,7 +30,7 @@ function Activity(viewModel: IViewModel) {
       }}
       variant="outlined"
     >
-      {activityType === "true-false" ? (
+      {activityType === "true-or-false" ? (
         <TrueOrFalseExercise />
       ) : (
         <FillOrDragExercise />
