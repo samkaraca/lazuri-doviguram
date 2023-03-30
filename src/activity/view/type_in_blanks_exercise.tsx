@@ -18,12 +18,16 @@ export function TypeInBlanksExercise() {
         return (
           <ListItem
             disablePadding
-            sx={{ paddingBottom: "1.5rem" }}
+            sx={{ paddingBottom: "1.5rem", overflowWrap: "anywhere" }}
             key={item.id}
           >
             <ListItemText>
               <Box display="flex">
-                <Typography lineHeight="2.5rem" marginRight="1rem">
+                <Typography
+                  minWidth="1rem"
+                  lineHeight="2.5rem"
+                  marginRight="1rem"
+                >
                   {index + 1}.
                 </Typography>
                 <Box lineHeight="2.5rem">

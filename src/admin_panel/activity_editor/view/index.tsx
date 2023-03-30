@@ -26,14 +26,7 @@ export default function View() {
       }}
     >
       <AppBar position="relative">
-        <Toolbar
-          sx={{
-            maxWidth: "65rem",
-            margin: "0 auto",
-            width: "50%",
-            minWidth: "22rem",
-          }}
-        >
+        <Toolbar sx={{}}>
           <Typography variant="h5">Aktivite Editörü</Typography>
         </Toolbar>
       </AppBar>
@@ -43,11 +36,11 @@ export default function View() {
         flexDirection={largeMediaQuery ? "row" : "column"}
         alignItems={largeMediaQuery ? "start" : "center"}
         rowGap="2rem"
-        justifyContent="space-evenly"
+        justifyContent={largeMediaQuery ? "space-evenly" : "space-around"}
       >
         <Paper
           sx={{
-            width: largeMediaQuery ? "40%" : "70%",
+            width: largeMediaQuery ? "46%" : "80%",
             minWidth: "22rem",
             maxWidth: "60rem",
             display: "flex",
@@ -62,7 +55,7 @@ export default function View() {
         <Box
           maxWidth="60rem"
           minWidth="22rem"
-          width={largeMediaQuery ? "40%" : "70%"}
+          width={largeMediaQuery ? "46%" : "80%"}
         >
           <Activity />
         </Box>

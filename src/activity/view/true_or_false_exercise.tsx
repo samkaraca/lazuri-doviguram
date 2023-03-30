@@ -39,7 +39,9 @@ export function TrueOrFalseExercise() {
               </RadioGroup>
             }
           >
-            <ListItemText sx={{ marginRight: "0rem" }}>
+            <ListItemText
+              sx={{ marginRight: "13rem", overflowWrap: "anywhere" }}
+            >
               <Box sx={{ display: "flex" }}>
                 <Typography marginRight="1rem">{index + 1}.</Typography>
                 <Typography>{text}</Typography>
