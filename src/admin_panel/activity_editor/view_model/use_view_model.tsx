@@ -5,28 +5,27 @@ import {
   ITextAppendix,
   initialActivityType,
 } from "../model/activity/activity";
-import { IViewModel } from "../model/view_model";
-import livingStateOf from "@/core/functions/react_functions";
+import {
+  ITrueOrFalseExerciseItemAction,
+  ITypeOrDragExerciseItemAction,
+  IViewModel,
+} from "../model/view_model";
 import { persistActivity } from "../services/persist_activity";
 import {
   ITrueOrFalseExerciseItemContent,
   ITypeOrDragExerciseItemContent,
-  initialTrueOrFalse,
 } from "../model/activity";
-import { nanoid } from "nanoid";
+import getActivity from "../services/get_activity";
 
 function typeOrDragExerciseReducer(
   prevExercise: IExerciseItem<ITypeOrDragExerciseItemContent>[],
-  action: {
-    type: "change" | "remove" | "add" | "reset";
-    id: string;
-    text: string;
-  }
+  action: ITypeOrDragExerciseItemAction
 ): IExerciseItem<ITypeOrDragExerciseItemContent>[] {
-  let newExercise = [...prevExercise];
+  let newExercise: IExerciseItem<ITypeOrDragExerciseItemContent>[];
 
   switch (action.type) {
     case "change":
+      newExercise = [...prevExercise];
       const newItem = newExercise.find((x) => x.id === action.id)!;
 
       newItem.content.rawContent = action.text;
@@ -46,18 +45,16 @@ function typeOrDragExerciseReducer(
 
       break;
 
+    case "initialize":
+      newExercise = [...action.data];
+      break;
+
     case "add":
-      newExercise = [
-        ...newExercise,
-        {
-          id: nanoid(),
-          content: { rawContent: "", processedContent: [] },
-        },
-      ];
+      newExercise = [...prevExercise, action.item];
       break;
 
     case "remove":
-      newExercise = newExercise.filter((x) => x.id !== action.id);
+      newExercise = [...prevExercise].filter((x) => x.id !== action.id);
       break;
 
     case "reset":
@@ -70,37 +67,32 @@ function typeOrDragExerciseReducer(
 
 function trueOrFalseExerciseReducer(
   prevExercise: IExerciseItem<ITrueOrFalseExerciseItemContent>[],
-  action: {
-    type: "changeText" | "changeIsTrue" | "add" | "remove" | "reset";
-    isTrue: boolean;
-    text: string;
-    id: string;
-  }
+  action: ITrueOrFalseExerciseItemAction
 ) {
-  let newExercise = [...prevExercise];
+  let newExercise: IExerciseItem<ITrueOrFalseExerciseItemContent>[];
 
   switch (action.type) {
     case "changeText":
+      newExercise = [...prevExercise];
       newExercise.find((x) => x.id === action.id)!.content.text = action.text;
       break;
 
     case "changeIsTrue":
+      newExercise = [...prevExercise];
       newExercise.find((x) => x.id === action.id)!.content.isTrue =
         action.isTrue;
       break;
 
+    case "initialize":
+      newExercise = [...action.data];
+      break;
+
     case "add":
-      newExercise.push({
-        id: nanoid(),
-        content: {
-          isTrue: initialTrueOrFalse === "true" ? true : false,
-          text: "",
-        },
-      });
+      newExercise = [...prevExercise, action.item];
       break;
 
     case "remove":
-      newExercise = newExercise.filter((x) => x.id !== action.id);
+      newExercise = [...prevExercise].filter((x) => x.id !== action.id);
       break;
 
     case "reset":
@@ -127,14 +119,21 @@ export function useViewModel(): IViewModel {
   const activityCode = useRef("");
 
   useEffect(() => {
-    // getActivity().then((activity) => {
-    //   const { exercise, textAppendix, type, explanation, code } = activity;
-    //   activityCode.current = code;
-    //   setExplanation(explanation);
-    //   setActivityType(type);
-    //   setTextAppendix(textAppendix);
-    //   setTypeOrDragExercise(exercise);
-    // });
+    getActivity().then((activity) => {
+      const { exercise, textAppendix, type, explanation, code } = activity;
+      activityCode.current = code;
+      setExplanation(explanation);
+      setActivityType(type);
+      setTextAppendix(textAppendix);
+      dispatchTypeOrDragExercise({
+        type: "initialize",
+        data: exercise as IExerciseItem<ITypeOrDragExerciseItemContent>[],
+      });
+      dispatchTrueOrFalseExercise({
+        type: "initialize",
+        data: exercise as IExerciseItem<ITrueOrFalseExerciseItemContent>[],
+      });
+    });
   }, []);
 
   return {
@@ -148,14 +147,16 @@ export function useViewModel(): IViewModel {
     dispatchTypeOrDragExercise,
     trueOrFalseExercise,
     dispatchTrueOrFalseExercise,
-    save: () => {
+    save: () =>
       persistActivity({
-        type: livingStateOf(setActivityType)!,
+        type: activityType,
         code: activityCode.current,
         explanation,
-        textAppendix: livingStateOf(setTextAppendix)!,
-        exercise: typeOrDragExercise,
-      });
-    },
+        textAppendix,
+        exercise:
+          activityType === "true-or-false"
+            ? trueOrFalseExercise
+            : typeOrDragExercise,
+      }),
   };
 }

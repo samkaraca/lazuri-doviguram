@@ -18,8 +18,8 @@ import {
   ITrueOrFalseExerciseItemContent,
   initialTrueOrFalse,
 } from "@/admin_panel/activity_editor/model/activity/true_or_false_activity";
-import { nanoid } from "nanoid";
 import { IExerciseItem } from "@/admin_panel/activity_editor/model/activity/activity";
+import { nanoid } from "nanoid";
 
 export default function Consumer() {
   const viewModel = useViewModelContext()!;
@@ -55,7 +55,6 @@ function TrueOrFalseActivity(viewModel: IViewModel) {
                         dispatchTrueOrFalseExercise({
                           type: "changeIsTrue",
                           isTrue: value === "true" ? true : false,
-                          text: "",
                           id,
                         })
                       }
@@ -76,8 +75,6 @@ function TrueOrFalseActivity(viewModel: IViewModel) {
                         dispatchTrueOrFalseExercise({
                           type: "remove",
                           id,
-                          text: "",
-                          isTrue: false,
                         })
                       }
                     >
@@ -94,7 +91,6 @@ function TrueOrFalseActivity(viewModel: IViewModel) {
                     dispatchTrueOrFalseExercise({
                       type: "changeText",
                       id,
-                      isTrue: false,
                       text: e.target.value,
                     })
                   }
@@ -108,9 +104,13 @@ function TrueOrFalseActivity(viewModel: IViewModel) {
         onClick={() =>
           dispatchTrueOrFalseExercise({
             type: "add",
-            id: "",
-            isTrue: false,
-            text: "",
+            item: {
+              id: nanoid(),
+              content: {
+                text: "",
+                isTrue: initialTrueOrFalse === "true" ? true : false,
+              },
+            },
           })
         }
         color="secondary"

@@ -5,21 +5,16 @@ import {
   initialActivityType,
 } from "../../model/activity/activity";
 import { Dispatch, SetStateAction } from "react";
+import {
+  ITrueOrFalseExerciseItemAction,
+  ITypeOrDragExerciseItemAction,
+} from "../../model/view_model";
 
 interface Props {
   activityType: ActivityType;
   setActivityType: Dispatch<SetStateAction<ActivityType>>;
-  dispatchTypeOrDragExercise: Dispatch<{
-    type: "change" | "add" | "remove" | "reset";
-    id: string;
-    text: string;
-  }>;
-  dispatchTrueOrFalseExercise: Dispatch<{
-    type: "add" | "remove" | "reset" | "changeText" | "changeIsTrue";
-    isTrue: boolean;
-    text: string;
-    id: string;
-  }>;
+  dispatchTypeOrDragExercise: Dispatch<ITypeOrDragExerciseItemAction>;
+  dispatchTrueOrFalseExercise: Dispatch<ITrueOrFalseExerciseItemAction>;
 }
 
 export function ActivityTypeSelector(props: Props) {
@@ -45,13 +40,8 @@ export function ActivityTypeSelector(props: Props) {
         value={activityType}
         onChange={(e) => {
           setActivityType(e.target.value as ActivityType);
-          dispatchTypeOrDragExercise({ type: "reset", id: "", text: "" });
-          dispatchTrueOrFalseExercise({
-            type: "reset",
-            id: "",
-            text: "",
-            isTrue: false,
-          });
+          dispatchTypeOrDragExercise({ type: "reset" });
+          dispatchTrueOrFalseExercise({ type: "reset" });
         }}
         size="small"
         defaultValue={initialActivityType}

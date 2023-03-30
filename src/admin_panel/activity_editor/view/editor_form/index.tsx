@@ -10,7 +10,7 @@ export default function Consumer() {
 
   return (
     <SelectiveConsumer
-      observedParams={["explanation"]}
+      observedParams={["explanation", "save"]}
       hook={() => viewModel}
       component={EditorForm}
     />

@@ -9,6 +9,55 @@ import {
   ITypeOrDragExerciseItemContent,
 } from "./activity";
 
+export type ITrueOrFalseExerciseItemAction =
+  | {
+      type: "remove";
+      id: string;
+    }
+  | {
+      type: "reset";
+    }
+  | {
+      id: string;
+      type: "changeIsTrue";
+      isTrue: boolean;
+    }
+  | {
+      id: string;
+      type: "changeText";
+      text: string;
+    }
+  | {
+      type: "initialize";
+      data: IExerciseItem<ITrueOrFalseExerciseItemContent>[];
+    }
+  | {
+      type: "add";
+      item: IExerciseItem<ITrueOrFalseExerciseItemContent>;
+    };
+
+export type ITypeOrDragExerciseItemAction =
+  | {
+      type: "initialize";
+      data: IExerciseItem<ITypeOrDragExerciseItemContent>[];
+    }
+  | {
+      type: "add";
+      item: IExerciseItem<ITypeOrDragExerciseItemContent>;
+    }
+  | {
+      type: "remove";
+      id: string;
+    }
+  | {
+      type: "change";
+      id: string;
+      text: string;
+    }
+  | {
+      type: "reset";
+    };
+
 export interface IViewModel {
   activityType: ActivityType;
   setActivityType: Dispatch<SetStateAction<ActivityType>>;
@@ -17,17 +66,8 @@ export interface IViewModel {
   explanation: string;
   setExplanation: Dispatch<SetStateAction<string>>;
   typeOrDragExercise: IExerciseItem<ITypeOrDragExerciseItemContent>[];
-  dispatchTypeOrDragExercise: Dispatch<{
-    type: "change" | "add" | "remove" | "reset";
-    id: string;
-    text: string;
-  }>;
+  dispatchTypeOrDragExercise: Dispatch<ITypeOrDragExerciseItemAction>;
   trueOrFalseExercise: IExerciseItem<ITrueOrFalseExerciseItemContent>[];
-  dispatchTrueOrFalseExercise: Dispatch<{
-    type: "add" | "remove" | "reset" | "changeText" | "changeIsTrue";
-    isTrue: boolean;
-    text: string;
-    id: string;
-  }>;
+  dispatchTrueOrFalseExercise: Dispatch<ITrueOrFalseExerciseItemAction>;
   save: () => void;
 }

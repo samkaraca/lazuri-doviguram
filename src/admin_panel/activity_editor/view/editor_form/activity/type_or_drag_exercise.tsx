@@ -7,6 +7,7 @@ import { AddFab } from "@/core/components/add_fab";
 import { ActivityListItemPaper } from "@/core/components/list_item_paper";
 import { IExerciseItem } from "@/admin_panel/activity_editor/model/activity/activity";
 import { ITypeOrDragExerciseItemContent } from "@/admin_panel/activity_editor/model/activity/type_or_drag_activity";
+import { nanoid } from "nanoid";
 
 export default function Consumer() {
   const viewModel = useViewModelContext()!;
@@ -39,7 +40,6 @@ function FillOrDragActivity(viewModel: IViewModel) {
                       dispatchTypeOrDragExercise({
                         type: "remove",
                         id,
-                        text: "",
                       })
                     }
                   >
@@ -66,7 +66,13 @@ function FillOrDragActivity(viewModel: IViewModel) {
       </List>
       <AddFab
         onClick={() =>
-          dispatchTypeOrDragExercise({ type: "add", id: "", text: "" })
+          dispatchTypeOrDragExercise({
+            type: "add",
+            item: {
+              id: nanoid(),
+              content: { processedContent: [], rawContent: "" },
+            },
+          })
         }
       />
     </>
