@@ -15,6 +15,7 @@ import { TypeInBlanksExercise } from "./type_in_blanks_exercise";
 import { TrueOrFalseExercise } from "./true_or_false_exercise";
 import useViewModelContext from "../view_model";
 import { useMemo } from "react";
+import { DragIntoBlanksExercise } from "./drag_into_blanks_exercise";
 
 export function View() {
   const viewModel = useViewModelContext()!;
@@ -62,7 +63,9 @@ export function View() {
           <TypeInBlanksExercise />
         ) : activityType === "true-or-false" ? (
           <TrueOrFalseExercise />
-        ) : null}
+        ) : (
+          <DragIntoBlanksExercise />
+        )}
         <Stack direction="row" justifyContent="end">
           <Button variant="contained" onClick={() => {}}>
             BİTİR
