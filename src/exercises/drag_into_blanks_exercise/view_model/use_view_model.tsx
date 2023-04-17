@@ -1,6 +1,6 @@
-import useAlienViewModelContext from "@/admin_panel/activity_editor/view_model";
 import { useEffect, useState } from "react";
 import {
+  ExerciseModel,
   IBoardItem,
   IBoardItemPiecePointer,
   IRefinedExerciseItem,
@@ -13,21 +13,12 @@ import {
 } from "@/admin_panel/activity_editor/model/activity";
 import { nanoid } from "nanoid";
 
-export function useViewModel(): IViewModel {
-  const alienViewModel = useAlienViewModelContext()!;
-  const {
-    explanation,
-    textAppendix,
-    typeOrDragExercise,
-    trueOrFalseExercise,
-    activityType,
-  } = alienViewModel;
+export function useViewModel(exercise: ExerciseModel): IViewModel {
   const [exerciseItems, setExerciseItems] = useState<IRefinedExerciseItem[]>(
     []
   );
   const [board, setBoard] = useState<IBoardItem[]>(new Array());
   const [draggedItem, setDraggedItem] = useState<IBoardItem | null>(null);
-  const [exerciseLocked, setExerciseLocked] = useState(false);
 
   function placeBoardItem(
     toBoard: boolean,
@@ -52,7 +43,7 @@ export function useViewModel(): IViewModel {
   useEffect(() => {
     setExerciseItems([]);
     const boardItems = [] as IBoardItem[];
-    const refinedItems = typeOrDragExercise.map((item) => {
+    const refinedItems = exercise.map((item) => {
       const pieces = JSON.parse(
         JSON.stringify(item.content.processedContent)
       ) as (IExerciseItemTextPiece | IExerciseItemTextInputPiece)[];
@@ -73,18 +64,10 @@ export function useViewModel(): IViewModel {
     });
     setBoard(boardItems);
     setExerciseItems(refinedItems);
-  }, [typeOrDragExercise]);
+  }, [exercise]);
 
   return {
-    activityType,
-    explanation,
-    textAppendix,
-    typeOrDragExercise,
-    trueOrFalseExercise,
-    exerciseLocked,
-    setExerciseLocked,
     exerciseItems,
-    setExerciseItems,
     board,
     setBoard,
     draggedItem,

@@ -1,8 +1,8 @@
-import { IBoardItemPiecePointer } from "@/activity/model/view_model";
 import { useDroppable } from "@dnd-kit/core";
 import { Box, Chip } from "@mui/material";
 import { WordChip } from "./word_chip";
-import useViewModelContext from "@/activity/view_model";
+import { useViewModelContext } from "../view_model";
+import { IBoardItemPiecePointer } from "../model/view_model";
 
 interface Props {
   boardItemPointer: IBoardItemPiecePointer;

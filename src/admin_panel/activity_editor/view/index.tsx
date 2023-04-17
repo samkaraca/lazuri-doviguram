@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import EditorToolbar from "./editor_toolbar";
 import EditorForm from "./editor_form";
-import { Activity } from "@/activity";
+import { ActivityPreview } from "./activity_preview";
 
 export default function View() {
   const theme = useTheme();
@@ -57,7 +57,7 @@ export default function View() {
           minWidth="22rem"
           width={largeMediaQuery ? "46%" : "80%"}
         >
-          <Activity />
+          <ActivityPreview />
         </Box>
       </Box>
     </Box>

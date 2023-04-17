@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { WordDraggable } from "./word_draggable";
-import useViewModelContext from "@/activity/view_model";
 import { WordChip } from "./word_chip";
+import { useViewModelContext } from "../view_model";
 
 export function WordDraggablesBoard() {
   const { board } = useViewModelContext()!;

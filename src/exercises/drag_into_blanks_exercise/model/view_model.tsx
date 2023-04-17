@@ -1,10 +1,7 @@
 import {
-  ActivityType,
   IExerciseItem,
   IExerciseItemTextInputPiece,
   IExerciseItemTextPiece,
-  ITextAppendix,
-  ITrueOrFalseExerciseItemContent,
   ITypeOrDragExerciseItemContent,
 } from "@/admin_panel/activity_editor/model/activity";
 import { Dispatch, SetStateAction } from "react";
@@ -32,16 +29,10 @@ export interface IBoardItem {
   data: string;
 }
 
+export type ExerciseModel = IExerciseItem<ITypeOrDragExerciseItemContent>[];
+
 export interface IViewModel {
-  activityType: ActivityType;
-  explanation: string;
-  textAppendix: ITextAppendix | null;
-  typeOrDragExercise: IExerciseItem<ITypeOrDragExerciseItemContent>[];
-  trueOrFalseExercise: IExerciseItem<ITrueOrFalseExerciseItemContent>[];
-  exerciseLocked: boolean;
-  setExerciseLocked: Dispatch<SetStateAction<IViewModel["exerciseLocked"]>>;
   exerciseItems: IRefinedExerciseItem[];
-  setExerciseItems: Dispatch<SetStateAction<IViewModel["exerciseItems"]>>;
   board: IBoardItem[];
   setBoard: Dispatch<SetStateAction<IViewModel["board"]>>;
   draggedItem: IBoardItem | null;

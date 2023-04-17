@@ -1,7 +1,7 @@
-import { IBoardItem } from "@/activity/model/view_model";
 import { useDraggable } from "@dnd-kit/core";
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
+import { IBoardItem } from "../model/view_model";
 
 export interface Props {
   children: ReactNode;

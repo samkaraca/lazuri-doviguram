@@ -1,17 +1,23 @@
-import useViewModelContext from "@/activity/view_model";
-import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
-import { WordDroppable } from "./word_droppable";
+import {
+  Box,
+  Input,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import { useViewModelContext } from "../view_model";
 
-export function QuestionsList() {
-  const { exerciseItems } = useViewModelContext()!;
+export function View() {
+  const { exercise } = useViewModelContext()!;
 
   return (
-    <List disablePadding>
-      {exerciseItems.map((item, index) => {
+    <List>
+      {exercise.map((item, index) => {
         return (
           <ListItem
             disablePadding
-            sx={{ overflowWrap: "anywhere" }}
+            sx={{ paddingBottom: "1.5rem", overflowWrap: "anywhere" }}
             key={item.id}
           >
             <ListItemText>
@@ -24,17 +30,19 @@ export function QuestionsList() {
                   {index + 1}.
                 </Typography>
                 <Box lineHeight="2.5rem">
-                  {item.pieces.map((piece, i) => {
+                  {item.content.processedContent.map((piece, i) => {
                     switch (piece.type) {
                       case "text-input":
                         return (
-                          <WordDroppable
-                            key={piece.id}
-                            boardItemPointer={{
-                              itemIndex: index,
-                              pieceIndex: i,
-                              piece,
+                          <Input
+                            color="success"
+                            sx={{
+                              display: "inline-block",
+                              marginX: "0.5rem",
+                              width: "10rem",
                             }}
+                            key={i}
+                            size="small"
                           />
                         );
 

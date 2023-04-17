@@ -11,16 +11,17 @@ import {
   useTheme,
 } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
-import { TypeInBlanksExercise } from "./type_in_blanks_exercise";
-import { TrueOrFalseExercise } from "./true_or_false_exercise";
-import useViewModelContext from "../view_model";
-import { useMemo } from "react";
-import { DragIntoBlanksExercise } from "./drag_into_blanks_exercise";
+import { Context, ReactNode, useContext, useMemo } from "react";
+import useViewModelContext from "../../view_model";
 
-export function View() {
+export interface IActivityLayoutContext {
+  explanation: any;
+  textAppendix: any;
+}
+
+export function ActivityLayout({ children }: { children: ReactNode }) {
   const viewModel = useViewModelContext()!;
-  const { activityType, explanation, textAppendix, setExerciseLocked } =
-    viewModel;
+  const { explanation, textAppendix } = viewModel;
 
   const defaultTheme = useTheme();
   const theme = useMemo(
@@ -59,13 +60,7 @@ export function View() {
             </AccordionDetails>
           </Accordion>
         )}
-        {activityType === "type-in-blanks" ? (
-          <TypeInBlanksExercise />
-        ) : activityType === "true-or-false" ? (
-          <TrueOrFalseExercise />
-        ) : (
-          <DragIntoBlanksExercise />
-        )}
+        {children}
         <Stack direction="row" justifyContent="end">
           <Button variant="contained" onClick={() => {}}>
             BİTİR

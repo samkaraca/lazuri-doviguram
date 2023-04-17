@@ -8,15 +8,14 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import useViewModelContext from "../view_model";
+import { useViewModelContext } from "../view_model";
 
-export function TrueOrFalseExercise() {
-  const viewModel = useViewModelContext()!;
-  const { trueOrFalseExercise, exerciseLocked } = viewModel;
+export function View() {
+  const { exercise } = useViewModelContext()!;
 
   return (
     <List>
-      {trueOrFalseExercise.map((item, index) => {
+      {exercise.map((item, index) => {
         const { text, isTrue } = item.content;
 
         return (

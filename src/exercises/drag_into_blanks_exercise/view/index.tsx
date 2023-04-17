@@ -1,4 +1,3 @@
-import useViewModelContext from "../../view_model";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { WordDraggablesBoard } from "./word_draggables_board";
 import { QuestionsList } from "./questions_list";
@@ -8,8 +7,9 @@ import {
 } from "@/activity/model/view_model";
 import { WordChip } from "./word_chip";
 import { Box } from "@mui/material";
+import { useViewModelContext } from "../view_model";
 
-export function DragIntoBlanksExercise() {
+export function View() {
   const { draggedItem, setDraggedItem, placeBoardItem } =
     useViewModelContext()!;
 
