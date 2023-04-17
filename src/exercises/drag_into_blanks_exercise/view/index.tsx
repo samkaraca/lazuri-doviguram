@@ -1,13 +1,10 @@
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { WordDraggablesBoard } from "./word_draggables_board";
 import { QuestionsList } from "./questions_list";
-import {
-  IBoardItem,
-  IBoardItemPiecePointer,
-} from "@/activity/model/view_model";
 import { WordChip } from "./word_chip";
 import { Box } from "@mui/material";
 import { useViewModelContext } from "../view_model";
+import { IBoardItem, IBoardItemPiecePointer } from "../model/view_model";
 
 export function View() {
   const { draggedItem, setDraggedItem, placeBoardItem } =
