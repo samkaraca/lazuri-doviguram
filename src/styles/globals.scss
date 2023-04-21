@@ -1,0 +1,14 @@
+@use "./global-variables.scss" as gv;
+
+.container {
+  margin: 0 auto;
+  max-width: gv.$brp-lg;
+  padding: 0 1rem 0 1rem;
+}
+
+body {
+  margin: 0;
+  background-color: #eeeeee;
+  height: 100vh;
+  overflow: hidden;
+}
