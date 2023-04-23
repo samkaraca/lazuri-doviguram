@@ -1,14 +1,22 @@
 @use "./global-variables.scss" as gv;
 
-.container {
-  margin: 0 auto;
-  max-width: gv.$brp-lg;
-  padding: 0 1rem 0 1rem;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
 }
 
 body {
   margin: 0;
-  background-color: #eeeeee;
-  height: 100vh;
-  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: gv.$brp-xl;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }

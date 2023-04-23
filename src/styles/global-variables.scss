@@ -1,5 +1,24 @@
-$brp-xs: 0px;
-$brp-sm: 600px;
-$brp-md: 900px;
-$brp-lg: 1200px;
-$brp-xl: 1536px;
+$brp-sm: 480px;
+$brp-md: 768px;
+$brp-lg: 1024px;
+$brp-xl: 1280px;
+
+@mixin padding-x($x: 1rem) {
+  padding-right: $x;
+  padding-left: $x;
+}
+
+@mixin padding-y($y: 1rem) {
+  padding-top: $y;
+  padding-bottom: $y;
+}
+
+@mixin margin-x($x: 1rem) {
+  margin-right: $x;
+  margin-left: $x;
+}
+
+@mixin margin-y($y: 1rem) {
+  margin-top: $y;
+  margin-bottom: $y;
+}

@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { Box, Container, Typography } from "@mui/material";
 import Image from "next/image";
 import { EmojiObjectsOutlined } from "@mui/icons-material";
 import Link from "next/link";
@@ -13,19 +12,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div id={styles.main}>
-        <div className={`container`}>
-          <div
-            className={`${styles.banner} ${styles["section-vertical-padding"]}`}
-          >
-            <div>
-              <Typography variant="h2" fontWeight="bold" marginBottom="1.5rem">
-                Lazuri Doviguram!
-              </Typography>
-              <Typography variant="h5" fontWeight="light" maxWidth="31rem">
+        <div className="container">
+          <div id={styles["banner-container"]}>
+            <div className={styles["headers-container"]}>
+              <h1>Lazuri Doviguram!</h1>
+              <h4>
                 Tarihin en eski dönemlerinden beri Kafkas insanının duygularına
                 tercüman olmuş, yaşamlarına eşlik etmiş bir dili, daha yakından
                 tanımak ister misin?
-              </Typography>
+              </h4>
             </div>
             <div className={styles["image-container"]}>
               <Image
@@ -37,13 +32,14 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className={`container ${styles["section-vertical-padding"]}`}>
-          <Typography variant="h4" fontWeight="medium" marginBottom={"2.5rem"}>
-            Temel Lazca
-          </Typography>
-          <div className={styles["theme-card-container"]}>
-            <ThemeCard />
-            <ThemeCard />
+        <div className="container">
+          <div className={styles["themes-container"]}>
+            <h2>Temel Lazca</h2>
+            <div className={styles["theme-card-container"]}>
+              <ThemeCard />
+              <ThemeCard />
+              <ThemeCard />
+            </div>
           </div>
         </div>
       </div>
@@ -58,45 +54,28 @@ function ThemeCard() {
       "Çkuni ocağişi nca",
       "Arteşi papu",
       "Ma nandidi miyonun",
-      "Çkimi, skani, muşi",
+      "Preparing for a career conversation",
     ],
   };
 
   return (
     <Link href="#" className={styles["theme-card"]}>
       <div className={styles.content}>
-        <Typography
-          variant="h4"
-          fontSize="1.7rem"
-          fontWeight="medium"
-          color="#444444"
-        >
-          {data.title}
-        </Typography>
-        <div className={styles.item}>
+        <h3>{data.title}</h3>
+        <div className={styles["item-container"]}>
           {data.lessons.map((lesson) => {
             return (
-              <Box key={lesson} sx={{ display: "flex" }}>
-                <EmojiObjectsOutlined sx={{ color: "#005E98" }} />
-                <Typography variant="body1">{lesson}</Typography>
-              </Box>
+              <div key={lesson} className={styles.item}>
+                <EmojiObjectsOutlined
+                  className={styles.icon}
+                  sx={{ color: "#005E98" }}
+                />
+                <h5>{lesson}</h5>
+              </div>
             );
           })}
         </div>
-        <Typography
-          variant="button"
-          className={styles.button}
-          sx={{
-            color: "#073042",
-            border: "0.15rem solid black",
-            borderRadius: "2rem",
-            padding: "0.5rem 2rem",
-            width: "min-content",
-            transition: "0.3s",
-          }}
-        >
-          Başla
-        </Typography>
+        <div className={styles.button}>Başla</div>
       </div>
       <div className={styles["image-container"]}>
         <Image
