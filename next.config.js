@@ -2,6 +2,16 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "media.lazuri.dev",
+        port: "",
+        pathname: "/images/**",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

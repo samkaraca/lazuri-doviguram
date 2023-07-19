@@ -1,0 +1,74 @@
+.card-button {
+  transition: 0.25s;
+
+  // theme-card
+  &:hover {
+    box-shadow: 0 14px 25px 0 rgba(60, 64, 67, 0.08);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  &:active {
+    box-shadow: 0 4px 13px 0 rgba(60, 64, 67, 0.12);
+  }
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background-color: #cccccc;
+  font-family: inherit;
+  flex-shrink: 0;
+
+  &:hover:not(:disabled):not(:active) {
+    filter: brightness(110%);
+  }
+
+  &:disabled {
+    cursor: unset;
+  }
+}
+
+button.add {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+}
+
+button.simple {
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.7rem 1.4rem;
+  border-radius: 20rem;
+
+  &.basic {
+    background-color: #335c99;
+    color: white;
+  }
+
+  &.error {
+    background-color: crimson;
+  }
+
+  &.success {
+    background-color: green;
+  }
+}
+
+button.simple-svg {
+  background-color: white;
+  padding: 0.6rem;
+  border-radius: 50%;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+  svg {
+    font-size: 1.1rem;
+    display: block;
+  }
+
+  &.remove {
+    color: white;
+    background-color: crimson;
+  }
+}

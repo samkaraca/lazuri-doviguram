@@ -1,0 +1,9 @@
+@startuml S
+!define S
+
+class GradingService {
+    -evaluate(question: Question): boolean | boolean[]
+    +grade(questions: Question[]): Object
+}
+
+@enduml

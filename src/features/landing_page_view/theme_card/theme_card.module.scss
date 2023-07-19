@@ -1,0 +1,73 @@
+@use "../../../styles/global-variables.scss" as gv;
+
+a.card {
+  color: inherit;
+  text-decoration: none;
+  display: grid;
+  grid-template:
+    "image" 14rem
+    "content" 1fr;
+  background-color: gv.$primary-light-tint-color;
+  height: fit-content;
+  width: 100%;
+
+  img {
+    grid-area: image;
+    height: 100%;
+    width: 100%;
+    grid-area: image;
+    object-fit: cover;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    grid-area: content;
+    padding: 1.2rem;
+    padding-bottom: 2rem;
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      button {
+        background-color: white;
+      }
+
+      h2 {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: gv.$primary-color;
+      }
+    }
+
+    ol {
+      list-style: none;
+      padding-left: 0.5rem;
+      padding-right: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      row-gap: 0.7rem;
+
+      li {
+        --font-size: 1rem;
+        display: flex;
+        column-gap: 0.6rem;
+
+        svg {
+          height: calc(var(--font-size) * 1.5);
+          font-size: calc(var(--font-size) * 1.2);
+          color: gv.$primary-color;
+        }
+
+        h3 {
+          font-weight: 400;
+          line-height: calc(var(--font-size) * 1.5);
+          font-size: var(--font-size);
+        }
+      }
+    }
+  }
+}

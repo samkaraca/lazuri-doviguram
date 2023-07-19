@@ -1,0 +1,37 @@
+.main {
+  height: 100vh;
+  overflow-x: hidden;
+  padding: 0;
+  padding-bottom: 2em;
+  background-color: #dddddd;
+
+  .appbar {
+    position: relative;
+
+    .buttons {
+      display: flex;
+      column-gap: 1em;
+    }
+  }
+
+  .content {
+    display: flex;
+    padding: 1.5em 1.5em 0 1.5em;
+    justify-content: space-evenly;
+
+    .simple-container {
+      width: 46%;
+      max-width: 60em;
+      min-width: 22em;
+      background-color: white;
+      row-gap: 1em;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editing-form-container {
+      padding: 1.5em 1em;
+      padding-bottom: 2.5em;
+    }
+  }
+}

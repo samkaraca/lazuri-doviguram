@@ -1,0 +1,30 @@
+@use "../../../styles/global-variables.scss" as gv;
+
+.themes {
+  @include gv.simple-responsive-container($max-width: gv.$bp-md-alt-2);
+  margin-top: 5rem;
+
+  h4 {
+    font-weight: 600;
+    font-size: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  ol.cards {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media (gv.$bp-sm > width) {
+  .themes {
+    padding-inline: 1rem;
+    ol.cards {
+      grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    }
+  }
+}

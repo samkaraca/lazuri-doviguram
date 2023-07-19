@@ -1,0 +1,82 @@
+@use "../../styles/global-variables.scss" as gv;
+
+.header {
+  @include gv.simple-responsive-container;
+  background-color: gv.$alt-bg-color;
+  border-bottom: 1px solid #ddd;
+}
+
+.header > div:only-child {
+  width: 100%;
+  height: gv.$app-bar-height;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .header-logo {
+    height: 72%;
+
+    img {
+      height: 100%;
+    }
+  }
+
+  nav {
+    display: flex;
+    column-gap: 4rem;
+
+    a {
+      font-size: 1.2rem;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .menu-button {
+    display: none;
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: transparent;
+    width: 2.5rem;
+    aspect-ratio: 1;
+    padding: 0;
+
+    svg {
+      vertical-align: middle;
+    }
+  }
+}
+
+.alt-nav-menu {
+  width: 100%;
+  background-color: #ddd;
+
+  nav {
+    margin: 1.8rem auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 1.5rem;
+  }
+}
+
+@media (gv.$bp-md-alt-2 > width) {
+  .header {
+    padding-inline: 3%;
+  }
+}
+
+@media (gv.$bp-md > width) {
+  .header > div:only-child {
+    nav {
+      display: none;
+    }
+
+    .menu-button {
+      display: unset;
+    }
+  }
+}

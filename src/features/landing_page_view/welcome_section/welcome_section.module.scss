@@ -1,0 +1,113 @@
+@use "../../../styles/global-variables.scss" as gv;
+
+.welcome {
+  @include gv.simple-responsive-container($max-width: gv.$bp-md-alt-2);
+  background-color: gv.$alt-bg-color;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.welcome > div:only-child {
+  padding-block: 6rem 8rem;
+  display: grid;
+  grid-template:
+    "title image"
+    "text image"
+    "button image" auto / auto minmax(18rem, 20%);
+
+  h1 {
+    grid-area: title;
+    font-size: 4.5rem;
+  }
+
+  p {
+    grid-area: text;
+    display: inline-block;
+    max-width: 34rem;
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  button {
+    grid-area: button;
+    width: fit-content;
+    font-size: 1.1rem;
+    background-color: gv.$primary-color;
+    color: white;
+    margin-top: 2.1rem;
+    padding: 0.9rem 1.8rem;
+  }
+
+  img {
+    align-self: center;
+    grid-area: image;
+    width: 100%;
+    object-fit: contain;
+  }
+}
+
+@media (gv.$bp-md-alt-2 > width) {
+  .welcome {
+    padding-inline: 7%;
+  }
+
+  .welcome > div:only-child {
+    padding-block: 4.5rem 6rem;
+
+    h1 {
+      font-size: 4rem;
+    }
+
+    p {
+      font-size: 1.5rem;
+      max-width: 32rem;
+    }
+  }
+}
+
+@media (gv.$bp-md > width) {
+  .welcome > div:only-child {
+    height: calc(100svh - gv.$app-bar-height);
+    justify-items: center;
+    grid-template:
+      "title"
+      "image"
+      "text"
+      "button";
+
+    align-content: space-evenly;
+    padding-block: 0;
+    padding-bottom: 3svh;
+
+    h1 {
+      text-align: center;
+    }
+
+    img {
+      max-height: 33svh;
+      max-width: 66dvw;
+    }
+
+    p {
+      margin: 0;
+      text-align: center;
+    }
+
+    button {
+      margin: 0;
+    }
+  }
+}
+
+@media (gv.$bp-sm > width) {
+  .welcome > div:only-child {
+    h1 {
+      font-size: 3rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+    }
+  }
+}

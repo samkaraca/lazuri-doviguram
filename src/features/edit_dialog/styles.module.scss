@@ -1,0 +1,36 @@
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  padding: 1rem;
+
+  section[aria-label="diyalog içeriği"] {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+  }
+
+  section[aria-label="diyalog butonları"] {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 0.6rem;
+  }
+}
+
+div.placeholder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #eee;
+  border: 0.1rem solid #ddd;
+  border-radius: 0.4rem;
+  aspect-ratio: 16/9;
+  font-size: 1.4rem;
+  color: #888;
+
+  .icon {
+    font-size: 4rem;
+  }
+}

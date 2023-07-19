@@ -1,0 +1,53 @@
+@use "../../../styles/global-variables.scss" as gv;
+
+.exercise-content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2.5rem;
+}
+
+.board-items-board {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 1rem;
+  min-height: 10rem;
+  background-color: #ddd;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.dropped {
+  background-color: transparent;
+  padding: 0;
+  width: calc(10rem + 2px);
+
+  .draggable-chip {
+    padding-block: 0;
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+.droppable {
+  box-sizing: content-box;
+  display: inline-block;
+  width: 10rem;
+  height: 1.8rem;
+  vertical-align: middle;
+  border: 1px solid gv.$neutral-color;
+  border-radius: 9px;
+
+  &.over {
+    box-shadow: 0 0 0.2rem 0.05rem gv.$neutral-color;
+  }
+
+  &.success {
+    border: 1px solid gv.$success-color;
+  }
+
+  &.error {
+    border: 1px solid gv.$error-color;
+  }
+}

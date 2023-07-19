@@ -1,0 +1,74 @@
+@use "../../../../styles/global-variables.scss" as gv;
+
+.tab-panels {
+  @include gv.simple-responsive-container;
+}
+
+.panel {
+  margin-top: 2.5rem;
+
+  h2 {
+    font-size: 1.9rem;
+  }
+
+  p {
+    margin-top: 0.8rem;
+    font-size: 1.1rem;
+  }
+}
+
+.activities-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.2em;
+  margin-top: 4em;
+}
+
+.activity-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: gv.$primary-light-tint-color;
+  padding: 1.3rem;
+  border-radius: 0.2em;
+
+  h3 {
+    color: gv.$primary-color;
+    font-weight: 600;
+    font-size: 1.3em;
+  }
+
+  .actions {
+    .start {
+      background-color: gv.$primary-color;
+      color: white;
+    }
+  }
+}
+
+.no-activity-container {
+  padding-block: 6rem;
+  background-color: #eeeeee;
+  border: 0.1em solid #dddddd;
+  border-radius: 0.3em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.lesson-actions-container {
+  margin-top: 1.5em;
+
+  hr {
+    border-color: #ffffff;
+    color: red;
+    background-color: red;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.7em;
+  }
+}

@@ -1,24 +1,40 @@
-$brp-sm: 480px;
-$brp-md: 768px;
-$brp-lg: 1024px;
-$brp-xl: 1280px;
+$bp-lg: 87.5rem;
+$bp-md-alt-2: 72.5rem;
+$bp-md-alt-1: 64rem;
+$bp-md: 57.5rem;
+$bp-sm-md: 42.5rem;
+$bp-sm: 27.5rem;
 
-@mixin padding-x($x: 1rem) {
-  padding-right: $x;
-  padding-left: $x;
-}
+$success-color: green;
+$success-color-light: #e9fed6;
+$error-color: crimson;
+$error-color-light: #ffd8dc;
+$neutral-color: dodgerblue;
 
-@mixin padding-y($y: 1rem) {
-  padding-top: $y;
-  padding-bottom: $y;
-}
+$primary-color: #005e98;
+$primary-dark-tint-color: #174d82;
+$primary-light-tint-color: #d7effe;
+$alt-bg-color: #f0f0f0;
 
-@mixin margin-x($x: 1rem) {
-  margin-right: $x;
-  margin-left: $x;
-}
+$app-bar-height: 5.5rem;
 
-@mixin margin-y($y: 1rem) {
-  margin-top: $y;
-  margin-bottom: $y;
+@mixin simple-responsive-container(
+  $padding-inline: 10%,
+  $max-width: $bp-lg,
+  $type: "fragile"
+) {
+  padding-inline: $padding-inline;
+  width: 100%;
+
+  > div:only-child {
+    margin: 0 auto;
+    width: 100%;
+    max-width: $max-width;
+  }
+
+  @if $type == "fragile" {
+    @media ($bp-md-alt-2 > width) {
+      padding-inline: 5%;
+    }
+  }
 }

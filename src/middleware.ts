@@ -4,7 +4,7 @@ import * as jose from "jose";
 export async function middleware(req: NextRequest) {
   const isLoginPage = req.nextUrl.pathname === "/admin/login";
   const loginUrl = new URL("/admin/login", new URL(req.url).origin);
-  const successUrl = new URL("/admin/temalar", new URL(req.url).origin);
+  const successUrl = new URL("/admin", new URL(req.url).origin);
 
   if (req.cookies.has("token")) {
     try {
@@ -27,5 +27,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/temalar/:path*", "/admin/login"],
+  matcher: ["/admin/:path*", "/admin/login"],
 };

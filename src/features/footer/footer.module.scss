@@ -1,0 +1,97 @@
+@use "../../styles/global-variables.scss" as gv;
+
+.footer {
+  @include gv.simple-responsive-container;
+  background-color: gv.$primary-dark-tint-color;
+  margin-top: 20vh;
+}
+
+.inner-container {
+  color: white;
+  padding-block: 4.5rem;
+  display: grid;
+  grid-template:
+    "site-map about-us" auto
+    "address eu" auto / 50% 50%;
+  row-gap: 3.5rem;
+}
+
+.site-map {
+  grid-area: site-map;
+
+  h3 {
+    margin-bottom: 0.4rem;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+
+    a {
+      color: white;
+      display: flex;
+      column-gap: 0.3rem;
+      align-items: center;
+
+      svg {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
+
+.about-us {
+  grid-area: about-us;
+  display: flex;
+  flex-direction: column;
+
+  img {
+    width: 10rem;
+    margin-bottom: 0.8rem;
+  }
+
+  p {
+    font-size: 1rem;
+    max-width: 40rem;
+  }
+}
+
+.address {
+  grid-area: address;
+
+  h3 {
+    margin-bottom: 0.3rem;
+  }
+
+  p {
+    margin: 0;
+    padding-right: 2rem;
+  }
+}
+
+.eu {
+  grid-area: eu;
+  width: 20rem;
+}
+
+@media (gv.$bp-md-alt-2 > width) {
+  .inner-container {
+    display: grid;
+    grid-template:
+      "site-map address" auto
+      "about-us about-us" auto
+      "eu eu" auto / 50% 50%;
+  }
+}
+
+@media (gv.$bp-sm-md > width) {
+  .inner-container {
+    display: grid;
+    grid-template:
+      "site-map"
+      "about-us"
+      "address"
+      "eu";
+  }
+}

@@ -1,9 +1,12 @@
 import "@/styles/globals.scss";
+import "@/styles/list.scss";
+import "@/styles/button.scss";
+import "@/styles/input.scss";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import type { AppProps } from "next/app";
 import { Poppins } from "next/font/google";
 
-const poppins = Poppins({
+export const poppins = Poppins({
   subsets: ["latin-ext"],
   weight: ["100", "200", "300", "400", "500", "600", "700"],
 });
@@ -20,11 +23,11 @@ const theme = createTheme({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <main className={poppins.className}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <main className={poppins.className}>
         <Component {...pageProps} />
-      </ThemeProvider>
-    </main>
+      </main>
+    </ThemeProvider>
   );
 }

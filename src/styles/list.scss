@@ -1,0 +1,82 @@
+@use "../styles/global-variables.scss" as gv;
+
+ol.simple {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    column-gap: 0.3rem;
+    counter-increment: item;
+
+    &::before {
+      content: counter(item) ". ";
+      flex-shrink: 0;
+      min-width: 1rem;
+    }
+
+    section:only-child {
+      flex-grow: 1;
+      margin: 0;
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+}
+
+ol.composite-question-list {
+  padding-inline: 4%;
+
+  li {
+    &::before {
+      line-height: 2rem;
+    }
+
+    p {
+      display: inline;
+      line-height: 2rem;
+    }
+
+    input {
+      display: inline;
+    }
+  }
+}
+
+ol.multiple-choice {
+  li {
+    padding: 1.2rem 1.3rem;
+    padding-bottom: 1.3rem;
+
+    &.success {
+      background-color: gv.$success-color-light;
+    }
+
+    &.error {
+      background-color: gv.$error-color-light;
+    }
+
+    .choices {
+      margin-left: 0.8rem;
+    }
+
+    .choice {
+      input[type="radio"] {
+        height: 1.5rem;
+        margin: 0;
+      }
+
+      display: flex;
+      align-items: flex-start;
+      column-gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+  }
+}

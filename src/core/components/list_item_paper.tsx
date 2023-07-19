@@ -1,7 +1,7 @@
-import { ElementChildren } from "@/core/types";
 import { Paper } from "@mui/material";
+import { ReactNode } from "react";
 
-export function ActivityListItemPaper({ children }: ElementChildren) {
+export function ActivityListItemPaper({ children }: { children: ReactNode }) {
   return (
     <Paper
       elevation={5}

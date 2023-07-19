@@ -1,0 +1,25 @@
+@startuml Q
+!define Q
+
+abstract class QuestionRepresentation {}
+
+class ImageRepresentation {}
+ImageRepresentation -down-|> QuestionRepresentation
+
+class TemplateRepresentation {}
+TemplateRepresentation -down-|> QuestionRepresentation
+
+abstract class Question<A extends single | multiple> {
+  +id: string
+  +representation: QuestionRepresentation
+  +answer: A
+}
+Question *-up- QuestionRepresentation
+
+class Answer {
+  +representation: string
+  +value: string
+}
+Answer -up-* Question
+
+@enduml
