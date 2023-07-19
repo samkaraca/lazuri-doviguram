@@ -19,7 +19,7 @@ export default function LandingPage({
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const themeRepository = ThemeReposityImplementation.getInstance();
   const themeMetas = await themeRepository.getThemeMetas();
 
