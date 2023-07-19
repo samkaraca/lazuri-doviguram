@@ -26,6 +26,23 @@ export class ThemeReposityImplementation implements ThemeRepository {
     return ThemeReposityImplementation.instance;
   }
 
+  getThemeIds = async (): Promise<any> => {
+    const dbClient = DynamoDBClientSingleton.getInstance();
+    const queryCommand = new QueryCommand({
+      TableName: "themes",
+      KeyConditionExpression: "PK = :pk",
+      ExpressionAttributeValues: {
+        ":pk": { S: "theme" },
+      },
+      ProjectionExpression: "SK",
+    });
+
+    const rawThemeIdDatas = await dbClient.send(queryCommand);
+    const themeIds = rawThemeIdDatas.Items!.map((item) => unmarshall(item));
+
+    return themeIds;
+  };
+
   getThemeMetas = async (): Promise<ThemeMetaDTO[]> => {
     const dbClient = DynamoDBClientSingleton.getInstance();
     const queryCommand = new QueryCommand({
