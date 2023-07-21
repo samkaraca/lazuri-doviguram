@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ThemeReposityImplementation } from "@/core/models/repositories/theme_repository_implementation";
+import { ActivityRepositoryImplementation } from "@/core/models/repositories/activity_repository_implementation";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const themeRepo = ThemeReposityImplementation.getInstance();
+  const activityRepo = new ActivityRepositoryImplementation();
 
   if (req.method === "PUT") {
     const { theme, lesson, activity } = req.query as {
@@ -13,12 +13,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { type } = req.body;
 
     if (type === "saveActivity") {
-      const DBResponse = await themeRepo.saveActivity(
+      const DBResponse = await activityRepo.saveActivity(
         theme,
         lesson,
         activity,
         req.body.activity
       );
+      return res.status(200).send(DBResponse);
+    } else if (type === "deleteActivity") {
+      const DBResponse = await activityRepo.deleteActivity({
+        themeId: theme,
+        lessonId: lesson,
+        activityId: activity,
+        activityIndex: req.body.activityIndex,
+      });
       return res.status(200).send(DBResponse);
     }
 

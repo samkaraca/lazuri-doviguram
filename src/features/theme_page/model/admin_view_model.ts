@@ -1,15 +1,41 @@
-import { IAdminThemeDialog } from "../view_model/use_admin_theme_dialog";
+import { Dispatch, SetStateAction } from "react";
 
 export interface AdminViewModel {
   isAdmin: boolean;
-  saveThemeTitle: (newTitle: string) => void;
-  saveThemeExplanation: (newExplanation: string) => void;
-  saveThemeImage: (newImage: string) => void;
-  saveThemeYoutubeVideoUrl: (newUrl: string) => void;
-  saveLessonTitle: (newTitle: string) => void;
-  saveLessonExplanation: (newExplanation: string) => void;
-  createNewLesson: () => void;
-  createNewActivity: (lessonId: string) => void;
-  deleteLesson: (lessonId: string) => void;
-  adminThemeDialog: IAdminThemeDialog;
+  stalling: boolean;
+  snackbar: {
+    severity: "error" | "success" | "warning" | "info";
+    message: string;
+    visible: boolean;
+  };
+  setSnackbar: Dispatch<SetStateAction<AdminViewModel["snackbar"]>>;
+  createNewLesson: () => Promise<void>;
+  saveLesson: ({
+    title,
+    explanation,
+  }: {
+    title: string;
+    explanation: string;
+  }) => Promise<void>;
+  deleteLesson: () => Promise<void>;
+  createNewActivity: () => Promise<void>;
+  deleteActivity: ({
+    activityIndex,
+    activityId,
+  }: {
+    activityIndex: number;
+    activityId: string;
+  }) => Promise<void>;
+  saveTheme: ({
+    title,
+    explanation,
+    image,
+    youtubeVideoUrl,
+  }: {
+    title: string;
+    explanation: string;
+    image: string;
+    youtubeVideoUrl: string;
+  }) => Promise<void>;
+  deleteTheme: () => Promise<void>;
 }

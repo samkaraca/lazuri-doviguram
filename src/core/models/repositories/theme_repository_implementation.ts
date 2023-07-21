@@ -12,19 +12,56 @@ import { ThemeMetaDTO } from "../dtos/theme_meta_dto";
 import { Activity, LessonMap, Theme } from "../entities/learning_unit";
 import slugify from "slugify";
 import { nanoid } from "nanoid";
+import { StatusResponse } from "./status_response";
 
 export class ThemeReposityImplementation implements ThemeRepository {
-  private static instance: ThemeReposityImplementation;
+  saveTheme = async ({
+    themeId,
+    title,
+    image,
+    youtubeVideoUrl,
+    explanation,
+  }: {
+    themeId: string;
+    title: string;
+    image: string;
+    youtubeVideoUrl: string;
+    explanation: string;
+  }): Promise<StatusResponse> => {
+    slugify.extend({ ǩ: "k", ǯ: "z", ʒ: "z" });
+    const newURLPath = slugify(title.toLowerCase(), {
+      strict: true,
+    });
 
-  private constructor() {}
+    const dbClient = DynamoDBClientSingleton.getInstance();
+    const updateCommand = new UpdateItemCommand({
+      TableName: "themes",
+      Key: marshall({ PK: "theme", SK: themeId }),
+      UpdateExpression:
+        "SET #title = :newTitle, #explanation = :newExplanation, #image = :newImage, #youtubeVideoUrl = :newYoutubeVideoUrl, #URLPath = :newURLPath",
+      ExpressionAttributeNames: {
+        "#title": "title",
+        "#explanation": "explanation",
+        "#image": "image",
+        "#youtubeVideoUrl": "youtubeVideoUrl",
+        "#URLPath": "URLPath",
+      },
+      ExpressionAttributeValues: marshall({
+        ":newTitle": title,
+        ":newExplanation": explanation,
+        ":newImage": image,
+        ":newYoutubeVideoUrl": youtubeVideoUrl,
+        ":newURLPath": newURLPath,
+      }),
+    });
 
-  public static getInstance(): ThemeReposityImplementation {
-    if (!ThemeReposityImplementation.instance) {
-      ThemeReposityImplementation.instance = new ThemeReposityImplementation();
+    try {
+      await dbClient.send(updateCommand);
+      return { status: "success", message: "Tema başarıyla güncellendi." };
+    } catch (error) {
+      return { status: "error", message: "Tema güncelleme başarısız." };
     }
-
-    return ThemeReposityImplementation.instance;
-  }
+  };
 
   getThemeIds = async (): Promise<any> => {
     const dbClient = DynamoDBClientSingleton.getInstance();
@@ -99,162 +136,6 @@ export class ThemeReposityImplementation implements ThemeRepository {
     } as Theme;
   };
 
-  saveThemeTitle = async (newTitle: string, themeId: string): Promise<any> => {
-    const tableName = "themes";
-    const primaryKey = marshall({ PK: "theme", SK: themeId });
-    slugify.extend({ ǩ: "k", ǯ: "z", ʒ: "z" });
-    const newPath = slugify(newTitle.toLowerCase(), {
-      strict: true,
-    });
-
-    const dbClient = DynamoDBClientSingleton.getInstance();
-    const updateCommand = new UpdateItemCommand({
-      TableName: tableName,
-      Key: primaryKey,
-      UpdateExpression: "SET #title = :newTitle, #URLPath = :newPath",
-      ExpressionAttributeNames: {
-        "#title": "title",
-        "#URLPath": "URLPath",
-      },
-      ExpressionAttributeValues: marshall({
-        ":newTitle": newTitle,
-        ":newPath": newPath,
-      }),
-    });
-
-    const result = await dbClient.send(updateCommand);
-
-    return result;
-  };
-
-  saveThemeExplanation = async (
-    newExplanation: string,
-    themeId: string
-  ): Promise<any> => {
-    const tableName = "themes";
-    const primaryKey = marshall({ PK: "theme", SK: themeId });
-
-    const dbClient = DynamoDBClientSingleton.getInstance();
-    const updateCommand = new UpdateItemCommand({
-      TableName: tableName,
-      Key: primaryKey,
-      UpdateExpression: "SET #explanation = :newExplanation",
-      ExpressionAttributeNames: {
-        "#explanation": "explanation",
-      },
-      ExpressionAttributeValues: marshall({
-        ":newExplanation": newExplanation,
-      }),
-    });
-
-    const result = await dbClient.send(updateCommand);
-
-    return result;
-  };
-
-  saveThemeImage = async (newImage: string, themeId: string): Promise<any> => {
-    const tableName = "themes";
-    const primaryKey = marshall({ PK: "theme", SK: themeId });
-
-    const dbClient = DynamoDBClientSingleton.getInstance();
-    const updateCommand = new UpdateItemCommand({
-      TableName: tableName,
-      Key: primaryKey,
-      UpdateExpression: "SET #image = :newImage",
-      ExpressionAttributeNames: {
-        "#image": "image",
-      },
-      ExpressionAttributeValues: marshall({
-        ":newImage": newImage,
-      }),
-    });
-
-    const result = await dbClient.send(updateCommand);
-
-    return result;
-  };
-
-  saveThemeYoutubeVideoUrl = async (
-    newYoutubeVideoUrl: string,
-    themeId: string
-  ): Promise<any> => {
-    const tableName = "themes";
-    const primaryKey = marshall({ PK: "theme", SK: themeId });
-
-    const dbClient = DynamoDBClientSingleton.getInstance();
-    const updateCommand = new UpdateItemCommand({
-      TableName: tableName,
-      Key: primaryKey,
-      UpdateExpression: "SET #youtubeVideoUrl = :newYoutubeVideoUrl",
-      ExpressionAttributeNames: {
-        "#youtubeVideoUrl": "youtubeVideoUrl",
-      },
-      ExpressionAttributeValues: marshall({
-        ":newYoutubeVideoUrl": newYoutubeVideoUrl,
-      }),
-    });
-
-    const result = await dbClient.send(updateCommand);
-
-    return result;
-  };
-
-  saveLessonTitle = async (
-    newTitle: string,
-    themeId: string,
-    lessonIndex: number
-  ): Promise<any> => {
-    const tableName = "themes";
-    const primaryKey = marshall({ PK: "theme", SK: themeId });
-
-    const dbClient = DynamoDBClientSingleton.getInstance();
-    const updateCommand = new UpdateItemCommand({
-      TableName: tableName,
-      Key: primaryKey,
-      UpdateExpression: `SET #lessons.#meta[${lessonIndex}].#title = :newTitle`,
-      ExpressionAttributeNames: {
-        "#lessons": "lessons",
-        "#meta": "meta",
-        "#title": "title",
-      },
-      ExpressionAttributeValues: marshall({
-        ":newTitle": newTitle,
-      }),
-    });
-
-    const result = await dbClient.send(updateCommand);
-
-    return result;
-  };
-
-  saveLessonExplanation = async (
-    newExplanation: string,
-    themeId: string,
-    lessonId: string
-  ): Promise<any> => {
-    const tableName = "themes";
-    const primaryKey = marshall({ PK: "theme", SK: themeId });
-
-    const dbClient = DynamoDBClientSingleton.getInstance();
-    const updateCommand = new UpdateItemCommand({
-      TableName: tableName,
-      Key: primaryKey,
-      UpdateExpression: `SET #lessons.#lessonId.#explanation = :newExplanation`,
-      ExpressionAttributeNames: {
-        "#lessons": "lessons",
-        "#lessonId": lessonId,
-        "#explanation": "explanation",
-      },
-      ExpressionAttributeValues: marshall({
-        ":newExplanation": newExplanation,
-      }),
-    });
-
-    const result = await dbClient.send(updateCommand);
-
-    return result;
-  };
-
   createNewTheme = async () => {
     const dbClient = DynamoDBClientSingleton.getInstance();
     const newThemeId = nanoid(7);
@@ -276,6 +157,21 @@ export class ThemeReposityImplementation implements ThemeRepository {
     const result = await dbClient.send(updateCommand);
 
     return newThemeId;
+  };
+
+  deleteTheme = async (themeId: string) => {
+    const tableName = "themes";
+    const key = marshall({ PK: "theme", SK: themeId });
+
+    const dbClient = DynamoDBClientSingleton.getInstance();
+    const deleteCommand = new DeleteItemCommand({
+      TableName: tableName,
+      Key: key,
+    });
+
+    const result = await dbClient.send(deleteCommand);
+
+    return result;
   };
 
   createNewLesson = async (themeId: string) => {
@@ -310,149 +206,15 @@ export class ThemeReposityImplementation implements ThemeRepository {
       ReturnValues: "UPDATED_NEW",
     });
 
-    const result = await dbClient.send(updateCommand);
-
-    return unmarshall(result.Attributes!);
-  };
-
-  deleteTheme = async (themeId: string) => {
-    const tableName = "themes";
-    const key = marshall({ PK: "theme", SK: themeId });
-
-    const dbClient = DynamoDBClientSingleton.getInstance();
-    const deleteCommand = new DeleteItemCommand({
-      TableName: tableName,
-      Key: key,
-    });
-
-    const result = await dbClient.send(deleteCommand);
-
-    return result;
-  };
-
-  deleteLesson = async (themeId: string, lessonId: string) => {
-    const tableName = "themes";
-    const key = marshall({ PK: "theme", SK: themeId });
-
-    const dbClient = DynamoDBClientSingleton.getInstance();
-    const getPrevLessonsCommand = new GetItemCommand({
-      TableName: tableName,
-      Key: key,
-      ProjectionExpression: "lessons",
-    });
-
-    const prevLessons = unmarshall(
-      (await dbClient.send(getPrevLessonsCommand)).Item!
-    ).lessons;
-
-    const newLessons = { ...prevLessons };
-
-    delete newLessons[lessonId];
-
-    newLessons["meta"] = newLessons["meta"].filter(
-      (lessonMeta: any) => lessonMeta.id !== lessonId
-    );
-
-    const deleteLessonCommand = new UpdateItemCommand({
-      TableName: tableName,
-      Key: key,
-      UpdateExpression: "SET #lessons = :updatedLessons",
-      ExpressionAttributeNames: {
-        "#lessons": "lessons",
-      },
-      ExpressionAttributeValues: marshall({
-        ":updatedLessons": newLessons,
-      }),
-    });
-
-    const result = await dbClient.send(deleteLessonCommand);
-
-    return result;
-  };
-
-  createNewActivity = async (themeId: string, lessonId: string) => {
-    const tableName = "themes";
-    const primaryKey = marshall({ PK: "theme", SK: themeId });
-    const newActivityIdKey = nanoid(7);
-
-    const newActivityTemplate = {
-      title: "Yeni Aktivite",
-      explanation: "",
-      audio: null,
-      image: null,
-      textContent: null,
-      youtubeVideoUrl: null,
-      activityType: "type-in-blanks",
-      questions: [],
-    } as Activity<any>;
-
-    const dbClient = DynamoDBClientSingleton.getInstance();
-    const updateCommand = new UpdateItemCommand({
-      TableName: tableName,
-      Key: primaryKey,
-      UpdateExpression: `SET #lessons.#lessonId.#activities.#idOrderMeta = list_append(#lessons.#lessonId.#activities.#idOrderMeta, :newActivityMeta), #lessons.#lessonId.#activities.#newActivityIdKey = :newActivity`,
-      ExpressionAttributeNames: {
-        "#lessons": "lessons",
-        "#lessonId": lessonId,
-        "#activities": "activities",
-        "#idOrderMeta": "idOrderMeta",
-        "#newActivityIdKey": newActivityIdKey,
-      },
-      ExpressionAttributeValues: marshall({
-        ":newActivityMeta": [newActivityIdKey],
-        ":newActivity": newActivityTemplate,
-      }),
-    });
-
-    await dbClient.send(updateCommand);
-
-    return {
-      meta: newActivityIdKey,
-      activity: newActivityTemplate,
-    };
-  };
-
-  getActivity = async (themeId: string) => {
-    const dbClient = DynamoDBClientSingleton.getInstance();
-    const queryCommand = new GetItemCommand({
-      TableName: "themes",
-      Key: {
-        PK: { S: "theme" },
-        SK: { S: themeId },
-      },
-      ProjectionExpression: "lessons",
-    });
-
-    const rawActivity = await dbClient.send(queryCommand);
-
-    return rawActivity.Item!;
-  };
-
-  saveActivity = async (
-    themeId: string,
-    lessonId: string,
-    activityId: string,
-    activity: Activity<any>
-  ) => {
-    const tableName = "themes";
-    const primaryKey = marshall({ PK: "theme", SK: themeId });
-
-    const dbClient = DynamoDBClientSingleton.getInstance();
-    const updateCommand = new UpdateItemCommand({
-      TableName: tableName,
-      Key: primaryKey,
-      UpdateExpression: `SET #lessons.#lessonId.#activities.#activityIdKey = :activity`,
-      ExpressionAttributeNames: {
-        "#lessons": "lessons",
-        "#lessonId": lessonId,
-        "#activities": "activities",
-        "#activityIdKey": activityId,
-      },
-      ExpressionAttributeValues: marshall({
-        ":activity": activity,
-      }),
-    });
-
-    const result = await dbClient.send(updateCommand);
+    try {
+      const res = await dbClient.send(updateCommand);
+      return {
+        status: "success",
+        message: "Yeni ders başarıyla oluşturuldu.",
+        data: unmarshall(res.Attributes!),
+      };
+    } catch (error) {
+      return { status: "error", message: "Yeni ders oluşturma başarısız." };
+    }
   };
 }

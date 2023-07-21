@@ -1,50 +1,30 @@
 import {
   AttributeValue,
   DeleteItemCommandOutput,
+  TransactWriteItemsCommandOutput,
   UpdateItemCommandOutput,
 } from "@aws-sdk/client-dynamodb";
 import { ThemeMetaDTO } from "../dtos/theme_meta_dto";
-import { Activity, Theme } from "../entities/learning_unit";
+import { Theme } from "../entities/learning_unit";
+import { StatusResponse } from "./status_response";
 
 export interface ThemeRepository {
   getThemeMetas(): Promise<ThemeMetaDTO[]>;
   getThemeData(themePath: string): Promise<Theme>;
-  saveThemeTitle(themePath: string, newTitle: string): Promise<any>;
-  saveThemeExplanation(newExplanation: string, themeId: string): Promise<any>;
-  saveThemeImage(newImage: string, themeId: string): Promise<any>;
-  saveThemeYoutubeVideoUrl(
-    newYoutubeVideoUrl: string,
-    themeId: string
-  ): Promise<any>;
-  saveLessonTitle(
-    newTitle: string,
-    themeId: string,
-    lessonIndex: number
-  ): Promise<any>;
-  saveLessonExplanation(
-    newExplanation: string,
-    themeId: string,
-    lessonId: string
-  ): Promise<any>;
-  createNewTheme: () => Promise<string>;
   createNewLesson: (themeId: string) => Promise<Record<string, any>>;
+  saveTheme: ({
+    themeId,
+    title,
+    image,
+    youtubeVideoUrl,
+    explanation,
+  }: {
+    themeId: string;
+    title: string;
+    image: string;
+    youtubeVideoUrl: string;
+    explanation: string;
+  }) => Promise<StatusResponse>;
+  createNewTheme: () => Promise<string>;
   deleteTheme: (themeId: string) => Promise<DeleteItemCommandOutput>;
-  deleteLesson: (
-    themeId: string,
-    lessonId: string
-  ) => Promise<UpdateItemCommandOutput>;
-  createNewActivity: (
-    themeId: string,
-    lessonId: string
-  ) => Promise<{
-    meta: string;
-    activity: Activity<any>;
-  }>;
-  saveActivity: (
-    themeId: string,
-    lessonId: string,
-    activityId: string,
-    activity: Activity<any>
-  ) => Promise<void>;
-  getActivity: (themeId: string) => Promise<Record<string, AttributeValue>>;
 }

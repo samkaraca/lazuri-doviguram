@@ -1,33 +1,31 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ThemeReposityImplementation } from "@/core/models/repositories/theme_repository_implementation";
+import { LessonRepositoryImplementation } from "@/core/models/repositories/lesson_repository_implementation";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const themeRepo = ThemeReposityImplementation.getInstance();
+  const lessonRepo = new LessonRepositoryImplementation();
 
   if (req.method === "PUT") {
     let DBResponse;
     const { theme, lesson } = req.query as { theme: string; lesson: string };
     const { type } = req.body;
 
-    if (type === "setLessonTitle") {
-      const { newTitle } = req.body;
-      const lessonIndex = parseInt(lesson, 10);
-      DBResponse = await themeRepo.saveLessonTitle(
-        newTitle,
-        theme,
-        lessonIndex
-      );
+    if (type === "saveLesson") {
+      const { title, explanation, lessonIndex } = req.body;
+      DBResponse = await lessonRepo.saveLesson({
+        themeId: theme,
+        lessonId: lesson,
+        lessonIndex,
+        title,
+        explanation,
+      });
       return res.status(200).send(DBResponse);
-    } else if (type === "setLessonExplanation") {
-      const { newExplanation } = req.body;
-      DBResponse = await themeRepo.saveLessonExplanation(
-        newExplanation,
-        theme,
-        lesson
-      );
+    } else if (type === "deleteLesson") {
+      DBResponse = await lessonRepo.deleteLesson(theme, lesson);
+
       return res.status(200).send(DBResponse);
     } else if (type === "createNewActivity") {
-      DBResponse = await themeRepo.createNewActivity(theme, lesson);
+      DBResponse = await lessonRepo.createNewActivity(theme, lesson);
+
       return res.status(200).send(DBResponse);
     }
 

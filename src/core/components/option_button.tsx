@@ -1,4 +1,13 @@
-import { MouseEventHandler, ReactNode } from "react";
+import {
+  MouseEventHandler,
+  ReactElement,
+  ReactNode,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
 
 export function OptionButton({
   children,
@@ -7,34 +16,56 @@ export function OptionButton({
   left = true,
   existent = true,
 }: {
-  children: ReactNode;
+  children: (ref?: RefObject<HTMLElement>) => ReactElement;
   icon: ReactNode;
   onClick: MouseEventHandler<HTMLButtonElement>;
   left?: boolean;
   existent?: boolean;
 }) {
+  const childRef = useRef<HTMLElement>(null);
+  const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (
+      existent &&
+      childRef.current &&
+      childRef.current.getBoundingClientRect
+    ) {
+      const rect = childRef.current.getBoundingClientRect();
+      setButtonPosition({
+        x: left ? rect.left : rect.right,
+        y: rect.top,
+      });
+    }
+  }, [childRef, existent, left]);
+
   if (existent) {
     return (
-      <div style={{ position: "relative" }}>
-        <button
-          className={`simple-svg`}
-          onClick={onClick}
-          style={{
-            ...{
-              position: "absolute",
-              top: 0,
-            },
-            ...(left
-              ? { left: 0, transform: "translate(-150%, 0)" }
-              : { right: 0, transform: "translate(150%, 0)" }),
-          }}
-        >
-          {icon}
-        </button>
-        {children}
-      </div>
+      <>
+        {typeof window === "object"
+          ? createPortal(
+              <button
+                className={`simple-svg`}
+                onClick={onClick}
+                style={{
+                  ...{
+                    position: "sticky",
+                    top: buttonPosition.y,
+                  },
+                  ...(left
+                    ? { left: buttonPosition.x }
+                    : { right: buttonPosition.x }),
+                }}
+              >
+                {icon}
+              </button>,
+              document.body
+            )
+          : null}
+        {children(childRef)}
+      </>
     );
   }
 
-  return <>{children}</>;
+  return children();
 }

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { ThemeReposityImplementation } from "@/core/models/repositories/theme_repository_implementation";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const themeRepo = ThemeReposityImplementation.getInstance();
+  const themeRepo = new ThemeReposityImplementation();
 
   if (req.method === "PUT") {
     let DBResponse;

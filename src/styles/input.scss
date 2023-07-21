@@ -24,6 +24,11 @@ input[type="text"].basic {
 }
 
 div.input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  row-gap: 0.4rem;
+
   label {
     color: grey;
     font-weight: 600;

@@ -20,7 +20,7 @@ export default function AdminPage({
 }
 
 export async function getServerSideProps() {
-  const themeRepository = ThemeReposityImplementation.getInstance();
+  const themeRepository = new ThemeReposityImplementation();
   const themeMetas = await themeRepository.getThemeMetas();
 
   return {

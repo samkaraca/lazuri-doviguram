@@ -1,0 +1,38 @@
+.lesson-side-bar {
+  margin-top: 7rem;
+  height: calc(100vh - 7rem);
+}
+
+.activity-list {
+  h3 {
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  li {
+    background-color: #eee;
+    padding: 0.5rem 0.8rem;
+
+    div:only-child {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      .group {
+        display: flex;
+        column-gap: 0.8rem;
+
+        button {
+          border-radius: 50%;
+          width: 2.2rem;
+          aspect-ratio: 1;
+          padding: 0.4rem 0.8rem;
+        }
+
+        button > svg {
+          font-size: 1.3rem;
+        }
+      }
+    }
+  }
+}

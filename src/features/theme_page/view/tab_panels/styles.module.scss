@@ -1,6 +1,8 @@
 @use "../../../../styles/global-variables.scss" as gv;
 
 .tab-panels {
+  position: relative;
+  overflow: hidden;
   @include gv.simple-responsive-container;
 }
 

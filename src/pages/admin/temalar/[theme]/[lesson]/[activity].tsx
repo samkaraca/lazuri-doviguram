@@ -1,5 +1,5 @@
 import { Activity, LessonMap } from "@/core/models/entities/learning_unit";
-import { ThemeReposityImplementation } from "@/core/models/repositories/theme_repository_implementation";
+import { ActivityRepositoryImplementation } from "@/core/models/repositories/activity_repository_implementation";
 import { ActivityEditor } from "@/features/activity_editor";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { GetServerSidePropsContext } from "next";
@@ -20,9 +20,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     lesson: string;
     activity: string;
   };
-  const themeRepo = ThemeReposityImplementation.getInstance();
+  const activityRepo = new ActivityRepositoryImplementation();
 
-  const rawData = await themeRepo.getActivity(theme);
+  const rawData = await activityRepo.getActivity(theme);
   const data = unmarshall(rawData) as { lessons: LessonMap };
   const requestedLesson = data.lessons;
   const requestedActivity = requestedLesson[lesson].activities[activity];

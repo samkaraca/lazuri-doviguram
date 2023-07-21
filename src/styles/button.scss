@@ -1,3 +1,5 @@
+@use "../styles/global-variables.scss" as gv;
+
 .card-button {
   transition: 0.25s;
 
@@ -37,15 +39,16 @@ button.add {
 }
 
 button.simple {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 0.5rem;
   font-size: 0.9rem;
   font-weight: 700;
-  padding: 0.7rem 1.4rem;
+  padding: 0.5rem 1.1rem;
   border-radius: 20rem;
-
-  &.basic {
-    background-color: #335c99;
-    color: white;
-  }
+  background-color: gv.$primary-color;
+  color: white;
 
   &.error {
     background-color: crimson;

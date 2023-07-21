@@ -1,0 +1,34 @@
+.container {
+  form {
+    display: flex;
+    height: 2.5rem;
+    column-gap: 0.6rem;
+
+    *:focus {
+      outline: none;
+    }
+  }
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #eee;
+  border: 0.1rem solid #ddd;
+  border-radius: 0.4rem;
+  aspect-ratio: 16/9;
+  font-size: 1.4rem;
+  color: #888;
+
+  svg {
+    font-size: 4rem;
+  }
+}
+
+.zero-size-youtube-iframe {
+  width: 0;
+  height: 0;
+}

@@ -2,6 +2,8 @@ import "@/styles/globals.scss";
 import "@/styles/list.scss";
 import "@/styles/button.scss";
 import "@/styles/input.scss";
+import "@/styles/side_bar.scss";
+import "@/styles/feedback.scss";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import type { AppProps } from "next/app";
 import { Poppins } from "next/font/google";

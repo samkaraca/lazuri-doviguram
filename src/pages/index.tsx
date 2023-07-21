@@ -20,7 +20,7 @@ export default function LandingPage({
 }
 
 export async function getStaticProps() {
-  const themeRepository = ThemeReposityImplementation.getInstance();
+  const themeRepository = new ThemeReposityImplementation();
   const themeMetas = await themeRepository.getThemeMetas();
 
   return {
