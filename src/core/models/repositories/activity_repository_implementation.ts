@@ -1,12 +1,20 @@
-import { marshall } from "@aws-sdk/util-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ActivityRepository } from "./activity_repository";
-import { Activity } from "../entities/learning_unit";
+import { Activity, LessonMap } from "../entities/learning_unit";
 import { GetItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
 import { DynamoDBClientSingleton } from "@/core/utils/dynamo_db_client_singleton";
 import { StatusResponse } from "./status_response";
 
 export class ActivityRepositoryImplementation implements ActivityRepository {
-  getActivity = async (themeId: string) => {
+  getActivity = async ({
+    themeId,
+    lessonId,
+    activityId,
+  }: {
+    themeId: string;
+    lessonId: string;
+    activityId: string;
+  }): Promise<StatusResponse> => {
     const dbClient = DynamoDBClientSingleton.getInstance();
     const queryCommand = new GetItemCommand({
       TableName: "themes",
@@ -17,9 +25,14 @@ export class ActivityRepositoryImplementation implements ActivityRepository {
       ProjectionExpression: "lessons",
     });
 
-    const rawActivity = await dbClient.send(queryCommand);
-
-    return rawActivity.Item!;
+    try {
+      const rawData = await dbClient.send(queryCommand);
+      const data = unmarshall(rawData.Item!) as { lessons: LessonMap };
+      const activity = data.lessons[lessonId].activities[activityId];
+      return { status: "success", message: "", data: { activity } };
+    } catch (error) {
+      return { status: "error", message: "" };
+    }
   };
 
   saveActivity = async (

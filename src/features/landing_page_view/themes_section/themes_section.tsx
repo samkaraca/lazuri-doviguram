@@ -1,13 +1,16 @@
 import { ThemeMetaDTO } from "@/core/models/dtos/theme_meta_dto";
 import { ThemeCard } from "../theme_card/theme_card";
 import styles from "./themes_section.module.scss";
+import { ReactNode } from "react";
 
 export function ThemesSection({
-  isAdmin,
   themeMetas,
+  home,
+  createNewThemeButton,
 }: {
-  isAdmin: boolean;
   themeMetas: ThemeMetaDTO[];
+  home: "/admin" | "/";
+  createNewThemeButton?: ReactNode;
 }) {
   return (
     <article className={styles["themes"]}>
@@ -16,20 +19,15 @@ export function ThemesSection({
         <section aria-label="temalar">
           <ol className={styles["cards"]}>
             {themeMetas.map((themeMeta) => {
-              return <ThemeCard key={themeMeta.id} themeMeta={themeMeta} />;
+              return (
+                <ThemeCard
+                  home={home}
+                  key={themeMeta.id}
+                  themeMeta={themeMeta}
+                />
+              );
             })}
-            {/* <button
-              style={{
-                backgroundColor: "#eee",
-                border: "1px solid #ccc",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontSize: "1.5rem",
-              }}
-            >
-              Yeni Tema +
-            </button> */}
+            {createNewThemeButton}
           </ol>
         </section>
       </div>

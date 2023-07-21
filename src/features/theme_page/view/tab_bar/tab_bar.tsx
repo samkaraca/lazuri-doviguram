@@ -6,7 +6,7 @@ export function TabBar() {
   const { lessons, activeLesson, setActiveLesson } =
     useBaseViewModelContext() as BaseViewModel;
 
-  if (!activeLesson) return null;
+  if (activeLesson === null) return null;
 
   return (
     <Tabs

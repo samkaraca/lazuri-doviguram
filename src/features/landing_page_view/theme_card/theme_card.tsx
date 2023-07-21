@@ -1,16 +1,20 @@
 import { Label } from "@mui/icons-material";
 import styles from "./theme_card.module.scss";
 import { ThemeMetaDTO } from "@/core/models/dtos/theme_meta_dto";
-import { usePathname } from "next/navigation";
 
-export function ThemeCard({ themeMeta }: { themeMeta: ThemeMetaDTO }) {
-  const pathname = usePathname();
+export function ThemeCard({
+  themeMeta,
+  home,
+}: {
+  themeMeta: ThemeMetaDTO;
+  home: "/admin" | "/";
+}) {
   const { id, image, lessons, title } = themeMeta;
 
   return (
     <li>
       <a
-        href={`/${pathname}/temalar/${id}`}
+        href={`${home === "/" ? "" : home}/temalar/${id}`}
         className={`${styles["card"]} card-button`}
       >
         <img

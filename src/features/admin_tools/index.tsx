@@ -7,7 +7,6 @@ import { useBaseViewModelContext } from "../theme_page/view_model/context_provid
 
 export function AdminTools() {
   const { stalling, snackbar, setSnackbar } = useAdminViewModelContext()!;
-  const { activeLesson } = useBaseViewModelContext()!;
   const [isThemeSideBarOpen, setIsThemeSideBarOpen] = useState(false);
   const [isLessonSideBarOpen, setIsLessonSideBarOpen] = useState(false);
 
@@ -18,14 +17,13 @@ export function AdminTools() {
         isOpen={isThemeSideBarOpen}
         setIsOpen={setIsThemeSideBarOpen}
       />
-      {activeLesson !== null && (
+      {
         <LessonSideBar
           hide={isThemeSideBarOpen}
           isOpen={isLessonSideBarOpen}
           setIsOpen={setIsLessonSideBarOpen}
-          activeLesson={activeLesson}
         />
-      )}
+      }
       <InteractiveFeedbacks
         stalling={stalling}
         snackbar={snackbar}

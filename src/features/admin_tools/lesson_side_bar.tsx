@@ -15,19 +15,17 @@ export function LessonSideBar({
   isOpen,
   setIsOpen,
   hide,
-  activeLesson,
 }: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   hide: boolean;
-  activeLesson: number;
 }) {
   const pathname = usePathname();
   const { push } = useRouter();
   const [modified, setModified] = useState(false);
   const [adminLessonTitle, setAdminLessonTitle] = useState("");
   const [adminLessonExplanation, setAdminLessonExplanation] = useState("");
-  const { lessons } = useBaseViewModelContext()!;
+  const { lessons, activeLesson } = useBaseViewModelContext()!;
   const {
     saveLesson,
     createNewLesson,
@@ -41,6 +39,7 @@ export function LessonSideBar({
   }, [activeLesson]);
 
   const reset = () => {
+    if (activeLesson === null) return;
     const { id, title } = lessons.meta[activeLesson];
     const { explanation } = lessons[id];
     setAdminLessonExplanation(explanation);
@@ -48,6 +47,7 @@ export function LessonSideBar({
   };
 
   useEffect(() => {
+    if (activeLesson === null) return;
     setModified(false);
     const { id, title } = lessons.meta[activeLesson];
     const { explanation } = lessons[id];
@@ -68,101 +68,105 @@ export function LessonSideBar({
             Yeni ders ekle
           </button>
         </header>
-        <div className="main">
-          {modified && (
-            <div className={"warning"}>
-              <WarningAmber />
-              <div className={"content"}>
-                <span>Kaydedilmemiş değişiklikler var.</span>
-                <div className={"actions"}>
-                  <button onClick={reset}>Geri al</button>
-                  <button
-                    onClick={() =>
-                      saveLesson({
-                        title: adminLessonTitle,
-                        explanation: adminLessonExplanation,
-                      })
-                    }
-                  >
-                    Kaydet
-                  </button>
+        {activeLesson !== null && (
+          <div className="main">
+            {modified && (
+              <div className={"warning"}>
+                <WarningAmber />
+                <div className={"content"}>
+                  <span>Kaydedilmemiş değişiklikler var.</span>
+                  <div className={"actions"}>
+                    <button onClick={reset}>Geri al</button>
+                    <button
+                      onClick={() =>
+                        saveLesson({
+                          title: adminLessonTitle,
+                          explanation: adminLessonExplanation,
+                        })
+                      }
+                    >
+                      Kaydet
+                    </button>
+                  </div>
                 </div>
               </div>
+            )}
+            <h2>Ders {activeLesson + 1}</h2>
+            <div className="input-container">
+              <label htmlFor="admin-lesson-title-input">Ders Adı</label>
+              <TextField
+                id="admin-lesson-title-input"
+                size="small"
+                placeholder="Ders 1..."
+                value={adminLessonTitle}
+                onChange={(e) => setAdminLessonTitle(e.target.value)}
+              />
             </div>
-          )}
-          <h2>Ders {activeLesson + 1}</h2>
-          <div className="input-container">
-            <label htmlFor="admin-lesson-title-input">Ders Adı</label>
-            <TextField
-              id="admin-lesson-title-input"
-              size="small"
-              placeholder="Ders 1..."
-              value={adminLessonTitle}
-              onChange={(e) => setAdminLessonTitle(e.target.value)}
-            />
-          </div>
-          <div className="input-container">
-            <label htmlFor="admin-lesson-explanation-input">
-              Ders Açıklaması
-            </label>
-            <TextField
-              id="admin-lesson-explanation-input"
-              size="small"
-              placeholder="Bu derste aile üyeleri ile ilgili..."
-              value={adminLessonExplanation}
-              onChange={(e) => setAdminLessonExplanation(e.target.value)}
-            />
-          </div>
-          <div className={`${styles["activity-list"]}`}>
-            <h3>Aktiviteler</h3>
-            <ol className={`simple`}>
-              {lessons[
-                lessons.meta[activeLesson].id
-              ].activities.idOrderMeta.map((id, activityIndex) => {
-                const { title } =
-                  lessons[lessons.meta[activeLesson].id].activities[id];
-                return (
-                  <li key={id}>
-                    <div>
-                      <p>{title}</p>
-                      <div className={styles["group"]}>
-                        <button
-                          onClick={() =>
-                            push(
-                              `${pathname}/${lessons.meta[activeLesson].id}/${id}`
-                            )
-                          }
-                          className="simple"
-                        >
-                          <DesignServices />
-                        </button>
-                        <button
-                          onClick={() =>
-                            deleteActivity({ activityId: id, activityIndex })
-                          }
-                          className="simple error"
-                        >
-                          <DeleteForever />
-                        </button>
+            <div className="input-container">
+              <label htmlFor="admin-lesson-explanation-input">
+                Ders Açıklaması
+              </label>
+              <TextField
+                id="admin-lesson-explanation-input"
+                size="small"
+                placeholder="Bu derste aile üyeleri ile ilgili..."
+                value={adminLessonExplanation}
+                onChange={(e) => setAdminLessonExplanation(e.target.value)}
+              />
+            </div>
+            <div className={`${styles["activity-list"]}`}>
+              <h3>Aktiviteler</h3>
+              <ol className={`simple`}>
+                {lessons[
+                  lessons.meta[activeLesson].id
+                ].activities.idOrderMeta.map((id, activityIndex) => {
+                  const { title } =
+                    lessons[lessons.meta[activeLesson].id].activities[id];
+                  return (
+                    <li key={id}>
+                      <div>
+                        <p>{title}</p>
+                        <div className={styles["group"]}>
+                          <button
+                            onClick={() =>
+                              push(
+                                `${pathname}/${lessons.meta[activeLesson].id}/${id}`
+                              )
+                            }
+                            className="simple"
+                          >
+                            <DesignServices />
+                          </button>
+                          <button
+                            onClick={() =>
+                              deleteActivity({ activityId: id, activityIndex })
+                            }
+                            className="simple error"
+                          >
+                            <DeleteForever />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-            <button onClick={createNewActivity} className="simple">
-              Yeni +
-            </button>
+                    </li>
+                  );
+                })}
+              </ol>
+              <button onClick={createNewActivity} className="simple">
+                Yeni +
+              </button>
+            </div>
           </div>
-        </div>
-        <footer>
-          <div>
-            <button onClick={deleteLesson} className="simple error">
-              <span>Dersi sil</span>
-              <DeleteOutline />
-            </button>
-          </div>
-        </footer>
+        )}
+        {activeLesson !== null && (
+          <footer>
+            <div>
+              <button onClick={deleteLesson} className="simple error">
+                <span>Dersi sil</span>
+                <DeleteOutline />
+              </button>
+            </div>
+          </footer>
+        )}
       </div>
       <button
         style={{ transform: hide ? "translate(-100%, 0)" : undefined }}

@@ -10,11 +10,16 @@ import Head from "next/head";
 import styles from "./styles.module.scss";
 import { Footer } from "@/features/footer";
 import { TabBar } from "./tab_bar/tab_bar";
-import { AdminTools } from "@/features/admin_tools";
+import { ReactNode } from "react";
 
-export function View() {
+export function View({
+  home,
+  adminTools,
+}: {
+  home: "/admin" | "/";
+  adminTools?: ReactNode;
+}) {
   const {
-    isAdmin,
     isActivityDialogOpen,
     activeActivity,
     closeActivity,
@@ -35,14 +40,14 @@ export function View() {
           key="image"
         />
       </Head>
-      <AppBar />
+      <AppBar home={home} />
       <div className={styles["main"]}>
         <Banner />
         <TabBar />
         <TabPanels />
       </div>
       <Footer />
-      {isAdmin && <AdminTools />}
+      {adminTools}
       <Dialog
         className={poppins.className}
         open={isActivityDialogOpen}

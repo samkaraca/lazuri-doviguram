@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface AdminViewModel {
-  isAdmin: boolean;
   stalling: boolean;
   snackbar: {
     severity: "error" | "success" | "warning" | "info";

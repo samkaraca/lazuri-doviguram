@@ -2,7 +2,6 @@ import { Activity, LessonMap } from "@/core/models/entities/learning_unit";
 import { Dispatch, SetStateAction } from "react";
 
 export interface BaseViewModel {
-  isAdmin: boolean;
   themeId: string;
   themeTitle: string;
   setThemeTitle: Dispatch<SetStateAction<BaseViewModel["themeTitle"]>>;

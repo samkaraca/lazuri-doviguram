@@ -14,7 +14,7 @@ export default function LandingPage({
         <title>Lazuri Doviguram</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <LandingPageView isAdmin={false} themeMetas={themeMetas} />
+      <LandingPageView home="/" themeMetas={themeMetas} />
     </>
   );
 }

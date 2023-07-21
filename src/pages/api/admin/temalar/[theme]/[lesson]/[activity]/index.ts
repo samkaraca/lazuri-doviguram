@@ -31,6 +31,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     return res.status(501).json({ error: "Unsopported action" });
+  } else if (req.method === "GET") {
+    const { theme, lesson, activity } = req.query as {
+      theme: string;
+      lesson: string;
+      activity: string;
+    };
+    const activityRepo = new ActivityRepositoryImplementation();
+    const rawData = await activityRepo.getActivity({
+      themeId: theme,
+      lessonId: lesson,
+      activityId: activity,
+    });
+    return res.status(200).json(rawData);
   }
 
   return res.status(501).json({ error: "Unsopported request method" });

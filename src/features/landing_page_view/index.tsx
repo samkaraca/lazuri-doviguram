@@ -5,22 +5,29 @@ import { ThemesSection } from "./themes_section/themes_section";
 import { WelcomeSection } from "./welcome_section/welcome_section";
 import { Footer } from "../footer";
 import Head from "next/head";
+import { ReactNode } from "react";
 
 export function LandingPageView({
-  isAdmin,
   themeMetas,
+  home = "/",
+  createNewThemeButton,
 }: {
-  isAdmin: boolean;
   themeMetas: ThemeMetaDTO[];
+  home: "/admin" | "/";
+  createNewThemeButton?: ReactNode;
 }) {
   return (
     <>
       <Head>
         <title>Lazuri Doviguram!</title>
       </Head>
-      <AppBar />
+      <AppBar home={home} />
       <WelcomeSection />
-      <ThemesSection themeMetas={themeMetas} isAdmin={isAdmin} />
+      <ThemesSection
+        home={home}
+        themeMetas={themeMetas}
+        createNewThemeButton={createNewThemeButton}
+      />
       <Footer />
     </>
   );

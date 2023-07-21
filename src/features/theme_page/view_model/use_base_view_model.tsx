@@ -2,10 +2,7 @@ import { useState } from "react";
 import { Activity, Theme } from "@/core/models/entities/learning_unit";
 import { BaseViewModel } from "../model/base_view_model";
 
-export function useBaseViewModel(
-  theme: Theme,
-  isAdmin: boolean
-): BaseViewModel {
+export function useBaseViewModel(theme: Theme): BaseViewModel {
   const [themeTitle, setThemeTitle] = useState(theme.title);
   const [themeExplanation, setThemeExplanation] = useState(theme.explanation);
   const [themeImage, setThemeImage] = useState(theme.image);
@@ -34,7 +31,6 @@ export function useBaseViewModel(
   };
 
   return {
-    isAdmin,
     themeId: theme.id,
     themeTitle,
     themeExplanation,

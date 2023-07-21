@@ -6,14 +6,12 @@ import { AdminViewModel } from "./context_providers/admin_view_model";
 export function ViewModel({
   children,
   theme,
-  isAdmin,
 }: {
   children: ReactNode;
   theme: Theme;
-  isAdmin: boolean;
 }) {
   return (
-    <BaseViewModel theme={theme} isAdmin={isAdmin}>
+    <BaseViewModel theme={theme}>
       <AdminViewModel>{children}</AdminViewModel>
     </BaseViewModel>
   );

@@ -25,6 +25,6 @@ export interface ThemeRepository {
     youtubeVideoUrl: string;
     explanation: string;
   }) => Promise<StatusResponse>;
-  createNewTheme: () => Promise<string>;
+  createNewTheme: () => Promise<StatusResponse>;
   deleteTheme: (themeId: string) => Promise<DeleteItemCommandOutput>;
 }

@@ -4,7 +4,7 @@ import { Theme } from "@/core/models/entities/learning_unit";
 import { ThemePage as ThemePageElement } from "@/features/theme_page";
 
 export default function ThemePage({ themeData }: { themeData: Theme }) {
-  return <ThemePageElement theme={Theme.from(themeData)} isAdmin={false} />;
+  return <ThemePageElement home="/" theme={Theme.from(themeData)} />;
 }
 
 export async function getStaticProps(context: GetServerSidePropsContext) {

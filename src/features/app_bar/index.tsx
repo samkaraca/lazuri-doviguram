@@ -3,14 +3,14 @@ import styles from "./app_bar.module.scss";
 import { Menu, MenuRounded } from "@mui/icons-material";
 import { useState } from "react";
 
-export function AppBar() {
+export function AppBar({ home }: { home: "/admin" | "/" }) {
   const [isAltMenuOpen, setIsAltMenuOpen] = useState(false);
 
   return (
     <>
       <header className={styles["header"]}>
         <div>
-          <Link className={styles["header-logo"]} href="/">
+          <Link className={styles["header-logo"]} href={home}>
             <img src="/header-logo.png" alt="" />
           </Link>
           <nav>

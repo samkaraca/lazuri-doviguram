@@ -9,7 +9,15 @@ export interface ActivityRepository {
     activityId: string,
     activity: Activity<any>
   ) => Promise<void>;
-  getActivity: (themeId: string) => Promise<Record<string, AttributeValue>>;
+  getActivity: ({
+    themeId,
+    lessonId,
+    activityId,
+  }: {
+    themeId: string;
+    lessonId: string;
+    activityId: string;
+  }) => Promise<StatusResponse>;
   deleteActivity: ({
     themeId,
     lessonId,

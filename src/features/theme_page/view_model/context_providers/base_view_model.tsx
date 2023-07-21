@@ -8,13 +8,11 @@ const BaseViewModelContext = createContext<BaseViewModel | null>(null);
 export function BaseViewModel({
   children,
   theme,
-  isAdmin,
 }: {
   children: ReactNode;
   theme: Theme;
-  isAdmin: boolean;
 }) {
-  const viewModel = useBaseViewModel(theme, isAdmin);
+  const viewModel = useBaseViewModel(theme);
 
   return (
     <BaseViewModelContext.Provider value={viewModel}>

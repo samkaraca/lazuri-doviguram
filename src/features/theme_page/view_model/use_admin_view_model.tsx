@@ -6,7 +6,6 @@ import { Activity, LessonMap } from "@/core/models/entities/learning_unit";
 
 export function useAdminViewModel(): AdminViewModel {
   const {
-    isAdmin,
     themeId,
     activeLesson,
     lessons,
@@ -91,7 +90,7 @@ export function useAdminViewModel(): AdminViewModel {
     title: string;
     explanation: string;
   }) => {
-    if (!activeLesson) return;
+    if (activeLesson === null) return;
     setStalling(true);
     const lessonId = lessons.meta[activeLesson].id;
     const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
@@ -165,10 +164,13 @@ export function useAdminViewModel(): AdminViewModel {
       visible: true,
     });
     setLessons((prev) => ({ ...prev, ...res.data.lessons }));
+    if (activeLesson === null) {
+      setActiveLesson(0);
+    }
   };
 
   const deleteLesson = async () => {
-    if (!activeLesson) return;
+    if (activeLesson === null) return;
     setStalling(true);
     const lessonId = lessons.meta[activeLesson].id;
     const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
@@ -205,11 +207,16 @@ export function useAdminViewModel(): AdminViewModel {
       );
       return newLessons;
     });
-    setActiveLesson((prev) => (prev ? (prev === 0 ? null : prev - 1) : null));
+    setActiveLesson((prev) => {
+      if (lessons.meta.length === 0) return null;
+      if (prev === null) return null;
+      if (prev > 0) return prev - 1;
+      return 0;
+    });
   };
 
   const createNewActivity = async () => {
-    if (!activeLesson) return;
+    if (activeLesson === null) return;
     setStalling(true);
     const lessonId = lessons.meta[activeLesson].id;
     const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
@@ -261,7 +268,7 @@ export function useAdminViewModel(): AdminViewModel {
     activityIndex: number;
     activityId: string;
   }) => {
-    if (!activeLesson) return;
+    if (activeLesson === null) return;
     setStalling(true);
     const lessonId = lessons.meta[activeLesson].id;
     const resObj = await fetch(
@@ -306,7 +313,6 @@ export function useAdminViewModel(): AdminViewModel {
   };
 
   return {
-    isAdmin,
     stalling,
     snackbar,
     setSnackbar,

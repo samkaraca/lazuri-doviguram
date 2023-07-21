@@ -9,7 +9,7 @@ import { ThemeRepository } from "./theme_repository";
 import { DynamoDBClientSingleton } from "@/core/utils/dynamo_db_client_singleton";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ThemeMetaDTO } from "../dtos/theme_meta_dto";
-import { Activity, LessonMap, Theme } from "../entities/learning_unit";
+import { Theme } from "../entities/learning_unit";
 import slugify from "slugify";
 import { nanoid } from "nanoid";
 import { StatusResponse } from "./status_response";
@@ -136,7 +136,7 @@ export class ThemeReposityImplementation implements ThemeRepository {
     } as Theme;
   };
 
-  createNewTheme = async () => {
+  createNewTheme = async (): Promise<StatusResponse> => {
     const dbClient = DynamoDBClientSingleton.getInstance();
     const newThemeId = nanoid(7);
 
@@ -154,9 +154,16 @@ export class ThemeReposityImplementation implements ThemeRepository {
       }),
     });
 
-    const result = await dbClient.send(updateCommand);
-
-    return newThemeId;
+    try {
+      await dbClient.send(updateCommand);
+      return {
+        status: "success",
+        message: "Tema başarıyla oluşturuldu.",
+        data: { newThemeId },
+      };
+    } catch (error) {
+      return { status: "error", message: "Tema oluşturma başarısız." };
+    }
   };
 
   deleteTheme = async (themeId: string) => {
