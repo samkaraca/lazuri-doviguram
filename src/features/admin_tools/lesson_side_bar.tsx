@@ -115,7 +115,9 @@ export function LessonSideBar({
               />
             </div>
             <div className={`${styles["activity-list"]}`}>
-              <h3>Aktiviteler</h3>
+              <header>
+                <h3>Aktiviteler</h3>
+              </header>
               <ol className={`simple`}>
                 {lessons[
                   lessons.meta[activeLesson].id
@@ -151,9 +153,11 @@ export function LessonSideBar({
                   );
                 })}
               </ol>
-              <button onClick={createNewActivity} className="simple">
-                Yeni +
-              </button>
+              <footer>
+                <button onClick={createNewActivity} className="simple">
+                  Yeni +
+                </button>
+              </footer>
             </div>
           </div>
         )}

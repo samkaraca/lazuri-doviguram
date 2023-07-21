@@ -23,7 +23,7 @@ export function ThemeCard({
         <div className={styles["content"]}>
           <header>
             <h2>{title}</h2>
-            <button className="simple">Başla</button>
+            <button className="simple big">Başla</button>
           </header>
           <ol>
             {lessons.map((lesson) => {

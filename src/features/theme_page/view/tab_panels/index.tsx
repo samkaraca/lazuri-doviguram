@@ -57,7 +57,7 @@ export function ActivitiesContainer({
             <h3>{title}</h3>
             <div className={styles["actions"]}>
               <button
-                className={`simple ${styles["start"]}`}
+                className={`simple big ${styles["start"]}`}
                 onClick={() => openActivity(activities[id])}
               >
                 Başla

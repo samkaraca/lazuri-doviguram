@@ -7,9 +7,13 @@
 }
 
 .activity-list {
-  h3 {
+  header > h3 {
     font-size: 1rem;
     margin-bottom: 0.6rem;
+  }
+
+  footer {
+    margin-top: 0.8rem;
   }
 
   li {

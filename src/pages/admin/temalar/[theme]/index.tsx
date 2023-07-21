@@ -1,10 +1,11 @@
-import { GetServerSidePropsContext } from "next";
 import { Theme } from "@/core/models/entities/learning_unit";
 import { ThemePage as ThemePageElement } from "@/features/theme_page";
 import { useEffect, useState } from "react";
 import { AdminTools } from "@/features/admin_tools";
+import { usePathname } from "next/navigation";
 
-export default function ThemePage({ themeId }: { themeId: string }) {
+export default function ThemePage() {
+  const pathname = usePathname();
   const [themeData, setThemeData] = useState<Theme>();
 
   const fetchTheme = async (themeId: string) => {
@@ -14,8 +15,11 @@ export default function ThemePage({ themeId }: { themeId: string }) {
   };
 
   useEffect(() => {
+    if (!pathname) return;
+    const splitPathname = pathname.split("/");
+    const themeId = splitPathname[splitPathname.length - 1];
     fetchTheme(themeId);
-  }, [themeId]);
+  }, [pathname]);
 
   if (themeData) {
     return (
@@ -33,10 +37,4 @@ export default function ThemePage({ themeId }: { themeId: string }) {
       <p>Tema Yükleniyor...</p>
     </div>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { theme } = context.params as unknown as { theme: string };
-
-  return { props: { themeId: theme } };
 }

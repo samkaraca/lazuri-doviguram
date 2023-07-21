@@ -1,36 +1,41 @@
-import { Activity, LessonMap } from "@/core/models/entities/learning_unit";
-import { ActivityRepositoryImplementation } from "@/core/models/repositories/activity_repository_implementation";
+import { Activity } from "@/core/models/entities/learning_unit";
 import { StatusResponse } from "@/core/models/repositories/status_response";
 import { ActivityEditor } from "@/features/activity_editor";
-import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { GetServerSidePropsContext } from "next";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function ActivityEditorPage({
-  themeId,
-  lessonId,
-  activityId,
-}: {
-  themeId: string;
-  lessonId: string;
-  activityId: string;
-}) {
+export default function ActivityEditorPage() {
+  const pathname = usePathname();
   const [activityData, setActivityData] = useState<Activity<any>>();
 
-  const fetchActivity = async () => {
+  const fetchActivity = async ({
+    themeId,
+    lessonId,
+    activityId,
+  }: {
+    themeId: string;
+    lessonId: string;
+    activityId: string;
+  }) => {
     const resObj = await fetch(
       `/api/admin/temalar/${themeId}/${lessonId}/${activityId}`
     );
     const res = (await resObj.json()) as StatusResponse;
 
+    console.log("la", res);
     if (res.status === "success") {
       setActivityData(Activity.from(res.data.activity));
     }
   };
 
   useEffect(() => {
-    fetchActivity();
-  }, [themeId, lessonId, activityId]);
+    if (!pathname) return;
+    const splitPathname = pathname.split("/");
+    const themeId = splitPathname[splitPathname.length - 3];
+    const lessonId = splitPathname[splitPathname.length - 2];
+    const activityId = splitPathname[splitPathname.length - 1];
+    fetchActivity({ themeId, lessonId, activityId });
+  }, [pathname]);
 
   if (activityData)
     return <ActivityEditor beginningActivityData={activityData} />;
@@ -41,20 +46,4 @@ export default function ActivityEditorPage({
       <p>Aktivite Yükleniyor...</p>
     </div>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { theme, lesson, activity } = context.params as unknown as {
-    theme: string;
-    lesson: string;
-    activity: string;
-  };
-
-  return {
-    props: {
-      themeId: theme,
-      lessonId: lesson,
-      activityId: activity,
-    },
-  };
 }

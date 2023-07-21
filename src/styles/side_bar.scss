@@ -13,7 +13,6 @@ aside.side-bar > .content {
   background-color: #fafafa;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   overflow-y: auto;
   padding-bottom: 1rem;
@@ -76,6 +75,7 @@ aside.side-bar > .content > header {
 }
 
 aside.side-bar > .content > footer {
+  margin-top: auto;
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
