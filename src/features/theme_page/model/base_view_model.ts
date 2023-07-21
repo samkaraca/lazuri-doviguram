@@ -18,7 +18,7 @@ export interface BaseViewModel {
   setThemeYoutubeVideoUrl: Dispatch<
     SetStateAction<BaseViewModel["themeYoutubeVideoUrl"]>
   >;
-  activeLesson: number;
+  activeLesson: number | null;
   setActiveLesson: Dispatch<SetStateAction<BaseViewModel["activeLesson"]>>;
   isActivityDialogOpen: boolean;
   openActivity: (activity: Activity<any>) => void;

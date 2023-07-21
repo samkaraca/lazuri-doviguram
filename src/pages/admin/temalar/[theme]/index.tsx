@@ -1,20 +1,33 @@
 import { GetServerSidePropsContext } from "next";
-import { ThemeReposityImplementation } from "@/core/models/repositories/theme_repository_implementation";
 import { Theme } from "@/core/models/entities/learning_unit";
 import { ThemePage as ThemePageElement } from "@/features/theme_page";
+import { useEffect, useState } from "react";
 
-export default function ThemePage({ themeData }: { themeData: Theme }) {
-  return <ThemePageElement theme={Theme.from(themeData)} isAdmin={true} />;
+export default function ThemePage({ themeId }: { themeId: string }) {
+  const [themeData, setThemeData] = useState<Theme>();
+
+  const fetchTheme = async (themeId: string) => {
+    const resObj = await fetch(`/api/admin/temalar/${themeId}`);
+    const res = (await resObj.json()) as Theme;
+    setThemeData(Theme.from(res));
+  };
+
+  useEffect(() => {
+    fetchTheme(themeId);
+  }, [themeId]);
+
+  if (themeData) return <ThemePageElement theme={themeData} isAdmin={true} />;
+
+  return (
+    <div className="admin-waiting-room">
+      <h1>Merhaba Admin!</h1>
+      <p>Tema Yükleniyor...</p>
+    </div>
+  );
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const path = context.params as unknown as { theme: string };
-  const themeRepository = new ThemeReposityImplementation();
-  const themeData = await themeRepository.getThemeData(path.theme);
+  const { theme } = context.params as unknown as { theme: string };
 
-  return {
-    props: {
-      themeData,
-    },
-  };
+  return { props: { themeId: theme } };
 }

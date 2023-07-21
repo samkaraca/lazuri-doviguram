@@ -15,17 +15,19 @@ export function LessonSideBar({
   isOpen,
   setIsOpen,
   hide,
+  activeLesson,
 }: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   hide: boolean;
+  activeLesson: number;
 }) {
   const pathname = usePathname();
   const { push } = useRouter();
   const [modified, setModified] = useState(false);
   const [adminLessonTitle, setAdminLessonTitle] = useState("");
   const [adminLessonExplanation, setAdminLessonExplanation] = useState("");
-  const { activeLesson, lessons } = useBaseViewModelContext()!;
+  const { lessons } = useBaseViewModelContext()!;
   const {
     saveLesson,
     createNewLesson,

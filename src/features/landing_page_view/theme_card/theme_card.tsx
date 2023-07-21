@@ -10,7 +10,7 @@ export function ThemeCard({ themeMeta }: { themeMeta: ThemeMetaDTO }) {
   return (
     <li>
       <a
-        href={`${pathname}/temalar/${id}`}
+        href={`/${pathname}/temalar/${id}`}
         className={`${styles["card"]} card-button`}
       >
         <img

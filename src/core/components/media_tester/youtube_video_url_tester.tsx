@@ -12,7 +12,6 @@ export function YouTubeVideoUrlTester({
   media: OptionalStringValueProperty;
   setMedia: Dispatch<SetStateAction<OptionalStringValueProperty>>;
 }) {
-  console.log(media);
   return (
     <div>
       {media.status !== "success" && (

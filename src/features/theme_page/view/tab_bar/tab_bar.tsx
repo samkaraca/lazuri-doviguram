@@ -3,8 +3,10 @@ import { useBaseViewModelContext } from "../../view_model/context_providers/base
 import { BaseViewModel } from "../../model/base_view_model";
 
 export function TabBar() {
-  const { lessons, activeLesson, setActiveLesson, isAdmin } =
+  const { lessons, activeLesson, setActiveLesson } =
     useBaseViewModelContext() as BaseViewModel;
+
+  if (!activeLesson) return null;
 
   return (
     <Tabs

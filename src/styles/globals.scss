@@ -80,6 +80,18 @@ div.simple-card {
   }
 }
 
+div.admin-waiting-room {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 3rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 120%;
+  text-align: center;
+}
+
 @media (max-width: 400px) {
   html {
     font-size: 75%; /* this is the base font size for screens smaller than 400px */

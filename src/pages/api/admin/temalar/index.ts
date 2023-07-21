@@ -1,7 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ThemeReposityImplementation } from "@/core/models/repositories/theme_repository_implementation";
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const themeRepo = new ThemeReposityImplementation();
 
   if (req.method === "PUT") {
@@ -18,9 +21,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     return res.status(501).json({ error: "Unsopported action" });
+  } else if (req.method === "GET") {
+    const themeMetas = await themeRepo.getThemeMetas();
+    return res.status(200).json(themeMetas);
   }
 
   return res.status(501).json({ error: "Unsopported request method" });
 }
-
-export default handler;

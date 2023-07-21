@@ -1,10 +1,8 @@
 import { useBaseViewModelContext } from "./context_providers/base_view_model";
 import { AdminViewModel } from "../model/admin_view_model";
-import { LessonRepository } from "@/core/models/repositories/lesson_repository";
 import { useState } from "react";
 import { StatusResponse } from "@/core/models/repositories/status_response";
 import { Activity, LessonMap } from "@/core/models/entities/learning_unit";
-import { usePathname, useRouter } from "next/navigation";
 
 export function useAdminViewModel(): AdminViewModel {
   const {
@@ -93,6 +91,7 @@ export function useAdminViewModel(): AdminViewModel {
     title: string;
     explanation: string;
   }) => {
+    if (!activeLesson) return;
     setStalling(true);
     const lessonId = lessons.meta[activeLesson].id;
     const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
@@ -169,6 +168,7 @@ export function useAdminViewModel(): AdminViewModel {
   };
 
   const deleteLesson = async () => {
+    if (!activeLesson) return;
     setStalling(true);
     const lessonId = lessons.meta[activeLesson].id;
     const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
@@ -205,10 +205,11 @@ export function useAdminViewModel(): AdminViewModel {
       );
       return newLessons;
     });
-    setActiveLesson((prev) => (prev === 0 ? prev : prev - 1));
+    setActiveLesson((prev) => (prev ? (prev === 0 ? null : prev - 1) : null));
   };
 
   const createNewActivity = async () => {
+    if (!activeLesson) return;
     setStalling(true);
     const lessonId = lessons.meta[activeLesson].id;
     const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
@@ -260,6 +261,7 @@ export function useAdminViewModel(): AdminViewModel {
     activityIndex: number;
     activityId: string;
   }) => {
+    if (!activeLesson) return;
     setStalling(true);
     const lessonId = lessons.meta[activeLesson].id;
     const resObj = await fetch(

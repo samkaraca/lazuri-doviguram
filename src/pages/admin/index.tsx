@@ -1,13 +1,21 @@
 import { ThemeMetaDTO } from "@/core/models/dtos/theme_meta_dto";
-import { ThemeReposityImplementation } from "@/core/models/repositories/theme_repository_implementation";
 import { LandingPageView } from "@/features/landing_page_view";
 import Head from "next/head";
+import { useEffect, useState } from "react";
 
-export default function AdminPage({
-  themeMetas,
-}: {
-  themeMetas: ThemeMetaDTO[];
-}) {
+export default function AdminPage() {
+  const [themeMetas, setThemeMetas] = useState<ThemeMetaDTO[]>([]);
+
+  const fetchThemeMetas = async () => {
+    const resObj = await fetch(`/api/admin/temalar`);
+    const res = (await resObj.json()) as ThemeMetaDTO[];
+    setThemeMetas(res);
+  };
+
+  useEffect(() => {
+    fetchThemeMetas();
+  }, []);
+
   return (
     <>
       <Head>
@@ -17,15 +25,4 @@ export default function AdminPage({
       <LandingPageView isAdmin={true} themeMetas={themeMetas} />
     </>
   );
-}
-
-export async function getServerSideProps() {
-  const themeRepository = new ThemeReposityImplementation();
-  const themeMetas = await themeRepository.getThemeMetas();
-
-  return {
-    props: {
-      themeMetas,
-    },
-  };
 }

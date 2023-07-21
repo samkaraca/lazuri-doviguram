@@ -13,7 +13,9 @@ export function useBaseViewModel(
     theme.youtubeVideoUrl
   );
   const [lessons, setLessons] = useState(theme.lessons);
-  const [activeLesson, setActiveLesson] = useState(0);
+  const [activeLesson, setActiveLesson] = useState<number | null>(
+    theme.lessons.meta.length > 0 ? 0 : null
+  );
 
   // ACTIVITY DIALOG
   const [activeActivity, setActiveActivity] = useState<Activity<any> | null>(

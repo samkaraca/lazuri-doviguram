@@ -18,6 +18,18 @@ export function ThemesSection({
             {themeMetas.map((themeMeta) => {
               return <ThemeCard key={themeMeta.id} themeMeta={themeMeta} />;
             })}
+            {/* <button
+              style={{
+                backgroundColor: "#eee",
+                border: "1px solid #ccc",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: "1.5rem",
+              }}
+            >
+              Yeni Tema +
+            </button> */}
           </ol>
         </section>
       </div>
