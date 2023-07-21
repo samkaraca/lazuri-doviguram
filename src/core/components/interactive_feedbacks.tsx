@@ -22,7 +22,7 @@ export function InteractiveFeedbacks({
 }) {
   return (
     <>
-      <Backdrop open={stalling}>
+      <Backdrop sx={{ zIndex: 200 }} open={stalling}>
         <CircularProgress />
       </Backdrop>
       <Snackbar

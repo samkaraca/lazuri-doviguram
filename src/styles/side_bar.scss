@@ -4,7 +4,7 @@ aside.side-bar {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 9999;
+  z-index: 100;
   display: flex;
 }
 
@@ -55,7 +55,7 @@ aside.side-bar > button.open-close {
 
 aside.side-bar > .content > header {
   position: sticky;
-  z-index: 999;
+  z-index: 99;
   flex-shrink: 0;
   top: 0;
   inset-inline: 0;

@@ -9,13 +9,13 @@ export default function AdminPage({
   themeMetas: ThemeMetaDTO[];
 }) {
   return (
-    <div>
+    <>
       <Head>
         <title>Admin Paneli | Lazuri Doviguram</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <LandingPageView isAdmin={true} themeMetas={themeMetas} />
-    </div>
+    </>
   );
 }
 
