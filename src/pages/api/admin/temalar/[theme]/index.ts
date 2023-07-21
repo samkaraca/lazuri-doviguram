@@ -28,8 +28,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     return res.status(501).json({ error: "Unsopported action" });
   } else if (req.method === "GET") {
+    console.warn("/temalar/[theme] request made");
     const theme = req.query.theme as string;
     const themeData = await themeRepo.getThemeData(theme);
+    console.warn("/temalar/[theme] request response received", themeData);
     return res.status(200).json(themeData);
   }
 
