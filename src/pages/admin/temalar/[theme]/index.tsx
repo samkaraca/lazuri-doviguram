@@ -1,5 +1,5 @@
 import { Theme } from "@/core/models/entities/learning_unit";
-import { ThemePage as ThemePageElement } from "@/features/theme_page";
+import TP from "@/features/theme_page";
 import { useEffect, useState } from "react";
 import { AdminTools } from "@/features/admin_tools";
 import { usePathname } from "next/navigation";
@@ -22,13 +22,7 @@ export default function ThemePage() {
   }, [pathname]);
 
   if (themeData) {
-    return (
-      <ThemePageElement
-        home="/admin"
-        theme={themeData}
-        adminTools={<AdminTools />}
-      />
-    );
+    return <TP home="/admin" theme={themeData} adminTools={<AdminTools />} />;
   }
 
   return (

@@ -1,16 +1,16 @@
-import { Button, Dialog, IconButton, Tab, Tabs } from "@mui/material";
 import { TabPanels } from "./tab_panels";
 import { useBaseViewModelContext } from "../view_model/context_providers/base_view_model";
 import { BaseViewModel } from "../model/base_view_model";
-import { Activity } from "@/features/activity";
-import { poppins } from "@/pages/_app";
 import { AppBar } from "@/features/app_bar";
 import { Banner } from "./banner/banner";
 import Head from "next/head";
 import styles from "./styles.module.scss";
 import { Footer } from "@/features/footer";
-import { TabBar } from "./tab_bar/tab_bar";
+import { TabBar } from "./tab_bar";
 import { ReactNode } from "react";
+import dynamic from "next/dynamic";
+
+const ActivityDialog = dynamic(() => import("./activity_dialog"));
 
 export function View({
   home,
@@ -48,16 +48,13 @@ export function View({
       </div>
       <Footer />
       {adminTools}
-      <Dialog
-        className={poppins.className}
-        open={isActivityDialogOpen}
-        onClose={closeActivity}
-        fullWidth
-        maxWidth="md"
-        scroll="body"
-      >
-        {activeActivity && <Activity activity={activeActivity} />}
-      </Dialog>
+      {
+        <ActivityDialog
+          isActivityDialogOpen={isActivityDialogOpen}
+          activeActivity={activeActivity ?? undefined}
+          closeActivity={closeActivity}
+        />
+      }
     </>
   );
 }

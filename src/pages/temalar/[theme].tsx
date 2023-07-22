@@ -1,11 +1,12 @@
 import { GetServerSidePropsContext } from "next";
 import { ThemeReposityImplementation } from "@/core/models/repositories/theme_repository_implementation";
 import { Theme } from "@/core/models/entities/learning_unit";
-import { ThemePage as ThemePageElement } from "@/features/theme_page";
+import TP from "@/features/theme_page";
 
 export default function ThemePage({ themeData }: { themeData: Theme }) {
   console.debug("ThemePage---", Date.now());
-  return <ThemePageElement home="/" theme={Theme.from(themeData)} />;
+
+  return <TP home="/" theme={Theme.from(themeData)} />;
 }
 
 export async function getStaticProps(context: GetServerSidePropsContext) {

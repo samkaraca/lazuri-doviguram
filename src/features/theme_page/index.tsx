@@ -3,7 +3,7 @@ import { View } from "./view";
 import { ViewModel } from "./view_model";
 import { ReactNode } from "react";
 
-export function ThemePage({
+export default function ThemePage({
   theme,
   home,
   adminTools,
