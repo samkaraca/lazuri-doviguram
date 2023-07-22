@@ -1,5 +1,6 @@
 import { LessonMeta, Theme } from "../entities/learning_unit";
 
-export interface ThemeMetaDTO extends Pick<Theme, "title" | "image" | "id"> {
+export interface ThemeMetaDTO
+  extends Pick<Theme, "title" | "image" | "id" | "createdAt"> {
   lessons: LessonMeta[];
 }

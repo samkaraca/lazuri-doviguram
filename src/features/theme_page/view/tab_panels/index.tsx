@@ -38,34 +38,34 @@ export function ActivitiesContainer({
   activities: ActivityMap;
   openActivity: (activity: Activity<any>) => void;
 }) {
-  if (activities["idOrderMeta"].length === 0) {
-    return (
-      <div className={styles["no-activity-container"]}>
-        <Inbox fontSize="large" />
-        <p>Bu derste henüz bir aktivite yok</p>
-      </div>
-    );
-  }
-
   return (
-    <div className={styles["activities-container"]}>
-      {activities["idOrderMeta"].map((id) => {
-        const { title } = activities[id];
+    <section className={styles["activities"]} aria-label="aktiviteler">
+      {activities["idOrderMeta"].length === 0 ? (
+        <div className={styles["no-activity"]}>
+          <Inbox fontSize="large" />
+          <p>Bu derste henüz aktivite yok</p>
+        </div>
+      ) : (
+        <ol className={styles["activity-list"]}>
+          {activities["idOrderMeta"].map((id) => {
+            const { title } = activities[id];
 
-        return (
-          <div key={id} className={styles["activity-card"]}>
-            <h3>{title}</h3>
-            <div className={styles["actions"]}>
-              <button
-                className={`simple big ${styles["start"]}`}
-                onClick={() => openActivity(activities[id])}
-              >
-                Başla
-              </button>
-            </div>
-          </div>
-        );
-      })}
-    </div>
+            return (
+              <li key={id} className={styles["activity-card"]}>
+                <h3>{title}</h3>
+                <div className={styles["actions"]}>
+                  <button
+                    className={`simple lg ${styles["start"]}`}
+                    onClick={() => openActivity(activities[id])}
+                  >
+                    Başla
+                  </button>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      )}
+    </section>
   );
 }

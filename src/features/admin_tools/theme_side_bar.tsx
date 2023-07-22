@@ -9,14 +9,7 @@ import {
 import { useAdminViewModelContext } from "../theme_page/view_model/context_providers/admin_view_model";
 import { useBaseViewModelContext } from "../theme_page/view_model/context_providers/base_view_model";
 import { Testable } from "@/core/models/entities/testable";
-import {
-  Alert,
-  Backdrop,
-  CircularProgress,
-  Snackbar,
-  TextField,
-} from "@mui/material";
-import { InteractiveFeedbacks } from "@/core/components/interactive_feedbacks";
+import { TextField } from "@mui/material";
 
 export function ThemeSideBar({
   isOpen,
@@ -30,8 +23,7 @@ export function ThemeSideBar({
   // context state
   const { themeTitle, themeExplanation, themeImage, themeYoutubeVideoUrl } =
     useBaseViewModelContext()!;
-  const { saveTheme, stalling, snackbar, setSnackbar } =
-    useAdminViewModelContext()!;
+  const { saveTheme, deleteTheme } = useAdminViewModelContext()!;
 
   // component state
   const [modified, setModified] = useState(false);
@@ -161,7 +153,7 @@ export function ThemeSideBar({
           </div>
           <footer>
             <div>
-              <button className="simple error">
+              <button onClick={deleteTheme} className="simple error">
                 <span>Temayı sil</span>
                 <DeleteOutline />
               </button>

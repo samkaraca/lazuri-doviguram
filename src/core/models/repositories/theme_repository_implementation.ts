@@ -88,13 +88,13 @@ export class ThemeReposityImplementation implements ThemeRepository {
       ExpressionAttributeValues: {
         ":pk": { S: "theme" },
       },
-      ProjectionExpression: "SK, title, image, lessons.meta",
+      ProjectionExpression: "SK, title, image, lessons.meta, createdAt",
     });
 
     const rawThemeMetaDatas = await dbClient.send(queryCommand);
 
     const themeMetas = rawThemeMetaDatas.Items!.map((item) => {
-      const { SK, title, image, lessons } = unmarshall(item);
+      const { SK, title, image, lessons, createdAt } = unmarshall(item);
 
       const pLesson = lessons.meta;
 
@@ -103,10 +103,11 @@ export class ThemeReposityImplementation implements ThemeRepository {
         title,
         image,
         lessons: pLesson,
+        createdAt,
       } as ThemeMetaDTO;
     });
 
-    return themeMetas;
+    return themeMetas.sort((a, b) => a.createdAt - b.createdAt);
   };
 
   getThemeData = async (themePath: string): Promise<Theme> => {
@@ -151,6 +152,7 @@ export class ThemeReposityImplementation implements ThemeRepository {
         youtubeVideoUrl: "https://youtu.be/jzUHgC7Tylk",
         image: "default.jpg",
         lessons: { meta: [] },
+        createdAt: Date.now(),
       }),
     });
 
@@ -166,7 +168,7 @@ export class ThemeReposityImplementation implements ThemeRepository {
     }
   };
 
-  deleteTheme = async (themeId: string) => {
+  deleteTheme = async (themeId: string): Promise<StatusResponse> => {
     const tableName = "themes";
     const key = marshall({ PK: "theme", SK: themeId });
 
@@ -176,9 +178,12 @@ export class ThemeReposityImplementation implements ThemeRepository {
       Key: key,
     });
 
-    const result = await dbClient.send(deleteCommand);
-
-    return result;
+    try {
+      await dbClient.send(deleteCommand);
+      return { status: "success", message: "Tema başarıyla silindi." };
+    } catch (error) {
+      return { status: "error", message: "Tema silme başarısız." };
+    }
   };
 
   createNewLesson = async (themeId: string) => {

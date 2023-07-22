@@ -14,7 +14,8 @@ export class Theme {
     readonly URLPath: string,
     readonly image: string,
     readonly youtubeVideoUrl: string,
-    readonly lessons: LessonMap
+    readonly lessons: LessonMap,
+    readonly createdAt: number
   ) {}
 
   static from({
@@ -25,6 +26,7 @@ export class Theme {
     image,
     youtubeVideoUrl,
     lessons,
+    createdAt,
   }: Theme) {
     const newLessons = { ...lessons };
 
@@ -46,7 +48,8 @@ export class Theme {
       URLPath,
       image,
       youtubeVideoUrl,
-      newLessons
+      newLessons,
+      createdAt
     );
   }
 }

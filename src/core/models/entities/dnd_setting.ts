@@ -75,7 +75,6 @@ export class DndSetting {
       | { type: "on-blank"; blankKey: string }
   ) => {
     if (!this.draggedItem) {
-      console.warn("There is no dragged item currently!");
       return DndSetting.from(this);
     }
 

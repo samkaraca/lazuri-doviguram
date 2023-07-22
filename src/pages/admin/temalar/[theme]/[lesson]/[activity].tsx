@@ -22,7 +22,6 @@ export default function ActivityEditorPage() {
     );
     const res = (await resObj.json()) as StatusResponse;
 
-    console.log("la", res);
     if (res.status === "success") {
       setActivityData(Activity.from(res.data.activity));
     }

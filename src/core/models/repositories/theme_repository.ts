@@ -26,5 +26,5 @@ export interface ThemeRepository {
     explanation: string;
   }) => Promise<StatusResponse>;
   createNewTheme: () => Promise<StatusResponse>;
-  deleteTheme: (themeId: string) => Promise<DeleteItemCommandOutput>;
+  deleteTheme: (themeId: string) => Promise<StatusResponse>;
 }

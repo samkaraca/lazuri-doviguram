@@ -22,9 +22,7 @@ export default async function handler(
 
     return res.status(501).json({ error: "Unsopported action" });
   } else if (req.method === "GET") {
-    console.warn("/temalar request made");
     const themeMetas = await themeRepo.getThemeMetas();
-    console.warn("/temalar request response received", themeMetas);
     return res.status(200).json(themeMetas);
   }
 

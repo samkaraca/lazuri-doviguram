@@ -59,7 +59,12 @@ button.simple {
   }
 }
 
-button.big {
+button.lg {
+  font-size: 0.9rem;
+  padding: 0.7rem 1.4rem;
+}
+
+button.xl {
   font-size: 1rem;
   padding: 0.8rem 1.6rem;
 }

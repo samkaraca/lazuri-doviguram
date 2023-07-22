@@ -5,7 +5,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 
 export default function AdminPage() {
-  const [themeMetas, setThemeMetas] = useState<ThemeMetaDTO[]>([]);
+  const [themeMetas, setThemeMetas] = useState<ThemeMetaDTO[]>();
   const [stalling, setStalling] = useState(false);
 
   const fetchThemeMetas = async () => {
@@ -34,9 +34,16 @@ export default function AdminPage() {
     };
     if (res.status === "success") await fetchThemeMetas();
     setStalling(false);
-
-    console.log("löp", res);
   };
+
+  if (!themeMetas) {
+    return (
+      <div className="admin-waiting-room">
+        <h1>Merhaba Admin!</h1>
+        <p>Ana Sayfa Yükleniyor...</p>
+      </div>
+    );
+  }
 
   return (
     <>

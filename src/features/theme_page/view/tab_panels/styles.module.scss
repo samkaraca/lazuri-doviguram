@@ -19,11 +19,14 @@
   }
 }
 
-.activities-container {
+.activities {
+  margin-top: 4rem;
+}
+
+.activity-list {
   display: flex;
   flex-direction: column;
-  row-gap: 1.2em;
-  margin-top: 4em;
+  row-gap: 1.2rem;
 }
 
 .activity-card {
@@ -32,7 +35,7 @@
   align-items: center;
   background-color: gv.$primary-light-tint-color;
   padding: 1.3rem;
-  border-radius: 0.4em;
+  border-radius: 0.4rem;
 
   h3 {
     color: gv.$primary-color;
@@ -48,10 +51,9 @@
   }
 }
 
-.no-activity-container {
+.no-activity {
   padding-block: 6rem;
   background-color: #eeeeee;
-  border: 0.1em solid #dddddd;
   border-radius: 0.3em;
   display: flex;
   flex-direction: column;

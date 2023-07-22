@@ -3,6 +3,7 @@ import { AdminViewModel } from "../model/admin_view_model";
 import { useState } from "react";
 import { StatusResponse } from "@/core/models/repositories/status_response";
 import { Activity, LessonMap } from "@/core/models/entities/learning_unit";
+import { useRouter } from "next/navigation";
 
 export function useAdminViewModel(): AdminViewModel {
   const {
@@ -16,6 +17,7 @@ export function useAdminViewModel(): AdminViewModel {
     setActiveLesson,
     setThemeImage,
   } = useBaseViewModelContext()!;
+  const { replace } = useRouter();
   const [stalling, setStalling] = useState(false);
   const [snackbar, setSnackbar] = useState<{
     severity: "error" | "success" | "warning" | "info";
@@ -72,15 +74,23 @@ export function useAdminViewModel(): AdminViewModel {
   };
 
   const deleteTheme = async () => {
-    const res = await fetch(`/api/admin/temalar/${themeId}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        type: "deleteTheme",
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    setStalling(true);
+    const resObj = await fetch(`/api/admin/temalar/${themeId}`, {
+      method: "DELETE",
     });
+    const res = (await resObj.json()) as StatusResponse;
+    setStalling(false);
+
+    if (res.status === "error") {
+      setSnackbar({
+        severity: res.status,
+        message: res.message,
+        visible: true,
+      });
+      return;
+    }
+
+    replace("/admin");
   };
 
   const saveLesson = async ({
