@@ -28,5 +28,5 @@ export async function getStaticPaths() {
     return { paths: themePaths, fallback: false };
   }
 
-  return { paths: [{ params: { theme: "id1234" } }], fallback: false };
+  return { paths: [], fallback: false };
 }

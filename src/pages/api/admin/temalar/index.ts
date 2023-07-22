@@ -27,26 +27,6 @@ export default async function handler(
       return res.status(200).json(result.data);
     }
     return res.status(200).json([]);
-  } else if (req.method === "POST") {
-    const { type } = req.body;
-
-    if (type === "publishChanges") {
-      try {
-        await res.revalidate("/temalar/[theme]");
-        return res.status(200).send({
-          status: "success",
-          message: "Değişiklikler başarıyla yayınlandı.",
-        });
-      } catch (error) {
-        console.error(error);
-        return res.status(200).send({
-          status: "error",
-          message: "Değişikliklerin yayınlanması başarısız.",
-        });
-      }
-    }
-
-    return res.status(501).json({ error: "Unsopported action" });
   }
 
   return res.status(501).json({ error: "Unsopported request method" });

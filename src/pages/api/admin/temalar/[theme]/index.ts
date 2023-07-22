@@ -35,6 +35,29 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const theme = req.query.theme as string;
     const themeData = await themeRepo.getThemeData(theme);
     return res.status(200).json(themeData);
+  } else if (req.method === "POST") {
+    const { type } = req.body;
+    const themeId = req.query.theme;
+
+    if (type === "publishChanges") {
+      try {
+        await res.revalidate(`/temalar/${themeId}`);
+        await res.revalidate("/");
+        return res.status(200).send({
+          status: "success",
+          message: "Değişiklikler başarıyla yayınlandı.",
+        });
+      } catch (error) {
+        console.error(
+          `/api/admin/temalar/${themeId} -> POST -> publishChanges ->`,
+          error
+        );
+        return res.status(200).send({
+          status: "error",
+          message: "Değişikliklerin yayınlanması başarısız.",
+        });
+      }
+    }
   }
 
   return res.status(501).json({ error: "Unsopported request method" });

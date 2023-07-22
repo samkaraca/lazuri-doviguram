@@ -324,7 +324,7 @@ export function useAdminViewModel(): AdminViewModel {
 
   const publishChanges = async () => {
     setStalling(true);
-    const resObj = await fetch(`/api/admin/temalar`, {
+    const resObj = await fetch(`/api/admin/temalar/${themeId}`, {
       method: "POST",
       body: JSON.stringify({ type: "publishChanges" }),
       headers: {
