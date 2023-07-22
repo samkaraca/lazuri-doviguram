@@ -1,16 +1,20 @@
 import { BoardItemEntry } from "@/core/models/entities/dnd_setting";
 import { useDraggable } from "@dnd-kit/core";
+import styles from "./styles.module.scss";
+import { CSSProperties } from "react";
 
 export function Draggable({
   boardItemEntry,
   disabled = false,
-  classNameContainer,
-  classNameChip,
+  status,
+  styleChip,
+  styleContainer,
 }: {
   disabled: boolean;
   boardItemEntry: BoardItemEntry;
-  classNameContainer?: string;
-  classNameChip?: string;
+  status: "error" | "success" | "neutral";
+  styleChip?: CSSProperties;
+  styleContainer?: CSSProperties;
 }) {
   const [key, boardItem] = boardItemEntry;
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -26,13 +30,18 @@ export function Draggable({
           ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
           : undefined,
         display: "inline-block",
+        ...styleContainer,
       }}
-      className={`${classNameContainer}`}
       {...attributes}
       {...listeners}
       ref={setNodeRef}
     >
-      <div className={`board-item ${classNameChip}`}>
+      <div
+        style={{ ...styleChip }}
+        className={`${styles["board-item"]} ${
+          status !== "neutral" ? styles[status] : ""
+        }`}
+      >
         <p>{boardItem.value}</p>
       </div>
     </div>

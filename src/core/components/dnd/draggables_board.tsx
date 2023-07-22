@@ -19,6 +19,7 @@ export function BoardItemsBoard({
         .map(([key, boardItem]) => {
           return (
             <Draggable
+              status="neutral"
               disabled={disabled}
               key={`draggable-${key}`}
               boardItemEntry={[key, boardItem]}

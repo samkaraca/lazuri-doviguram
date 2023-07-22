@@ -31,7 +31,7 @@ export function View({
   return (
     <>
       <Head>
-        <title>{themeTitle} - Lazuri Doviguram!</title>
+        <title>{`${themeTitle} - Lazuri Doviguram!`}</title>
         <meta property="og:title" content={themeTitle} key="title" />
         <meta property="og:description" content={themeExplanation} key="desc" />
         <meta

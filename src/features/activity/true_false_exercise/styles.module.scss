@@ -7,6 +7,8 @@
     column-gap: 0.6rem;
     font-weight: 700;
     font-size: 0.7rem;
+    padding-right: 0.4rem;
+    margin-bottom: 1rem;
 
     span {
       max-width: 2.5rem;
@@ -19,6 +21,7 @@
   li {
     padding-block: 1rem;
     padding-left: 1.3rem;
+    padding-right: 0.4rem;
 
     &.success {
       background-color: gv.$success-color-light;
@@ -39,6 +42,7 @@
 
       .radio-buttons {
         display: flex;
+        align-items: center;
         width: 5.6rem;
         min-width: 5.6rem;
         min-height: 1.5rem;

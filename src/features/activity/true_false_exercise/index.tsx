@@ -1,6 +1,5 @@
-import { IViewModel } from "@/features/activity_editor/model/view_model";
 import styles from "./styles.module.scss";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { TrueFalseQuestion } from "@/core/models/entities/question";
 
 export function TrueFalseExercise({

@@ -1,5 +1,7 @@
 @use "../../../styles/global-variables.scss" as gv;
 
+$board-item-height: 1.8rem;
+
 .exercise-content {
   display: flex;
   flex-direction: column;
@@ -18,15 +20,34 @@
   padding: 1rem;
 }
 
-.dropped {
-  background-color: transparent;
-  padding: 0;
-  width: calc(10rem + 2px);
+.board-item {
+  height: $board-item-height;
+  width: 10rem;
+  min-width: 10rem;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  background-color: steelblue;
+  border-radius: 7.7px;
+  overflow: hidden;
+  cursor: pointer;
 
-  .draggable-chip {
-    padding-block: 0;
-    min-width: unset;
-    width: 100%;
+  &.error {
+    background-color: gv.$error-color;
+  }
+
+  &.success {
+    background-color: gv.$success-color;
+  }
+
+  p {
+    line-height: 1.8rem !important;
+    text-align: center;
+    word-break: keep-all;
+    overflow: hidden;
+    flex-grow: 1;
+    margin: 0;
   }
 }
 
@@ -34,7 +55,7 @@
   box-sizing: content-box;
   display: inline-block;
   width: 10rem;
-  height: 1.8rem;
+  height: $board-item-height;
   vertical-align: middle;
   border: 1px solid gv.$neutral-color;
   border-radius: 9px;

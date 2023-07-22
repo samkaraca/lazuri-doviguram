@@ -1,7 +1,6 @@
-import { IViewModel } from "@/features/activity_editor/model/view_model";
 import styles from "./styles.module.scss";
 import { DndSetting } from "@/core/models/entities/dnd_setting";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Droppable } from "@/core/components/dnd/droppable";
 import { WrapperDndContext } from "@/core/components/dnd/wrapper_dnd_context";
 import { Draggable } from "@/core/components/dnd/draggable";
@@ -58,10 +57,15 @@ export function PairTextsWithImagesExercise({
                 >
                   {boardItemEntry && (
                     <Draggable
-                      classNameChip={`${
-                        isFormLocked ? (isCorrect ? "success" : "error") : ""
-                      } full-width`}
-                      classNameContainer="full-width"
+                      status={
+                        isFormLocked
+                          ? isCorrect
+                            ? "success"
+                            : "error"
+                          : "neutral"
+                      }
+                      styleChip={{ width: "100%" }}
+                      styleContainer={{ width: "100%" }}
                       disabled={isFormLocked}
                       boardItemEntry={boardItemEntry}
                     />

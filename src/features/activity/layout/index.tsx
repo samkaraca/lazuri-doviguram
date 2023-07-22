@@ -75,12 +75,17 @@ export function Layout({
       </div>
       <footer className={styles["footer"]}>
         {isFormLocked ? (
-          <button className="simple" onClick={handleReattemptClick}>
-            Tekrar Çöz
-          </button>
+          <div className="row-group">
+            <button className="simple" onClick={handleReattemptClick}>
+              Tekrar Çöz
+            </button>
+            <button className="simple" onClick={() => {}}>
+              Bitir
+            </button>
+          </div>
         ) : (
           <button className="simple" onClick={handleFinishClick}>
-            Bitir
+            Sonucu gör
           </button>
         )}
       </footer>

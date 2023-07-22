@@ -66,13 +66,13 @@ export function DragIntoBlanksExercise({
                         >
                           {boardItemEntry && (
                             <Draggable
-                              classNameChip={`${
+                              status={
                                 isFormLocked
                                   ? isCorrect
                                     ? "success"
                                     : "error"
-                                  : ""
-                              }`}
+                                  : "neutral"
+                              }
                               disabled={isFormLocked}
                               boardItemEntry={boardItemEntry}
                             />
