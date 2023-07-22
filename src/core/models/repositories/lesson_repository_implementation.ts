@@ -55,6 +55,7 @@ export class LessonRepositoryImplementation implements LessonRepository {
         },
       };
     } catch (error) {
+      console.error("LessonRepository -> createNewActivity: ", error);
       return { status: "error", message: "Aktivite oluşturma başarısız." };
     }
   };
@@ -106,6 +107,7 @@ export class LessonRepositoryImplementation implements LessonRepository {
       await dbClient.send(deleteLessonCommand);
       return { status: "success", message: "Ders başarıyla silindi." };
     } catch (error) {
+      console.error("LessonRepository -> deleteLesson: ", error);
       return { status: "error", message: "Ders silme başarısız." };
     }
   };
@@ -162,6 +164,7 @@ export class LessonRepositoryImplementation implements LessonRepository {
       ]);
       return { status: "success", message: "Ders başarıyla güncellendi." };
     } catch (error) {
+      console.error("LessonRepository -> saveLesson: ", error);
       return { status: "error", message: "Ders güncelleme başarısız." };
     }
   };

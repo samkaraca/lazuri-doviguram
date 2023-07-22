@@ -21,8 +21,12 @@ export async function getStaticProps(context: GetServerSidePropsContext) {
 
 export async function getStaticPaths() {
   const themeRepository = new ThemeReposityImplementation();
-  const themeIds = (await themeRepository.getThemeIds()) as { SK: string }[];
-  const themePaths = themeIds.map((item) => ({ params: { theme: item.SK } }));
+  const result = await themeRepository.getThemeIds();
 
-  return { paths: themePaths, fallback: false };
+  if (result.status === "success" && result.data) {
+    const themePaths = result.data.map((item) => ({ params: { theme: item } }));
+    return { paths: themePaths, fallback: false };
+  }
+
+  return { paths: [{ params: { theme: "id1234" } }], fallback: false };
 }

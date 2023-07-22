@@ -59,11 +59,12 @@ export class ThemeReposityImplementation implements ThemeRepository {
       await dbClient.send(updateCommand);
       return { status: "success", message: "Tema başarıyla güncellendi." };
     } catch (error) {
+      console.error("ThemeRepository -> saveTheme: ", error);
       return { status: "error", message: "Tema güncelleme başarısız." };
     }
   };
 
-  getThemeIds = async (): Promise<any> => {
+  getThemeIds = async (): Promise<StatusResponse<string[]>> => {
     const dbClient = DynamoDBClientSingleton.getInstance();
     const queryCommand = new QueryCommand({
       TableName: "themes",
@@ -74,13 +75,19 @@ export class ThemeReposityImplementation implements ThemeRepository {
       ProjectionExpression: "SK",
     });
 
-    const rawThemeIdDatas = await dbClient.send(queryCommand);
-    const themeIds = rawThemeIdDatas.Items!.map((item) => unmarshall(item));
-
-    return themeIds;
+    try {
+      const rawThemeIdDatas = await dbClient.send(queryCommand);
+      const themeIds = rawThemeIdDatas.Items!.map(
+        (item) => unmarshall(item).SK
+      );
+      return { status: "success", message: "", data: themeIds };
+    } catch (error) {
+      console.error("ThemeRepository -> getThemeIds: ", error);
+      return { status: "error", message: "" };
+    }
   };
 
-  getThemeMetas = async (): Promise<ThemeMetaDTO[]> => {
+  getThemeMetas = async (): Promise<StatusResponse<ThemeMetaDTO[]>> => {
     const dbClient = DynamoDBClientSingleton.getInstance();
     const queryCommand = new QueryCommand({
       TableName: "themes",
@@ -91,23 +98,25 @@ export class ThemeReposityImplementation implements ThemeRepository {
       ProjectionExpression: "SK, title, image, lessons.meta, createdAt",
     });
 
-    const rawThemeMetaDatas = await dbClient.send(queryCommand);
-
-    const themeMetas = rawThemeMetaDatas.Items!.map((item) => {
-      const { SK, title, image, lessons, createdAt } = unmarshall(item);
-
-      const pLesson = lessons.meta;
-
-      return {
-        id: SK,
-        title,
-        image,
-        lessons: pLesson,
-        createdAt,
-      } as ThemeMetaDTO;
-    });
-
-    return themeMetas.sort((a, b) => a.createdAt - b.createdAt);
+    try {
+      const rawThemeMetaDatas = await dbClient.send(queryCommand);
+      const themeMetas = rawThemeMetaDatas.Items!.map((item) => {
+        const { SK, title, image, lessons, createdAt } = unmarshall(item);
+        const pLesson = lessons.meta;
+        return {
+          id: SK,
+          title,
+          image,
+          lessons: pLesson,
+          createdAt,
+        } as ThemeMetaDTO;
+      });
+      themeMetas.sort((a, b) => a.createdAt - b.createdAt);
+      return { status: "success", message: "", data: themeMetas };
+    } catch (error) {
+      console.error("ThemeRepository -> getThemeMetas: ", error);
+      return { status: "error", message: "" };
+    }
   };
 
   getThemeData = async (themePath: string): Promise<Theme> => {
@@ -164,6 +173,7 @@ export class ThemeReposityImplementation implements ThemeRepository {
         data: { newThemeId },
       };
     } catch (error) {
+      console.error("ThemeRepository -> createNewTheme: ", error);
       return { status: "error", message: "Tema oluşturma başarısız." };
     }
   };
@@ -182,6 +192,7 @@ export class ThemeReposityImplementation implements ThemeRepository {
       await dbClient.send(deleteCommand);
       return { status: "success", message: "Tema başarıyla silindi." };
     } catch (error) {
+      console.error("ThemeRepository -> deleteTheme: ", error);
       return { status: "error", message: "Tema silme başarısız." };
     }
   };
@@ -226,6 +237,7 @@ export class ThemeReposityImplementation implements ThemeRepository {
         data: unmarshall(res.Attributes!),
       };
     } catch (error) {
+      console.error("ThemeRepository -> createNewLesson: ", error);
       return { status: "error", message: "Yeni ders oluşturma başarısız." };
     }
   };

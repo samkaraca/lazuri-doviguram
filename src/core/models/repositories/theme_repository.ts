@@ -1,15 +1,10 @@
-import {
-  AttributeValue,
-  DeleteItemCommandOutput,
-  TransactWriteItemsCommandOutput,
-  UpdateItemCommandOutput,
-} from "@aws-sdk/client-dynamodb";
 import { ThemeMetaDTO } from "../dtos/theme_meta_dto";
 import { Theme } from "../entities/learning_unit";
 import { StatusResponse } from "./status_response";
 
 export interface ThemeRepository {
-  getThemeMetas(): Promise<ThemeMetaDTO[]>;
+  getThemeIds: () => Promise<StatusResponse<string[]>>;
+  getThemeMetas: () => Promise<StatusResponse<ThemeMetaDTO[]>>;
   getThemeData(themePath: string): Promise<Theme>;
   createNewLesson: (themeId: string) => Promise<Record<string, any>>;
   saveTheme: ({

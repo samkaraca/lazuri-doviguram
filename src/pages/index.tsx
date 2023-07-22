@@ -21,11 +21,19 @@ export default function LandingPage({
 
 export async function getStaticProps() {
   const themeRepository = new ThemeReposityImplementation();
-  const themeMetas = await themeRepository.getThemeMetas();
+  const res = await themeRepository.getThemeMetas();
+
+  if (res.status === "success" && res.data) {
+    return {
+      props: {
+        themeMetas: res.data,
+      },
+    };
+  }
 
   return {
     props: {
-      themeMetas,
+      themeMetas: [],
     },
   };
 }

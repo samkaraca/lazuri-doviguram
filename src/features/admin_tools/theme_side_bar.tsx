@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   DeleteOutline,
   DesignServices,
+  RssFeed,
   WarningAmber,
 } from "@mui/icons-material";
 import { useAdminViewModelContext } from "../theme_page/view_model/context_providers/admin_view_model";
@@ -23,7 +24,8 @@ export function ThemeSideBar({
   // context state
   const { themeTitle, themeExplanation, themeImage, themeYoutubeVideoUrl } =
     useBaseViewModelContext()!;
-  const { saveTheme, deleteTheme } = useAdminViewModelContext()!;
+  const { saveTheme, deleteTheme, publishChanges } =
+    useAdminViewModelContext()!;
 
   // component state
   const [modified, setModified] = useState(false);
@@ -96,6 +98,10 @@ export function ThemeSideBar({
         >
           <header>
             <h3>Tema Editörü</h3>
+            <button onClick={publishChanges} className="simple">
+              <span>Değişiklikleri Yayınla</span>
+              <RssFeed />
+            </button>
           </header>
           <div className={"main"}>
             {modified && (

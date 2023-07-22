@@ -31,6 +31,7 @@ export class ActivityRepositoryImplementation implements ActivityRepository {
       const activity = data.lessons[lessonId].activities[activityId];
       return { status: "success", message: "", data: { activity } };
     } catch (error) {
+      console.error("ActivityRepository -> getActivity: ", error);
       return { status: "error", message: "" };
     }
   };
@@ -95,6 +96,7 @@ export class ActivityRepositoryImplementation implements ActivityRepository {
       await dbClient.send(updateCommand);
       return { status: "success", message: "Aktivite başarıyla silindi." };
     } catch (error) {
+      console.error("ActivityRepository -> deleteActivity: ", error);
       return { status: "error", message: "Aktivite silme başarısız." };
     }
   };
