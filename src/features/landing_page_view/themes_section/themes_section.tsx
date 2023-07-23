@@ -13,7 +13,7 @@ export function ThemesSection({
   createNewThemeButton?: ReactNode;
 }) {
   return (
-    <article className={styles["themes"]}>
+    <article id="temalar" className={styles["themes"]}>
       <div>
         <h4>Temel Lazca</h4>
         <section aria-label="temalar">

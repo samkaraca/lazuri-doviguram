@@ -37,5 +37,4 @@ export interface AdminViewModel {
     youtubeVideoUrl: string;
   }) => Promise<void>;
   deleteTheme: () => Promise<void>;
-  publishChanges: () => Promise<void>;
 }

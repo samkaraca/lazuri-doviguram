@@ -21,7 +21,9 @@ export default function ActivityDialog({
       maxWidth="md"
       scroll="body"
     >
-      {activeActivity && <Activity activity={activeActivity} />}
+      {activeActivity && (
+        <Activity closeActivity={closeActivity} activity={activeActivity} />
+      )}
     </Dialog>
   );
 }

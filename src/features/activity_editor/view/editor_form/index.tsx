@@ -1,12 +1,12 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import styles from "../styles.module.scss";
 import useViewModelContext from "../../view_model";
-import Activity from "./activity";
 import { Activity as IActivity } from "@/core/models/entities/learning_unit";
 import { MediaTester } from "@/core/components/media_tester";
 import YouTube from "react-youtube";
 import { NextImageContainer } from "@/core/components/next_image_container";
 import getYouTubeID from "get-youtube-id";
+import ExerciseEditor from "./exercise_editor";
 
 const activityTypeMap = {
   "true-false": "Doğru yanlış",
@@ -155,7 +155,7 @@ export default function EditorForm() {
           placeholder="ses.mp3"
         />
       </section>
-      <Activity />
+      <ExerciseEditor />
     </div>
   );
 }

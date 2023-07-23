@@ -15,6 +15,7 @@ export function Layout({
   handleFinishClick,
   isFormLocked,
   handleReattemptClick,
+  closeActivity,
 }: {
   children: ReactNode;
   title: Activity<any>["title"];
@@ -24,8 +25,9 @@ export function Layout({
   image: Activity<any>["image"];
   youtubeVideoUrl: Activity<any>["youtubeVideoUrl"];
   isFormLocked: boolean;
-  handleReattemptClick: () => void;
-  handleFinishClick: () => void;
+  handleReattemptClick: VoidFunction;
+  handleFinishClick: VoidFunction;
+  closeActivity: VoidFunction;
 }) {
   return (
     <section className={styles["container"]} aria-label="aktivite">
@@ -79,7 +81,7 @@ export function Layout({
             <button className="simple" onClick={handleReattemptClick}>
               Tekrar Çöz
             </button>
-            <button className="simple" onClick={() => {}}>
+            <button className="simple" onClick={closeActivity}>
               Bitir
             </button>
           </div>

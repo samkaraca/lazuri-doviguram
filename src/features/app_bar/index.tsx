@@ -14,7 +14,7 @@ export function AppBar({ home }: { home: "/admin" | "/" }) {
             <img src="/header-logo.png" alt="" />
           </Link>
           <nav>
-            <a className="simple" href="#">
+            <a className="simple" href={`${home}#temalar`}>
               Temalar
             </a>
             <a

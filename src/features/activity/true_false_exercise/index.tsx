@@ -1,17 +1,17 @@
 import styles from "./styles.module.scss";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { TrueFalseQuestion } from "@/core/models/entities/question";
 
 export function TrueFalseExercise({
-  replies,
-  setReplies,
   exercise,
   isFormLocked,
+  replies,
+  setReplies,
 }: {
-  replies: boolean[];
-  setReplies: Dispatch<SetStateAction<boolean[]>>;
   isFormLocked: boolean;
   exercise: TrueFalseQuestion[];
+  replies: boolean[];
+  setReplies: Dispatch<SetStateAction<boolean[]>>;
 }) {
   return (
     <section
@@ -45,13 +45,13 @@ export function TrueFalseExercise({
                       name={`true-false-${i}`}
                       disabled={isFormLocked}
                       checked={reply === true}
-                      onClick={() =>
+                      onChange={() => {
                         setReplies((prev) => {
                           const newReplies = [...prev];
                           newReplies[i] = true;
                           return newReplies;
-                        })
-                      }
+                        });
+                      }}
                     />
                   </div>
                   <div className={styles["radio-button"]}>
@@ -60,13 +60,13 @@ export function TrueFalseExercise({
                       name={`true-false-${i}`}
                       disabled={isFormLocked}
                       checked={reply === false}
-                      onClick={() =>
+                      onChange={() => {
                         setReplies((prev) => {
                           const newReplies = [...prev];
                           newReplies[i] = false;
                           return newReplies;
-                        })
-                      }
+                        });
+                      }}
                     />
                   </div>
                 </div>

@@ -5,10 +5,7 @@ import { Activity } from "@/features/activity";
 import useViewModelContext from "../view_model";
 import { useMemo } from "react";
 import { Activity as IActivity } from "@/core/models/entities/learning_unit";
-import {
-  FillInBlanksQuestion,
-  TrueFalseQuestion,
-} from "@/core/models/entities/question";
+import { FillInBlanksQuestion } from "@/core/models/entities/question";
 import { ExerciseConverter } from "../services/exercise_converter";
 
 export default function View() {
@@ -79,7 +76,7 @@ export default function View() {
       <div className={styles["content"]}>
         <EditorForm />
         <div className={styles["simple-container"]}>
-          <Activity activity={activity} />
+          <Activity closeActivity={() => {}} activity={activity} />
         </div>
       </div>
     </div>

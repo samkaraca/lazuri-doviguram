@@ -10,7 +10,9 @@ import { TabBar } from "./tab_bar";
 import { ReactNode } from "react";
 import dynamic from "next/dynamic";
 
-const ActivityDialog = dynamic(() => import("./activity_dialog"));
+const ActivityDialog = dynamic(() => import("./activity_dialog"), {
+  ssr: false,
+});
 
 export function View({
   home,

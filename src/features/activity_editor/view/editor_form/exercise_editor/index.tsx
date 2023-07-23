@@ -2,10 +2,10 @@ import { Paper } from "@mui/material";
 import TrueOrFalseExercise from "./true_or_false_exercise";
 import FillOrDragExercise from "./type_or_drag_exercise";
 import useViewModelContext from "@/features/activity_editor/view_model";
-import { MultipleChoiceExerciseForm } from "../multiple_choice_exercise_form";
-import { PairTextsWithImagesExerciseForm } from "../pair_texts_with_images_exercise_form";
+import { MultipleChoiceExerciseForm } from "./multiple_choice_exercise_form";
+import { PairTextsWithImagesExerciseForm } from "./pair_texts_with_images_exercise_form";
 
-export default function Activity() {
+export default function ExerciseEditor() {
   const { activityType } = useViewModelContext()!;
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DragIntoBlanksExercise } from "./drag_into_blanks_exercise";
 import { Layout } from "./layout";
 import { MultipleChoiceExercise } from "./multiple_choice_exercise";
@@ -13,7 +13,13 @@ import {
   TrueFalseQuestion,
 } from "@/core/models/entities/question";
 
-export function Activity({ activity }: { activity: IActivity<any> }) {
+export function Activity({
+  activity,
+  closeActivity,
+}: {
+  activity: IActivity<any>;
+  closeActivity: VoidFunction;
+}) {
   const {
     title,
     textContent,
@@ -24,16 +30,16 @@ export function Activity({ activity }: { activity: IActivity<any> }) {
     activityType,
     questions,
   } = activity;
-
   const [isFormLocked, setIsFormLocked] = useState(false);
-  const [replies, setReplies] = useState<any[]>(
-    new Array(questions.length).fill(undefined)
-  );
+  const [replies, setReplies] = useState<any[]>([]);
+
+  useEffect(() => setReplies([]), [activityType]);
+
   const handleFinishClick = () => {
     setIsFormLocked(true);
   };
   const handleReattemptClick = () => {
-    setReplies(new Array(questions.length).fill(undefined));
+    setReplies([]);
     setIsFormLocked(false);
   };
 
@@ -48,6 +54,7 @@ export function Activity({ activity }: { activity: IActivity<any> }) {
       isFormLocked={isFormLocked}
       handleReattemptClick={handleReattemptClick}
       handleFinishClick={handleFinishClick}
+      closeActivity={closeActivity}
     >
       {activityType === "true-false" ? (
         <TrueFalseExercise

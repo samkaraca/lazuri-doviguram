@@ -1,6 +1,4 @@
-import { IViewModel } from "@/features/activity_editor/model/view_model";
-import styles from "./styles.module.scss";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { FillInBlanksQuestion } from "@/core/models/entities/question";
 
 export function TypeInBlanksExercise({
@@ -9,8 +7,8 @@ export function TypeInBlanksExercise({
   isFormLocked,
   exercise,
 }: {
-  replies: { [index: number]: string }[];
-  setReplies: Dispatch<SetStateAction<{ [index: number]: string }[]>>;
+  replies: Map<string, string>[];
+  setReplies: Dispatch<SetStateAction<Map<string, string>[]>>;
   isFormLocked: boolean;
   exercise: FillInBlanksQuestion[];
 }) {
@@ -25,7 +23,10 @@ export function TypeInBlanksExercise({
                   return <p key={pieceKey}>{pieceValue}</p>;
                 }
 
-                const reply = replies[index][i];
+                const replyMap = replies[index] as
+                  | Map<string, string>
+                  | undefined;
+                const reply = replyMap?.get(pieceKey);
                 const isCorrect =
                   reply !== undefined && reply !== null
                     ? item.check(pieceKey, reply)
@@ -34,16 +35,21 @@ export function TypeInBlanksExercise({
                 return (
                   <input
                     type="text"
+                    style={{ width: "10rem" }}
                     className={`basic ${
                       isFormLocked ? (isCorrect ? "success" : "error") : ""
                     }`}
                     key={pieceKey}
                     disabled={isFormLocked}
-                    value={replies[index][i]}
+                    value={replyMap?.get(pieceKey) ?? ""}
                     onChange={(e) => {
                       setReplies((prev) => {
                         const newReplies = [...prev];
-                        newReplies[index][i] = e.target.value;
+                        const newReplyMap = new Map(
+                          newReplies[index] ?? new Map()
+                        );
+                        newReplyMap.set(pieceKey, e.target.value);
+                        newReplies[index] = newReplyMap;
                         return newReplies;
                       });
                     }}

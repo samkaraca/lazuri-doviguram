@@ -1,17 +1,17 @@
 import { MultipleChoiceQuestion } from "@/core/models/entities/question";
 import styles from "./styles.module.scss";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export function MultipleChoiceExercise({
-  replies,
-  setReplies,
   isFormLocked,
   exercise,
+  replies,
+  setReplies,
 }: {
-  replies: number[];
-  setReplies: Dispatch<SetStateAction<number[]>>;
   isFormLocked: boolean;
   exercise: MultipleChoiceQuestion[];
+  replies: number[];
+  setReplies: Dispatch<SetStateAction<number[]>>;
 }) {
   return (
     <ol className={`simple multiple-choice`}>
@@ -36,13 +36,14 @@ export function MultipleChoiceExercise({
                     <div key={`${choice}-${i}`} className={"choice"}>
                       <input
                         disabled={isFormLocked}
-                        onClick={() =>
+                        onChange={() =>
                           setReplies((prev) => {
                             const newReplies = [...prev];
                             newReplies[index] = i;
                             return newReplies;
                           })
                         }
+                        checked={replies[index] === i}
                         type="radio"
                         id={`choice-${index}-${i}`}
                         name={`choice-${index}`}

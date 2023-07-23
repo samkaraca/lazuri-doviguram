@@ -322,34 +322,6 @@ export function useAdminViewModel(): AdminViewModel {
     });
   };
 
-  const publishChanges = async () => {
-    setStalling(true);
-    const resObj = await fetch(`/api/admin/temalar/${themeId}`, {
-      method: "POST",
-      body: JSON.stringify({ type: "publishChanges" }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const res = (await resObj.json()) as StatusResponse;
-    setStalling(false);
-
-    if (res.status === "error") {
-      setSnackbar({
-        severity: res.status,
-        message: res.message,
-        visible: true,
-      });
-      return;
-    }
-
-    setSnackbar({
-      severity: res.status,
-      message: res.message,
-      visible: true,
-    });
-  };
-
   return {
     stalling,
     snackbar,
@@ -364,6 +336,5 @@ export function useAdminViewModel(): AdminViewModel {
     // theme actions
     saveTheme,
     deleteTheme,
-    publishChanges,
   };
 }
