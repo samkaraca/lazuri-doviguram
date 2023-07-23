@@ -3,13 +3,15 @@
 .welcome {
   @include gv.simple-responsive-container($max-width: gv.$bp-md-alt-2);
   background-color: gv.$alt-bg-color;
+  height: calc(100svh - gv.$app-bar-height);
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding-bottom: calc(gv.$app-bar-height / 3);
 }
 
 .welcome > div:only-child {
-  padding-block: 6rem 8rem;
   display: grid;
   grid-template:
     "title image"
@@ -47,7 +49,7 @@
   }
 }
 
-@media (gv.$bp-md-alt-2 > width) {
+@media (max-width: gv.$bp-md-alt-2) {
   .welcome {
     padding-inline: 7%;
   }
@@ -66,7 +68,7 @@
   }
 }
 
-@media (gv.$bp-md > width) {
+@media (max-width: gv.$bp-md) {
   .welcome > div:only-child {
     height: calc(100svh - gv.$app-bar-height);
     justify-items: center;
@@ -100,7 +102,7 @@
   }
 }
 
-@media (gv.$bp-sm > width) {
+@media (max-width: gv.$bp-sm) {
   .welcome > div:only-child {
     h1 {
       font-size: 3rem;

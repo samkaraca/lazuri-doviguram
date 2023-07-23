@@ -75,7 +75,7 @@
   width: 20rem;
 }
 
-@media (gv.$bp-md-alt-2 > width) {
+@media (max-width: gv.$bp-md-alt-2) {
   .inner-container {
     display: grid;
     grid-template:
@@ -85,7 +85,7 @@
   }
 }
 
-@media (gv.$bp-sm-md > width) {
+@media (max-width: gv.$bp-sm-md) {
   .inner-container {
     display: grid;
     grid-template:

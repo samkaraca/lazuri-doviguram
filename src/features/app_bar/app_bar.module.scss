@@ -63,13 +63,13 @@
   }
 }
 
-@media (gv.$bp-md-alt-2 > width) {
+@media (max-width: gv.$bp-md-alt-2) {
   .header {
     padding-inline: 3%;
   }
 }
 
-@media (gv.$bp-md > width) {
+@media (max-width: gv.$bp-md) {
   .header > div:only-child {
     nav {
       display: none;

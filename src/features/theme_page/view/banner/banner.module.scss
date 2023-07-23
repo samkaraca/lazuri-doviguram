@@ -85,7 +85,7 @@ $banner-bg-color: #164b60;
   }
 }
 
-@media (gv.$bp-md-alt-1 > width) {
+@media (max-width: gv.$bp-md-alt-1) {
   .content {
     padding-block: 3.5rem;
     grid-template-areas:

@@ -2,7 +2,8 @@
 
 .themes {
   @include gv.simple-responsive-container($max-width: gv.$bp-md-alt-2);
-  margin-top: 5rem;
+  padding-top: 4rem;
+  min-height: 100vh;
 
   h4 {
     font-weight: 600;
@@ -21,7 +22,7 @@
   }
 }
 
-@media (gv.$bp-sm > width) {
+@media (max-width: gv.$bp-sm) {
   .themes {
     padding-inline: 1rem;
     ol.cards {

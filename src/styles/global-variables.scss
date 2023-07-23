@@ -33,7 +33,7 @@ $app-bar-height: 5.5rem;
   }
 
   @if $type == "fragile" {
-    @media ($bp-md-alt-2 > width) {
+    @media (max-width: $bp-md-alt-2) {
       padding-inline: 5%;
     }
   }
