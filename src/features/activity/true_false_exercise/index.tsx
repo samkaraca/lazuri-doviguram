@@ -1,18 +1,22 @@
 import styles from "./styles.module.scss";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TrueFalseQuestion } from "@/core/models/entities/question";
 
 export function TrueFalseExercise({
   exercise,
   isFormLocked,
-  replies,
-  setReplies,
+  resetSwitch,
 }: {
   isFormLocked: boolean;
   exercise: TrueFalseQuestion[];
-  replies: boolean[];
-  setReplies: Dispatch<SetStateAction<boolean[]>>;
+  resetSwitch: boolean;
 }) {
+  const [replies, setReplies] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    setReplies([]);
+  }, [resetSwitch]);
+
   return (
     <section
       className={styles["container"]}

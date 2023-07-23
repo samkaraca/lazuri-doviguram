@@ -41,17 +41,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     if (type === "publishChanges") {
       try {
-        console.debug(
-          "atıyorum---",
-          Date.now(),
-          type,
-          themeId,
-          req.query,
-          req.body
-        );
         await res.revalidate(`/temalar/${themeId}`);
-        console.debug("topluyorum---", Date.now());
-        //await res.revalidate("/");
+        await res.revalidate("/");
         return res.status(200).send({
           status: "success",
           message: "Değişiklikler başarıyla yayınlandı.",

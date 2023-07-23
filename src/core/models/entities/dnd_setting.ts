@@ -85,9 +85,18 @@ export class DndSetting {
         location: null,
       });
     } else if (action.type === "on-blank") {
+      /**
+       * let's look if there is an existent boardItem at the blank
+       * we want to put our action boardItem (1)
+       */
       const goesToAnOccupiedBlank = this.getBoardItemContainingTheLocation(
         action.blankKey
       );
+
+      /**
+       * (2) if there is an exsiting one, we need to remove that
+       * boardItem from its place by setting its location to null
+       */
       if (goesToAnOccupiedBlank) {
         this.boardItems.set(goesToAnOccupiedBlank[0], {
           ...goesToAnOccupiedBlank[1],
@@ -95,6 +104,9 @@ export class DndSetting {
         });
       }
 
+      /**
+       * Finally, let's set the boardItem's location to its new place
+       */
       this.boardItems.set(this.draggedItem[0], {
         ...this.draggedItem[1],
         location: action.blankKey,
@@ -104,6 +116,26 @@ export class DndSetting {
 
     this.draggedItem = null;
     return DndSetting.from(this);
+  };
+
+  reset = (): DndSetting => {
+    const newBlanks = new Map(
+      Array.from(this.blanks, ([key, { answer, reply }]) => [
+        key,
+        { answer, reply: null },
+      ])
+    ) as Map<string, Blank>;
+    const newBoardItems = new Map(
+      Array.from(this.boardItems, ([key, { location, value }]) => [
+        key,
+        { value, location: null },
+      ])
+    ) as Map<string, BoardItem>;
+    return new DndSetting({
+      blanks: newBlanks,
+      boardItems: newBoardItems,
+      draggedItem: null,
+    });
   };
 
   /**

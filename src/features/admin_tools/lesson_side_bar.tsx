@@ -107,6 +107,8 @@ export function LessonSideBar({
                 Ders Açıklaması
               </label>
               <TextField
+                multiline
+                minRows={3}
                 id="admin-lesson-explanation-input"
                 size="small"
                 placeholder="Bu derste aile üyeleri ile ilgili..."

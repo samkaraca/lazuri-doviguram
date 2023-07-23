@@ -8,7 +8,6 @@ export default function ThemePage({ themeData }: { themeData: Theme }) {
 }
 
 export async function getStaticProps(context: GetServerSidePropsContext) {
-  console.log("/temalar/[theme] -> getStaticProps");
   const path = context.params as unknown as { theme: string };
   const themeRepository = new ThemeReposityImplementation();
   const themeData = await themeRepository.getThemeData(path.theme);

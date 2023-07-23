@@ -1,5 +1,4 @@
 import { DndSetting } from "@/core/models/entities/dnd_setting";
-import { IViewModel } from "@/features/activity_editor/model/view_model";
 import { useEffect, useState } from "react";
 import { WrapperDndContext } from "@/core/components/dnd/wrapper_dnd_context";
 import { Droppable } from "@/core/components/dnd/droppable";
@@ -10,11 +9,17 @@ import { FillInBlanksQuestion } from "@/core/models/entities/question";
 export function DragIntoBlanksExercise({
   isFormLocked,
   exercise,
+  resetSwitch,
 }: {
   isFormLocked: boolean;
   exercise: FillInBlanksQuestion[];
+  resetSwitch: boolean;
 }) {
   const [dndSetting, setDndSetting] = useState<DndSetting>(new DndSetting());
+
+  useEffect(() => {
+    setDndSetting(dndSetting.reset());
+  }, [resetSwitch]);
 
   useEffect(() => {
     let answersWithKeys = new Map();

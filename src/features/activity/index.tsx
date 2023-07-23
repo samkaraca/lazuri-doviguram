@@ -12,6 +12,7 @@ import {
   SimpleQuestion,
   TrueFalseQuestion,
 } from "@/core/models/entities/question";
+import { DndSetting } from "@/core/models/entities/dnd_setting";
 
 export function Activity({
   activity,
@@ -31,15 +32,18 @@ export function Activity({
     questions,
   } = activity;
   const [isFormLocked, setIsFormLocked] = useState(false);
-  const [replies, setReplies] = useState<any[]>([]);
+  const [resetSwitch, setResetSwitch] = useState(false);
 
-  useEffect(() => setReplies([]), [activityType]);
+  useEffect(() => {
+    setResetSwitch((prev) => !prev);
+  }, [activityType]);
 
   const handleFinishClick = () => {
     setIsFormLocked(true);
   };
+
   const handleReattemptClick = () => {
-    setReplies([]);
+    setResetSwitch((prev) => !prev);
     setIsFormLocked(false);
   };
 
@@ -58,32 +62,31 @@ export function Activity({
     >
       {activityType === "true-false" ? (
         <TrueFalseExercise
-          replies={replies}
-          setReplies={setReplies}
+          resetSwitch={resetSwitch}
           isFormLocked={isFormLocked}
           exercise={questions as TrueFalseQuestion[]}
         />
       ) : activityType === "type-in-blanks" ? (
         <TypeInBlanksExercise
-          replies={replies}
-          setReplies={setReplies}
+          resetSwitch={resetSwitch}
           isFormLocked={isFormLocked}
           exercise={questions as FillInBlanksQuestion[]}
         />
       ) : activityType === "drag-into-blanks" ? (
         <DragIntoBlanksExercise
+          resetSwitch={resetSwitch}
           isFormLocked={isFormLocked}
           exercise={questions as FillInBlanksQuestion[]}
         />
       ) : activityType === "multiple-choice" ? (
         <MultipleChoiceExercise
-          replies={replies}
-          setReplies={setReplies}
+          resetSwitch={resetSwitch}
           isFormLocked={isFormLocked}
           exercise={questions as MultipleChoiceQuestion[]}
         />
       ) : activityType === "pair-texts-with-images" ? (
         <PairTextsWithImagesExercise
+          resetSwitch={resetSwitch}
           isFormLocked={isFormLocked}
           exercise={questions as SimpleQuestion[]}
         />

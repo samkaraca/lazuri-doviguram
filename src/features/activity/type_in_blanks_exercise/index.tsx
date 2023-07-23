@@ -2,16 +2,20 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { FillInBlanksQuestion } from "@/core/models/entities/question";
 
 export function TypeInBlanksExercise({
-  replies,
-  setReplies,
   isFormLocked,
   exercise,
+  resetSwitch,
 }: {
-  replies: Map<string, string>[];
-  setReplies: Dispatch<SetStateAction<Map<string, string>[]>>;
   isFormLocked: boolean;
   exercise: FillInBlanksQuestion[];
+  resetSwitch: boolean;
 }) {
+  const [replies, setReplies] = useState<Map<string, string>[]>([]);
+
+  useEffect(() => {
+    setReplies([]);
+  }, [resetSwitch]);
+
   return (
     <ol className={`simple composite-question-list`}>
       {exercise.map((item, index) => {

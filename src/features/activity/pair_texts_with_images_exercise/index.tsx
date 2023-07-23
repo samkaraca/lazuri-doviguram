@@ -9,19 +9,24 @@ import { SimpleQuestion } from "@/core/models/entities/question";
 export function PairTextsWithImagesExercise({
   isFormLocked,
   exercise,
+  resetSwitch,
 }: {
   isFormLocked: boolean;
   exercise: SimpleQuestion[];
+  resetSwitch: boolean;
 }) {
   const [dndSetting, setDndSetting] = useState<DndSetting>(new DndSetting());
 
   useEffect(() => {
-    const answersWithKeys = new Map();
-    exercise.forEach((item, key) => {
-      const { question, answer } = item;
-      answersWithKeys.set(`${key}-${question}`, answer);
-    });
+    setDndSetting(dndSetting.reset());
+  }, [resetSwitch]);
 
+  useEffect(() => {
+    const answersWithKeys = new Map(
+      exercise.map(({ answer, question }, i) => {
+        return [`${i}-${question}`, answer];
+      })
+    );
     setDndSetting(new DndSetting({ answersWithKeys }));
   }, [exercise]);
 

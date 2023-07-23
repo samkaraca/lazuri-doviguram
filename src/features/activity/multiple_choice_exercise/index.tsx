@@ -1,18 +1,22 @@
 import { MultipleChoiceQuestion } from "@/core/models/entities/question";
 import styles from "./styles.module.scss";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export function MultipleChoiceExercise({
   isFormLocked,
   exercise,
-  replies,
-  setReplies,
+  resetSwitch,
 }: {
   isFormLocked: boolean;
   exercise: MultipleChoiceQuestion[];
-  replies: number[];
-  setReplies: Dispatch<SetStateAction<number[]>>;
+  resetSwitch: boolean;
 }) {
+  const [replies, setReplies] = useState<number[]>([]);
+
+  useEffect(() => {
+    setReplies([]);
+  }, [resetSwitch]);
+
   return (
     <ol className={`simple multiple-choice`}>
       {exercise.map((item, index) => {
