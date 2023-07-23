@@ -10,6 +10,7 @@ import { TextField } from "@mui/material";
 import { useBaseViewModelContext } from "../theme_page/view_model/context_providers/base_view_model";
 import { useAdminViewModelContext } from "../theme_page/view_model/context_providers/admin_view_model";
 import { usePathname, useRouter } from "next/navigation";
+import { title } from "process";
 
 export function LessonSideBar({
   isOpen,
@@ -44,6 +45,7 @@ export function LessonSideBar({
     const { explanation } = lessons[id];
     setAdminLessonExplanation(explanation);
     setAdminLessonTitle(title);
+    setModified(false);
   };
 
   useEffect(() => {
@@ -54,7 +56,7 @@ export function LessonSideBar({
     if (title !== adminLessonTitle || explanation !== adminLessonExplanation) {
       setModified(true);
     }
-  });
+  }, [adminLessonExplanation, adminLessonTitle]);
 
   return (
     <aside className={`side-bar ${styles["lesson-side-bar"]}`}>
