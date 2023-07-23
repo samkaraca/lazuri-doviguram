@@ -3,6 +3,7 @@ import {
   GetItemCommand,
   PutItemCommand,
   QueryCommand,
+  ScanCommand,
   UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
 import { ThemeRepository } from "./theme_repository";
@@ -27,9 +28,9 @@ export class ThemeReposityImplementation implements ThemeRepository {
     image: string;
     youtubeVideoUrl: string;
     explanation: string;
-  }): Promise<StatusResponse> => {
+  }): Promise<StatusResponse<{ pathName: string }>> => {
     slugify.extend({ ǩ: "k", ǯ: "z", ʒ: "z" });
-    const newURLPath = slugify(title.toLowerCase(), {
+    const newPathName = slugify(title.toLowerCase(), {
       strict: true,
     });
 
@@ -38,33 +39,37 @@ export class ThemeReposityImplementation implements ThemeRepository {
       TableName: "themes",
       Key: marshall({ PK: "theme", SK: themeId }),
       UpdateExpression:
-        "SET #title = :newTitle, #explanation = :newExplanation, #image = :newImage, #youtubeVideoUrl = :newYoutubeVideoUrl, #URLPath = :newURLPath",
+        "SET #title = :newTitle, #explanation = :newExplanation, #image = :newImage, #youtubeVideoUrl = :newYoutubeVideoUrl, #pathName = :newPathName",
       ExpressionAttributeNames: {
         "#title": "title",
         "#explanation": "explanation",
         "#image": "image",
         "#youtubeVideoUrl": "youtubeVideoUrl",
-        "#URLPath": "URLPath",
+        "#pathName": "pathName",
       },
       ExpressionAttributeValues: marshall({
         ":newTitle": title,
         ":newExplanation": explanation,
         ":newImage": image,
         ":newYoutubeVideoUrl": youtubeVideoUrl,
-        ":newURLPath": newURLPath,
+        ":newPathName": newPathName,
       }),
     });
 
     try {
       await dbClient.send(updateCommand);
-      return { status: "success", message: "Tema başarıyla güncellendi." };
+      return {
+        status: "success",
+        message: "Tema başarıyla güncellendi.",
+        data: { pathName: newPathName },
+      };
     } catch (error) {
       console.error("ThemeRepository -> saveTheme: ", error);
       return { status: "error", message: "Tema güncelleme başarısız." };
     }
   };
 
-  getThemeIds = async (): Promise<StatusResponse<string[]>> => {
+  getThemePathNames = async (): Promise<StatusResponse<string[]>> => {
     const dbClient = DynamoDBClientSingleton.getInstance();
     const queryCommand = new QueryCommand({
       TableName: "themes",
@@ -72,13 +77,13 @@ export class ThemeReposityImplementation implements ThemeRepository {
       ExpressionAttributeValues: {
         ":pk": { S: "theme" },
       },
-      ProjectionExpression: "SK",
+      ProjectionExpression: "pathName",
     });
 
     try {
       const rawThemeIdDatas = await dbClient.send(queryCommand);
       const themeIds = rawThemeIdDatas.Items!.map(
-        (item) => unmarshall(item).SK
+        (item) => unmarshall(item).pathName
       );
       return { status: "success", message: "", data: themeIds };
     } catch (error) {
@@ -95,20 +100,25 @@ export class ThemeReposityImplementation implements ThemeRepository {
       ExpressionAttributeValues: {
         ":pk": { S: "theme" },
       },
-      ProjectionExpression: "SK, title, image, lessons.meta, createdAt",
+      ProjectionExpression:
+        "SK, title, image, lessons.meta, createdAt, pathName",
     });
 
     try {
-      const rawThemeMetaDatas = await dbClient.send(queryCommand);
-      const themeMetas = rawThemeMetaDatas.Items!.map((item) => {
-        const { SK, title, image, lessons, createdAt } = unmarshall(item);
-        const pLesson = lessons.meta;
+      const data = await dbClient.send(queryCommand);
+      const items = data.Items
+        ? data.Items.map((item) => unmarshall(item))
+        : [];
+      const themeMetas = items.map((item) => {
+        const { SK, title, image, lessons, createdAt, pathName } = item;
+        const lessonsMeta = lessons.meta;
         return {
           id: SK,
           title,
           image,
-          lessons: pLesson,
+          lessons: lessonsMeta,
           createdAt,
+          pathName,
         } as ThemeMetaDTO;
       });
       themeMetas.sort((a, b) => a.createdAt - b.createdAt);
@@ -119,36 +129,69 @@ export class ThemeReposityImplementation implements ThemeRepository {
     }
   };
 
-  getThemeData = async (themePath: string): Promise<Theme> => {
+  getThemeData = async (pathName: string): Promise<StatusResponse<Theme>> => {
     const dbClient = DynamoDBClientSingleton.getInstance();
-    const queryCommand = new GetItemCommand({
+    const queryCommand = new ScanCommand({
       TableName: "themes",
-      Key: {
-        PK: { S: "theme" },
-        SK: { S: themePath },
+      FilterExpression: "#pk = :pk AND #pathName = :pathName",
+      ExpressionAttributeNames: {
+        "#pk": "PK",
+        "#pathName": "pathName",
       },
+      ExpressionAttributeValues: marshall({
+        ":pk": "theme",
+        ":pathName": pathName,
+      }),
       ProjectionExpression:
-        "SK, explanation, image, lessons, title, URLPath, youtubeVideoUrl",
+        "SK, explanation, image, lessons, title, youtubeVideoUrl, pathName, createdAt",
     });
 
-    const themeData = await dbClient.send(queryCommand);
-    const { SK, title, explanation, image, youtubeVideoUrl, lessons, URLPath } =
-      unmarshall(themeData.Item!);
+    try {
+      const data = await dbClient.send(queryCommand);
+      const items = data.Items
+        ? data.Items.map((item) => unmarshall(item))
+        : [];
+      if (items.length !== 1)
+        throw Error(
+          `Theme count with specified path name ${pathName} should have been exactly one instead of ${items.length}`
+        );
+      const {
+        SK,
+        explanation,
+        image,
+        lessons,
+        title,
+        youtubeVideoUrl,
+        createdAt,
+      } = items[0];
 
-    return {
-      id: SK,
-      URLPath,
-      title,
-      explanation,
-      image,
-      youtubeVideoUrl,
-      lessons,
-    } as Theme;
+      return {
+        status: "success",
+        message: "",
+        data: {
+          id: SK,
+          pathName: items[0].pathName,
+          title,
+          explanation,
+          image,
+          youtubeVideoUrl,
+          lessons,
+          createdAt,
+        },
+      };
+    } catch (error) {
+      console.error("ThemeRepository -> getThemeData: ", error);
+      return { status: "error", message: "" };
+    }
   };
 
   createNewTheme = async (): Promise<StatusResponse> => {
     const dbClient = DynamoDBClientSingleton.getInstance();
     const newThemeId = nanoid(7);
+    slugify.extend({ ǩ: "k", ǯ: "z", ʒ: "z" });
+    const newPathName = slugify(newThemeId.toLowerCase(), {
+      strict: true,
+    });
 
     const updateCommand = new PutItemCommand({
       TableName: "themes",
@@ -156,7 +199,7 @@ export class ThemeReposityImplementation implements ThemeRepository {
         PK: "theme",
         SK: newThemeId,
         title: "Tema Başlığı",
-        URLPath: "tema-basligi",
+        pathName: newPathName,
         explanation: "Tema açıklaması...",
         youtubeVideoUrl: "https://youtu.be/jzUHgC7Tylk",
         image: "default.jpg",

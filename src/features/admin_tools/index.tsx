@@ -3,9 +3,8 @@ import { LessonSideBar } from "./lesson_side_bar";
 import { ThemeSideBar } from "./theme_side_bar";
 import { InteractiveFeedbacks } from "@/core/components/interactive_feedbacks";
 import { useAdminViewModelContext } from "../theme_page/view_model/context_providers/admin_view_model";
-import { useBaseViewModelContext } from "../theme_page/view_model/context_providers/base_view_model";
 
-export function AdminTools() {
+export default function AdminTools() {
   const { stalling, snackbar, setSnackbar } = useAdminViewModelContext()!;
   const [isThemeSideBarOpen, setIsThemeSideBarOpen] = useState(false);
   const [isLessonSideBarOpen, setIsLessonSideBarOpen] = useState(false);

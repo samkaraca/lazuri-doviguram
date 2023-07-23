@@ -3,6 +3,7 @@ import { Activity, Theme } from "@/core/models/entities/learning_unit";
 import { BaseViewModel } from "../model/base_view_model";
 
 export function useBaseViewModel(theme: Theme): BaseViewModel {
+  const [pathName, setPathName] = useState(theme.pathName);
   const [themeTitle, setThemeTitle] = useState(theme.title);
   const [themeExplanation, setThemeExplanation] = useState(theme.explanation);
   const [themeImage, setThemeImage] = useState(theme.image);
@@ -48,5 +49,7 @@ export function useBaseViewModel(theme: Theme): BaseViewModel {
     openActivity,
     closeActivity,
     activeActivity,
+    pathName,
+    setPathName,
   };
 }

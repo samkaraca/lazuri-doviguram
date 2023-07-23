@@ -10,24 +10,32 @@ export default function ThemePage({ themeData }: { themeData: Theme }) {
 export async function getStaticProps(context: GetServerSidePropsContext) {
   const path = context.params as unknown as { theme: string };
   const themeRepository = new ThemeReposityImplementation();
-  const themeData = await themeRepository.getThemeData(path.theme);
+  const res = await themeRepository.getThemeData(path.theme);
 
-  return {
-    props: {
-      themeData,
-    },
-    revalidate: 60 * 15,
-  };
+  if (res.status === "success" && res.data) {
+    return {
+      props: {
+        themeData: res.data,
+      },
+      revalidate: 60 * 15,
+    };
+  }
+
+  console.error(
+    `/temalar/${path} -> getStaticProps. Error: ThemeRepository -> getThemeData returned error.`
+  );
 }
 
 export async function getStaticPaths() {
   const themeRepository = new ThemeReposityImplementation();
-  const result = await themeRepository.getThemeIds();
+  const result = await themeRepository.getThemePathNames();
 
   if (result.status === "success" && result.data) {
     const themePaths = result.data.map((item) => ({ params: { theme: item } }));
     return { paths: themePaths, fallback: false };
   }
 
-  return { paths: [], fallback: false };
+  console.error(
+    `/temalar/[theme] -> getStaticPaths. Error: ThemeRepository -> getThemePathNames returned error.`
+  );
 }

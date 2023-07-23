@@ -16,6 +16,8 @@ export function useAdminViewModel(): AdminViewModel {
     setLessons,
     setActiveLesson,
     setThemeImage,
+    pathName,
+    setPathName,
   } = useBaseViewModelContext()!;
   const { replace } = useRouter();
   const [stalling, setStalling] = useState(false);
@@ -50,7 +52,7 @@ export function useAdminViewModel(): AdminViewModel {
         "Content-Type": "application/json",
       },
     });
-    const res = (await resObj.json()) as StatusResponse;
+    const res = (await resObj.json()) as StatusResponse<{ pathName: string }>;
     setStalling(false);
 
     if (res.status === "error") {
@@ -67,10 +69,12 @@ export function useAdminViewModel(): AdminViewModel {
       message: res.message,
       visible: true,
     });
+    setPathName(res.data!.pathName);
     setThemeTitle(title);
     setThemeExplanation(explanation);
     setThemeImage(image);
     setThemeYoutubeVideoUrl(youtubeVideoUrl);
+    replace(`/admin/temalar/${res.data!.pathName}`);
   };
 
   const deleteTheme = async () => {

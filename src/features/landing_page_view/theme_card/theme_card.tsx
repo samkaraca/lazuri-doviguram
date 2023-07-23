@@ -9,12 +9,12 @@ export function ThemeCard({
   themeMeta: ThemeMetaDTO;
   home: "/admin" | "/";
 }) {
-  const { id, image, lessons, title } = themeMeta;
+  const { id, image, lessons, title, pathName } = themeMeta;
 
   return (
     <li>
       <a
-        href={`${home === "/" ? "" : home}/temalar/${id}`}
+        href={`${home === "/" ? "" : home}/temalar/${pathName}`}
         className={`${styles["card"]} card-button`}
       >
         <img

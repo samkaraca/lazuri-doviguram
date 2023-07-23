@@ -3,9 +3,9 @@ import { Theme } from "../entities/learning_unit";
 import { StatusResponse } from "./status_response";
 
 export interface ThemeRepository {
-  getThemeIds: () => Promise<StatusResponse<string[]>>;
+  getThemePathNames: () => Promise<StatusResponse<string[]>>;
   getThemeMetas: () => Promise<StatusResponse<ThemeMetaDTO[]>>;
-  getThemeData(themePath: string): Promise<Theme>;
+  getThemeData: (pathName: string) => Promise<StatusResponse<Theme>>;
   createNewLesson: (themeId: string) => Promise<Record<string, any>>;
   saveTheme: ({
     themeId,
@@ -19,7 +19,7 @@ export interface ThemeRepository {
     image: string;
     youtubeVideoUrl: string;
     explanation: string;
-  }) => Promise<StatusResponse>;
+  }) => Promise<StatusResponse<{ pathName: string }>>;
   createNewTheme: () => Promise<StatusResponse>;
   deleteTheme: (themeId: string) => Promise<StatusResponse>;
 }
