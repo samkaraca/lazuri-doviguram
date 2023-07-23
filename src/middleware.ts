@@ -2,30 +2,34 @@ import { NextRequest, NextResponse } from "next/server";
 import * as jose from "jose";
 
 export async function middleware(req: NextRequest) {
-  const isLoginPage = req.nextUrl.pathname === "/admin/login";
+  const requestToNext = req.nextUrl.pathname === "/api/admin/login";
+  const isLoginPageRequest = req.nextUrl.pathname === "/admin/login";
+  const isApiRequest = req.nextUrl.pathname.startsWith("/api");
   const loginUrl = new URL("/admin/login", new URL(req.url).origin);
-  const successUrl = new URL("/admin", new URL(req.url).origin);
+  const adminHomeUrl = new URL("/admin", new URL(req.url).origin);
 
-  if (req.cookies.has("token")) {
-    try {
-      const jwt = req.cookies.get("token")!.value;
-      const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
+  if (requestToNext) return NextResponse.next();
 
-      await jose.jwtVerify(jwt, secret);
-
-      if (isLoginPage) return NextResponse.redirect(successUrl);
-    } catch (error) {
-      if (isLoginPage) return NextResponse.next();
-
-      return NextResponse.redirect(loginUrl);
-    }
-  } else if (!isLoginPage) {
+  if (!req.cookies.get("token")?.value) {
+    if (isApiRequest) return new NextResponse(null, { status: 401 });
+    if (isLoginPageRequest) return NextResponse.next();
     return NextResponse.redirect(loginUrl);
   }
 
-  return NextResponse.next();
+  try {
+    const jwt = req.cookies.get("token")!.value;
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
+    await jose.jwtVerify(jwt, secret);
+
+    if (isLoginPageRequest) return NextResponse.redirect(adminHomeUrl);
+    return NextResponse.next();
+  } catch (error) {
+    if (isApiRequest) return new NextResponse(null, { status: 401 });
+    if (isLoginPageRequest) return NextResponse.next();
+    return NextResponse.redirect(loginUrl);
+  }
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/admin/login"],
+  matcher: ["/admin/:path*", "/api/:path*"],
 };

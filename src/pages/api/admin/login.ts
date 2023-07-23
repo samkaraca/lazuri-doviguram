@@ -8,7 +8,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const jwtSecretKey = process.env.JWT_SECRET_KEY;
-    const password = JSON.parse(req.body).password;
+    const password = req.body.password;
 
     if (!jwtSecretKey)
       return res.status(500).send("Environment variable missing.");
