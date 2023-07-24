@@ -37,16 +37,34 @@
   padding: 1.3rem;
   border-radius: 0.4rem;
 
-  h3 {
-    color: gv.$primary-color;
-    font-weight: 600;
-    font-size: 1.3em;
+  .left-group {
+    display: flex;
+    align-items: center;
+    column-gap: 1rem;
+
+    h3 {
+      color: gv.$primary-color;
+      font-weight: 600;
+      font-size: 1.3em;
+      padding-right: 1rem;
+    }
+
+    svg {
+      font-size: 1.8rem;
+      color: gv.$primary-color;
+    }
   }
 
-  .actions {
-    .start {
-      background-color: gv.$primary-color;
-      color: white;
+  .right-group {
+    display: flex;
+    column-gap: 4rem;
+    align-items: center;
+
+    span {
+      color: gv.$primary-color;
+      opacity: 0.8;
+      font-weight: 700;
+      font-size: 1.5rem;
     }
   }
 }

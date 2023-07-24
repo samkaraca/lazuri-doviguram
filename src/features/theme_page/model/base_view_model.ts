@@ -22,7 +22,8 @@ export interface BaseViewModel {
   activeLesson: number | null;
   setActiveLesson: Dispatch<SetStateAction<BaseViewModel["activeLesson"]>>;
   isActivityDialogOpen: boolean;
-  openActivity: (activity: Activity<any>) => void;
+  openActivity: (activityId: string, activity: Activity<any>) => void;
   closeActivity: () => void;
+  activeActivityId: string | null;
   activeActivity: Activity<any> | null;
 }

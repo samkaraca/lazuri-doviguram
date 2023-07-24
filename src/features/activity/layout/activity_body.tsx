@@ -4,30 +4,20 @@ import getYouTubeID from "get-youtube-id";
 import styles from "./styles.module.scss";
 import { Activity } from "@/core/models/entities/learning_unit";
 
-export function Layout({
-  children,
+export function ActivityBody({
   title,
   textContent,
   explanation,
   audio,
   image,
   youtubeVideoUrl,
-  handleFinishClick,
-  isFormLocked,
-  handleReattemptClick,
-  closeActivity,
 }: {
-  children: ReactNode;
   title: Activity<any>["title"];
   textContent: Activity<any>["textContent"];
   explanation: Activity<any>["explanation"];
   audio: Activity<any>["audio"];
   image: Activity<any>["image"];
   youtubeVideoUrl: Activity<any>["youtubeVideoUrl"];
-  isFormLocked: boolean;
-  handleReattemptClick: VoidFunction;
-  handleFinishClick: VoidFunction;
-  closeActivity: VoidFunction;
 }) {
   return (
     <section className={styles["container"]} aria-label="aktivite">
@@ -73,24 +63,7 @@ export function Layout({
             />
           )}
         </div>
-        <div className={styles["exercise"]}>{children}</div>
       </div>
-      <footer className={styles["footer"]}>
-        {isFormLocked ? (
-          <div className="row-group">
-            <button className="simple" onClick={handleReattemptClick}>
-              Tekrar Çöz
-            </button>
-            <button className="simple" onClick={closeActivity}>
-              Bitir
-            </button>
-          </div>
-        ) : (
-          <button className="simple" onClick={handleFinishClick}>
-            Sonucu gör
-          </button>
-        )}
-      </footer>
     </section>
   );
 }

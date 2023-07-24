@@ -16,17 +16,20 @@ export function useBaseViewModel(theme: Theme): BaseViewModel {
   );
 
   // ACTIVITY DIALOG
+  const [activeActivityId, setActiveActivityId] = useState<string | null>(null);
   const [activeActivity, setActiveActivity] = useState<Activity<any> | null>(
     null
   );
   const [isActivityDialogOpen, setIsActivityDialogOpen] = useState(false);
 
-  const openActivity = (activity: Activity<any>) => {
+  const openActivity = (activityId: string, activity: Activity<any>) => {
+    setActiveActivityId(activityId);
     setActiveActivity(activity);
     setIsActivityDialogOpen(true);
   };
 
   const closeActivity = () => {
+    setActiveActivityId(null);
     setActiveActivity(null);
     setIsActivityDialogOpen(false);
   };
@@ -50,6 +53,7 @@ export function useBaseViewModel(theme: Theme): BaseViewModel {
     closeActivity,
     activeActivity,
     pathName,
+    activeActivityId,
     setPathName,
   };
 }

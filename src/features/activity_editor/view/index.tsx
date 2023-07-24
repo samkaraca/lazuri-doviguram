@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { Activity as IActivity } from "@/core/models/entities/learning_unit";
 import { FillInBlanksQuestion } from "@/core/models/entities/question";
 import { ExerciseConverter } from "../services/exercise_converter";
+import { useBaseViewModelContext } from "@/features/theme_page/view_model/context_providers/base_view_model";
 
 export default function View() {
   const {
@@ -23,6 +24,7 @@ export default function View() {
     simpleExercise,
     saveActivity,
   } = useViewModelContext()!;
+  const { activeActivityId } = useBaseViewModelContext()!;
 
   const activity: IActivity<any> = useMemo(() => {
     const activityModifier = new ExerciseConverter().fromMap({
@@ -76,7 +78,13 @@ export default function View() {
       <div className={styles["content"]}>
         <EditorForm />
         <div className={styles["simple-container"]}>
-          <Activity closeActivity={() => {}} activity={activity} />
+          {activeActivityId && (
+            <Activity
+              activityId={activeActivityId}
+              closeActivity={() => {}}
+              activity={activity}
+            />
+          )}
         </div>
       </div>
     </div>

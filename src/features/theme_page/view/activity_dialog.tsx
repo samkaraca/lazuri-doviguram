@@ -7,7 +7,9 @@ export default function ActivityDialog({
   isActivityDialogOpen,
   closeActivity,
   activeActivity,
+  activeActivityId,
 }: {
+  activeActivityId: string | null;
   isActivityDialogOpen: boolean;
   closeActivity: VoidFunction;
   activeActivity?: IActivity<any>;
@@ -21,8 +23,12 @@ export default function ActivityDialog({
       maxWidth="md"
       scroll="body"
     >
-      {activeActivity && (
-        <Activity closeActivity={closeActivity} activity={activeActivity} />
+      {activeActivity && activeActivityId && (
+        <Activity
+          activityId={activeActivityId}
+          closeActivity={closeActivity}
+          activity={activeActivity}
+        />
       )}
     </Dialog>
   );

@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { UserExerciseLocalRepository } from "../repositories/interfaces/user_exercise_loca_repository";
 
 export interface Blank {
   readonly answer: string;
@@ -13,47 +14,121 @@ export interface BoardItem {
 export type BoardItemEntry = [string, BoardItem]; // [boardItemKey, boardItem]
 
 export class DndSetting {
-  draggedItem: BoardItemEntry | null;
   readonly blanks: Map<string, Blank>;
   readonly boardItems: Map<string, BoardItem>;
+  draggedItem: BoardItemEntry | null;
 
   static from(oldDragAndDropSetting: DndSetting) {
-    const { blanks, boardItems, draggedItem } = oldDragAndDropSetting;
-    return new DndSetting({
+    const {
       blanks,
       boardItems,
       draggedItem,
-    });
+      activityId,
+      userExerciseLocalRepository,
+    } = oldDragAndDropSetting;
+    return new DndSetting(
+      activityId,
+      userExerciseLocalRepository,
+      new Map(blanks),
+      new Map(boardItems),
+      draggedItem
+    );
   }
 
   constructor(
-    params?:
-      | { answersWithKeys: Map<string, string> }
-      | {
-          blanks: Map<string, Blank>;
-          boardItems: Map<string, BoardItem>;
-          draggedItem: BoardItemEntry | null;
-        }
+    readonly activityId: string,
+    readonly userExerciseLocalRepository: UserExerciseLocalRepository,
+    blanks: Map<string, Blank>,
+    boardItems?: Map<string, BoardItem>,
+    draggedItem?: BoardItemEntry | null
   ) {
-    this.blanks = new Map();
-    this.boardItems = new Map();
-    this.draggedItem = null;
+    this.blanks = new Map(blanks);
 
-    if (params && "answersWithKeys" in params) {
-      const { answersWithKeys } = params;
-      answersWithKeys.forEach((answer, key) => {
-        this.blanks.set(key, { answer, reply: null });
-      });
-      answersWithKeys.forEach((answer, key) => {
-        this.boardItems.set(nanoid(), { location: null, value: answer });
-      });
-    } else if (params && "blanks" in params) {
-      const { blanks, boardItems, draggedItem } = params;
-
-      this.blanks = new Map(blanks);
-      this.boardItems = new Map(boardItems);
-      this.draggedItem = draggedItem ? [...draggedItem] : null;
+    if (boardItems) {
+      this.boardItems = boardItems;
+    } else {
+      this.boardItems = new Map(
+        Array.from(blanks, ([key, blank]) => [
+          nanoid(),
+          { location: null, value: blank.answer },
+        ])
+      );
     }
+
+    if (draggedItem) {
+      this.draggedItem = draggedItem;
+    } else {
+      this.draggedItem = null;
+    }
+  }
+
+  gradeExercise() {
+    const total = this.blanks.size;
+    let correct = 0;
+    Array.from(this.blanks).forEach(([key, blank]) => {
+      const { answer, reply } = blank;
+      if (answer === reply) correct++;
+    });
+    return (correct / total) * 100;
+  }
+
+  private resetLocalUserData() {
+    this.userExerciseLocalRepository.saveUserActivityDataLocally({
+      activityId: this.activityId,
+      grade: this.gradeExercise(),
+      exerciseData: null,
+    });
+  }
+
+  saveUserDataLocally() {
+    this.userExerciseLocalRepository.saveUserActivityDataLocally({
+      activityId: this.activityId,
+      grade: this.gradeExercise(),
+      exerciseData: JSON.stringify({
+        blanks: Array.from(this.blanks),
+        boardItems: Array.from(this.boardItems),
+      }),
+    });
+  }
+
+  static withUserDataFrom(
+    activityId: string,
+    userExerciseLocalRepository: UserExerciseLocalRepository,
+    answers: Map<string, string>
+  ): { dndSetting: DndSetting; userData: boolean } {
+    const localUserActivityData =
+      userExerciseLocalRepository.getLocalUserActivityData({ activityId });
+
+    if (localUserActivityData && localUserActivityData.exerciseData) {
+      const exerciseData = JSON.parse(localUserActivityData.exerciseData);
+      const localBlanks = new Map(exerciseData.blanks) as Map<string, Blank>;
+      const localBoardItems = new Map(exerciseData.boardItems) as Map<
+        string,
+        BoardItem
+      >;
+
+      return {
+        dndSetting: new DndSetting(
+          activityId,
+          userExerciseLocalRepository,
+          localBlanks,
+          localBoardItems
+        ),
+        userData: true,
+      };
+    }
+
+    const blanks: Map<string, Blank> = new Map(
+      Array.from(answers, ([key, answer]) => [key, { answer, reply: null }])
+    );
+    return {
+      dndSetting: new DndSetting(
+        activityId,
+        userExerciseLocalRepository,
+        blanks
+      ),
+      userData: false,
+    };
   }
 
   check(blankKey: string) {
@@ -131,11 +206,15 @@ export class DndSetting {
         { value, location: null },
       ])
     ) as Map<string, BoardItem>;
-    return new DndSetting({
-      blanks: newBlanks,
-      boardItems: newBoardItems,
-      draggedItem: null,
-    });
+    this.resetLocalUserData();
+
+    return new DndSetting(
+      this.activityId,
+      this.userExerciseLocalRepository,
+      newBlanks,
+      newBoardItems,
+      null
+    );
   };
 
   /**

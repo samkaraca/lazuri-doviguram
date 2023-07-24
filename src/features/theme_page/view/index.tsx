@@ -28,6 +28,7 @@ export function View({
     themeTitle,
     themeExplanation,
     themeImage,
+    activeActivityId,
   } = useBaseViewModelContext() as BaseViewModel;
 
   return (
@@ -52,6 +53,7 @@ export function View({
       {adminTools}
       {
         <ActivityDialog
+          activeActivityId={activeActivityId}
           isActivityDialogOpen={isActivityDialogOpen}
           activeActivity={activeActivity ?? undefined}
           closeActivity={closeActivity}
