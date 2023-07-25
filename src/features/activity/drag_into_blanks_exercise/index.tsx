@@ -82,6 +82,12 @@ export function DragIntoBlanksExercise({
                               dndSetting.getBoardItemContainingTheLocation(
                                 blankKey
                               );
+                            console.log(
+                              "la",
+                              blankKey,
+                              boardItemEntry,
+                              dndSetting.check(blankKey)
+                            );
                             const isCorrect = dndSetting.check(blankKey);
 
                             return (

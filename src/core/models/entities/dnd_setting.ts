@@ -118,6 +118,7 @@ export class DndSetting {
       };
     }
 
+    console.warn("no user data");
     const blanks: Map<string, Blank> = new Map(
       Array.from(answers, ([key, answer]) => [key, { answer, reply: null }])
     );
