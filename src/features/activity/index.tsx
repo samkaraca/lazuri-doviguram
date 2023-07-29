@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
 import { DragIntoBlanksExercise } from "./drag_into_blanks_exercise";
 import { ActivityBody } from "./layout/activity_body";
-import { MultipleChoiceExercise } from "./multiple_choice_exercise";
 import { PairTextsWithImagesExercise } from "./pair_texts_with_images_exercise";
-import { TrueFalseExercise } from "./true_false_exercise";
-import { TypeInBlanksExercise } from "./type_in_blanks_exercise";
-import { Activity as IActivity } from "@/core/models/entities/learning_unit";
+import { Activity as IActivity } from "@/lib/activity/activity";
 import {
+  FillInBlanksExercise,
   FillInBlanksQuestion,
-  MultipleChoiceQuestion,
-  SimpleQuestion,
-  TrueFalseQuestion,
-} from "@/core/models/entities/question";
+} from "@/lib/exercises/fill_in_blanks_exercise";
+import { SimpleExercise as ISimpleExercise } from "@/lib/exercises/simple_question_exercise";
+import { MultipleChoiceExercise as IMultipleChoiceExercise } from "@/lib/exercises/multiple_choice_exercise";
+import { TypeInBlanksExercise } from "./type_in_blanks_exercise";
+import { TrueFalseExercise } from "./true_false_exercise";
+import { MultipleChoiceExercise } from "./multiple_choice_exercise";
 
 export function Activity({
-  activityId,
   activity,
   closeActivity,
 }: {
-  activityId: string;
-  activity: IActivity<any>;
+  activity: IActivity;
   closeActivity: VoidFunction;
 }) {
   const {
@@ -29,8 +26,8 @@ export function Activity({
     audio,
     image,
     youtubeVideoUrl,
-    activityType,
-    questions,
+    type,
+    exercise,
   } = activity;
 
   return (
@@ -44,35 +41,42 @@ export function Activity({
         youtubeVideoUrl={youtubeVideoUrl}
       />
 
-      {activityType === "true-false" ? (
+      {type === "true-false" ? (
         <TrueFalseExercise
           closeActivity={closeActivity}
-          activityId={activityId}
-          exercise={questions as TrueFalseQuestion[]}
+          exercise={exercise as ISimpleExercise}
         />
-      ) : activityType === "type-in-blanks" ? (
+      ) : type === "type-in-blanks" ? (
         <TypeInBlanksExercise
           closeActivity={closeActivity}
-          activityId={activityId}
-          exercise={questions as FillInBlanksQuestion[]}
+          exercise={exercise as FillInBlanksExercise}
         />
-      ) : activityType === "drag-into-blanks" ? (
-        <DragIntoBlanksExercise
+      ) : type === "drag-into-blanks" ? /*<DragIntoBlanksExercise
           activityId={activityId}
           closeActivity={closeActivity}
-          exercise={questions as FillInBlanksQuestion[]}
-        />
-      ) : activityType === "multiple-choice" ? (
+          exercise={
+            new FillInBlanksExercise("acId", [
+              new FillInBlanksQuestion(
+                "wq",
+                new Map([["fs", { type: "blank", value: "bu ne" }]]),
+                new Map()
+              ),
+              new FillInBlanksQuestion(
+                "fd",
+                new Map([["ms", { type: "blank", value: "işte bu" }]])
+              ),
+            ])
+          }
+        />*/
+      null : type === "multiple-choice" ? (
         <MultipleChoiceExercise
-          activityId={activityId}
           closeActivity={closeActivity}
-          exercise={questions as MultipleChoiceQuestion[]}
+          exercise={exercise as IMultipleChoiceExercise}
         />
-      ) : activityType === "pair-texts-with-images" ? (
+      ) : type === "pair-texts-with-images" ? (
         <PairTextsWithImagesExercise
-          activityId={activityId}
           closeActivity={closeActivity}
-          exercise={questions as SimpleQuestion[]}
+          exercise={exercise as ISimpleExercise}
         />
       ) : null}
     </article>

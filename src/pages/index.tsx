@@ -1,7 +1,8 @@
 import Head from "next/head";
-import { ThemeMetaDTO } from "@/core/models/dtos/theme_meta_dto";
-import { ThemeReposityImplementation } from "@/core/models/repositories/theme_repository_implementation";
 import { LandingPageView } from "../features/landing_page_view";
+import { DynamoDBThemeRepository } from "@/lib/theme/dynamodb_theme_repository";
+import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
+import ApiService from "@/lib/services/theme_api_service";
 
 export default function LandingPage({
   themeMetas,
@@ -14,14 +15,15 @@ export default function LandingPage({
         <title>Lazuri Doviguram</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <LandingPageView home="/" themeMetas={themeMetas} />
+      <LandingPageView home="/" themePreviews={themeMetas} />
     </>
   );
 }
 
 export async function getStaticProps() {
-  const themeRepository = new ThemeReposityImplementation();
-  const res = await themeRepository.getThemeMetas();
+  const themeRepo = new DynamoDBThemeRepository();
+  const adminThemeRepoService = new ApiService(themeRepo);
+  const res = await adminThemeRepoService.getThemeMetas();
 
   if (res.status === "success" && res.data) {
     return {
@@ -31,9 +33,7 @@ export async function getStaticProps() {
     };
   }
 
-  return {
-    props: {
-      themeMetas: [],
-    },
-  };
+  console.error(
+    `/ -> getStaticProps. Error: DynamoDBThemeRepository -> getThemePreviews returned error.`
+  );
 }

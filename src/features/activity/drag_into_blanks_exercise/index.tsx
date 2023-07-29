@@ -5,115 +5,125 @@ import { Droppable } from "@/core/components/dnd/droppable";
 import styles from "./styles.module.scss";
 import activityStyles from "../activity.module.scss";
 import { Draggable } from "@/core/components/dnd/draggable";
-import { FillInBlanksQuestion } from "@/core/models/entities/question";
 import { ActivityFooter } from "../layout/activity_footer";
 import { UserExerciseLocalRepositoryImplementation } from "../services/user_exercise_local_repository_implementation";
+import { useDndSetting } from "@/lib/utils/dnd_setting/use_dnd_setting";
+import { Item } from "@/lib/utils/dnd_setting/item";
+import { nanoid } from "nanoid";
+import { Blank } from "@/lib/utils/dnd_setting/blank";
+import { FillInBlanksExercise } from "@/lib/exercises/fill_in_blanks_exercise";
 
 export function DragIntoBlanksExercise({
   exercise,
   activityId,
   closeActivity,
 }: {
-  exercise: FillInBlanksQuestion[];
+  exercise: FillInBlanksExercise;
   activityId: string;
   closeActivity: VoidFunction;
 }) {
-  const [isFinished, setIsFinished] = useState(false);
-  const userExerciseLocalRepository = useRef(
-    new UserExerciseLocalRepositoryImplementation()
-  );
-  const [dndSetting, setDndSetting] = useState<DndSetting>(
-    new DndSetting(activityId, userExerciseLocalRepository.current, new Map())
-  );
+  // const { blanks, board, startDragging, stopDragging } = useDndSetting({
+  //   boardData: Array.from(
+  //     exercise.answers,
+  //     ([key, { type, value }]) => new Item(key, value)
+  //   ),
+  //   blanksData: Array.from(
+  //     exercise.answers,
+  //     ([key, { type, value }]) => new Blank(key, value, null)
+  //   ),
+  // });
+  // const [isFinished, setIsFinished] = useState(false);
+  // const userExerciseLocalRepository = useRef(
+  //   new UserExerciseLocalRepositoryImplementation()
+  // );
+  // const [dndSetting, setDndSetting] = useState<DndSetting>(
+  //   new DndSetting(activityId, userExerciseLocalRepository.current, new Map())
+  // );
 
-  const finishActivity = () => {
-    setIsFinished(true);
-    dndSetting.saveUserDataLocally();
-  };
+  // const finishActivity = () => {
+  //   setIsFinished(true);
+  //   dndSetting.saveUserDataLocally();
+  // };
 
-  const reattemptToActivity = () => {
-    setDndSetting(dndSetting.reset());
-    setIsFinished(false);
-  };
+  // const reattemptToActivity = () => {
+  //   setDndSetting(dndSetting.reset());
+  //   setIsFinished(false);
+  // };
 
-  useEffect(() => {
-    let answersWithKeys = new Map();
+  // useEffect(() => {
+  //   let answersWithKeys = new Map();
 
-    exercise.forEach((item, key) => {
-      const answers = item.answer;
-      answersWithKeys = new Map([
-        ...Array.from(answersWithKeys),
-        ...Array.from(answers),
-      ]);
-    });
+  //   exercise.forEach((item, key) => {
+  //     const answers = item.answer;
+  //     answersWithKeys = new Map([
+  //       ...Array.from(answersWithKeys),
+  //       ...Array.from(answers),
+  //     ]);
+  //   });
 
-    const finalExerciseData = DndSetting.withUserDataFrom(
-      activityId,
-      userExerciseLocalRepository.current,
-      answersWithKeys
-    );
+  //   const finalExerciseData = DndSetting.withUserDataFrom(
+  //     activityId,
+  //     userExerciseLocalRepository.current,
+  //     answersWithKeys
+  //   );
 
-    setDndSetting(finalExerciseData.dndSetting);
-    setIsFinished(finalExerciseData.userData);
-  }, [exercise]);
+  //   setDndSetting(finalExerciseData.dndSetting);
+  //   setIsFinished(finalExerciseData.userData);
+  // }, [exercise]);
 
   return (
     <article>
       <div className={activityStyles["exercise-body"]}>
         <WrapperDndContext
           disabled={isFinished}
-          dndSetting={dndSetting}
-          setDndSetting={setDndSetting}
+          blanks={blanks}
+          board={board}
+          startDragging={startDragging}
+          stopDragging={stopDragging}
         >
           <section aria-label="sorular">
             <ol className={`simple composite-question-list`}>
-              {exercise.map((item, index) => {
+              {exercise.questions.map((item, index) => {
                 return (
                   <li key={index}>
                     <section aria-label="soru içeriği">
                       {Array.from(
-                        item.parsed,
-                        ([pieceKey, pieceValue], index) => {
-                          if (index % 2 === 0) {
-                            return <p key={pieceKey}>{pieceValue}</p>;
-                          } else {
-                            const blankKey = pieceKey;
-                            const boardItemEntry =
-                              dndSetting.getBoardItemContainingTheLocation(
-                                blankKey
-                              );
-                            console.log(
-                              "la",
-                              blankKey,
-                              boardItemEntry,
-                              dndSetting.check(blankKey)
-                            );
-                            const isCorrect = dndSetting.check(blankKey);
-
+                        item.rawQuestion,
+                        ([pieceKey, { type, value }], index) => {
+                          if (type === "text") {
+                            return <p key={pieceKey}>{value}</p>;
+                          } else if (type === "blank") {
                             return (
                               <Droppable
-                                status={
-                                  isFinished
-                                    ? isCorrect
-                                      ? "success"
-                                      : "error"
-                                    : "neutral"
-                                }
+                                status={"neutral"}
+                                // status={
+                                //   isFinished
+                                //     ? isCorrect
+                                //       ? "success"
+                                //       : "error"
+                                //     : "neutral"
+                                // }
                                 disabled={isFinished}
                                 key={pieceKey}
-                                blankKey={blankKey}
+                                blankId={pieceKey}
                               >
-                                {boardItemEntry && (
+                                {blanks.find((blank) => blank.id === pieceKey)
+                                  ?.item && (
                                   <Draggable
-                                    status={
-                                      isFinished
-                                        ? isCorrect
-                                          ? "success"
-                                          : "error"
-                                        : "neutral"
-                                    }
+                                    status={"neutral"}
+                                    // status={
+                                    //   isFinished
+                                    //     ? isCorrect
+                                    //       ? "success"
+                                    //       : "error"
+                                    //     : "neutral"
+                                    // }
                                     disabled={isFinished}
-                                    boardItemEntry={boardItemEntry}
+                                    item={
+                                      blanks.find(
+                                        (blank) => blank.id === pieceKey
+                                      )!.item!
+                                    }
                                   />
                                 )}
                               </Droppable>
@@ -129,12 +139,12 @@ export function DragIntoBlanksExercise({
           </section>
         </WrapperDndContext>
       </div>
-      <ActivityFooter
+      {/* <ActivityFooter
         closeActivity={closeActivity}
         finishActivity={finishActivity}
         isFinished={isFinished}
         reattemptToActivity={reattemptToActivity}
-      />
+      /> */}
     </article>
   );
 }

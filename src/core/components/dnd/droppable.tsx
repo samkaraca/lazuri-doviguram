@@ -4,21 +4,21 @@ import styles from "./styles.module.scss";
 
 export function Droppable({
   children,
-  blankKey,
+  blankId,
   disabled = false,
   status = "neutral",
   className = "",
 }: {
   children?: ReactNode;
-  blankKey: string;
+  blankId: string;
   disabled?: boolean;
   status: "error" | "success" | "neutral";
   className?: string;
 }) {
   const { setNodeRef, isOver } = useDroppable({
-    id: `droppable-${blankKey}`,
+    id: blankId,
     disabled,
-    data: { blankKey },
+    data: { blankId },
   });
 
   return (

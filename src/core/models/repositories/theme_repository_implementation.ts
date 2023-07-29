@@ -7,7 +7,7 @@ import {
   UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
 import { ThemeRepository } from "./theme_repository";
-import { DynamoDBClientSingleton } from "@/core/utils/dynamo_db_client_singleton";
+import { DynamoDBClientSingleton } from "@/lib/utils/dynamo_db_client_singleton";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ThemeMetaDTO } from "../dtos/theme_meta_dto";
 import { Theme } from "../entities/learning_unit";

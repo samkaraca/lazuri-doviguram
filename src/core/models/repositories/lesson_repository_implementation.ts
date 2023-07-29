@@ -1,7 +1,7 @@
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { LessonRepository } from "./lesson_repository";
 import { GetItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
-import { DynamoDBClientSingleton } from "@/core/utils/dynamo_db_client_singleton";
+import { DynamoDBClientSingleton } from "@/lib/utils/dynamo_db_client_singleton";
 import { nanoid } from "nanoid";
 import { Activity } from "../entities/learning_unit";
 import { StatusResponse } from "./status_response";

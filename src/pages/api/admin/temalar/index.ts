@@ -1,32 +1,36 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ThemeReposityImplementation } from "@/core/models/repositories/theme_repository_implementation";
+import { DynamoDBThemeRepository } from "@/lib/theme/dynamodb_theme_repository";
+import ThemeApiService from "@/lib/services/theme_api_service";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const themeRepo = new ThemeReposityImplementation();
+  const themeRepo = new DynamoDBThemeRepository();
+  const themeApiService = new ThemeApiService(themeRepo);
 
   if (req.method === "PUT") {
-    let DBResponse;
-    const { type } = req.body;
-
-    if (type === "createNewTheme") {
-      DBResponse = await themeRepo.createNewTheme();
-      return res.status(200).send(DBResponse);
-    } else if (type === "deleteTheme") {
-      const { themeId } = req.body;
-      DBResponse = await themeRepo.deleteTheme(themeId);
-      return res.status(200).send(DBResponse);
+    const type = req.body.type;
+    if (type === "saveTheme") {
+      const repRes = await themeApiService.saveTheme(req.body.theme);
+      return res.status(200).send(repRes);
+    } else if (type === "createTheme") {
+      const repRes = await themeApiService.createTheme(req.body.theme);
+      return res.status(200).send(repRes);
     }
 
     return res.status(501).json({ error: "Unsopported action" });
   } else if (req.method === "GET") {
-    const result = await themeRepo.getThemeMetas();
-    if (result.status === "success" && result.data) {
-      return res.status(200).json(result.data);
+    const r = req.query.r;
+    if (r === "path-names") {
+      const repRes = await themeApiService.getThemePathNames();
+      return res.status(200).json(repRes);
+    } else if (r === "theme-metas") {
+      const repRes = await themeApiService.getThemeMetas();
+      return res.status(200).json(repRes);
     }
-    return res.status(200).json([]);
+
+    return res.status(501).json({ error: "Unsopported action" });
   }
 
   return res.status(501).json({ error: "Unsopported request method" });

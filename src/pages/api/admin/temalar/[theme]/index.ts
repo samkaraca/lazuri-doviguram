@@ -1,47 +1,45 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ThemeReposityImplementation } from "@/core/models/repositories/theme_repository_implementation";
+import { DynamoDBThemeRepository } from "@/lib/theme/dynamodb_theme_repository";
+import { DynamoDBLessonRepository } from "@/lib/lesson/dynamodb_lesson_repository";
+import ThemeApiService from "@/lib/services/theme_api_service";
+import LessonApiService from "@/lib/services/lesson_api_service";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const themeRepo = new ThemeReposityImplementation();
+  const themeRepo = new DynamoDBThemeRepository();
+  const lessonRepo = new DynamoDBLessonRepository();
+  const apiService = new ThemeApiService(themeRepo);
+  const lessonApiService = new LessonApiService(lessonRepo);
+  const themeApiService = new ThemeApiService(themeRepo);
+  const theme = req.query.theme as string;
 
   if (req.method === "PUT") {
-    let DBResponse;
-    const theme = req.query.theme as string;
-    const { type } = req.body;
+    const type = req.body.type;
 
-    if (type === "saveTheme") {
-      const { title, explanation, image, youtubeVideoUrl } = req.body;
-      DBResponse = await themeRepo.saveTheme({
-        themeId: theme,
-        title,
-        explanation,
-        image,
-        youtubeVideoUrl,
-      });
-
-      return res.status(200).send(DBResponse);
-    } else if (type === "createLesson") {
-      DBResponse = await themeRepo.createNewLesson(theme);
-
-      return res.status(200).send(DBResponse);
+    if (type === "createLesson") {
+      const repRes = await lessonApiService.createLesson(
+        theme,
+        req.body.lesson
+      );
+      return res.status(200).send(repRes);
+    } else if (type === "saveLesson") {
+      const repRes = await lessonApiService.saveLesson(theme, req.body.lesson);
+      return res.status(200).send(repRes);
+    } else if (type === "relocateTheme") {
+      const repRes = await themeApiService.relocateTheme(theme, req.body.theme);
+      return res.status(200).send(repRes);
     }
-
-    return res.status(501).json({ error: "Unsopported action" });
   } else if (req.method === "DELETE") {
-    const theme = req.query.theme as string;
-    const result = await themeRepo.deleteTheme(theme);
-    return res.status(200).json(result);
+    const repRes = await apiService.deleteTheme(theme);
+    return res.status(200).json(repRes);
   } else if (req.method === "GET") {
-    const theme = req.query.theme as string;
-    const themeData = await themeRepo.getThemeData(theme);
-    return res.status(200).json(themeData);
+    const repRes = await apiService.getTheme(theme);
+    return res.status(200).json(repRes);
   } else if (req.method === "POST") {
-    const { type } = req.body;
-    const themeId = req.query.theme;
+    const type = req.body.type;
 
     if (type === "publishChanges") {
       try {
-        await res.revalidate(`/temalar/${themeId}`);
+        await res.revalidate(`/temalar/${theme}`);
         await res.revalidate("/");
         return res.status(200).send({
           status: "success",
@@ -49,7 +47,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         });
       } catch (error) {
         console.error(
-          `/api/admin/temalar/${themeId} -> POST -> publishChanges ->`,
+          `/api/admin/temalar/${theme} -> POST -> publishChanges ->`,
           error
         );
         return res.status(200).send({

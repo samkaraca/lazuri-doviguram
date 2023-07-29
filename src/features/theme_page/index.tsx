@@ -1,4 +1,4 @@
-import { Theme } from "@/core/models/entities/learning_unit";
+import { Theme } from "@/lib/theme/theme";
 import { View } from "./view";
 import { ViewModel } from "./view_model";
 import { ReactNode } from "react";

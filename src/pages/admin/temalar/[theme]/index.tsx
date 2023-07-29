@@ -1,9 +1,9 @@
-import { Theme } from "@/core/models/entities/learning_unit";
 import TP from "@/features/theme_page";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
-import { StatusResponse } from "@/core/models/repositories/status_response";
+import { Theme } from "@/lib/theme/theme";
+import ThemeAdminService from "@/lib/services/theme_admin_service";
 
 const AT = dynamic(() => import("@/features/admin_tools"), {
   ssr: false,
@@ -11,21 +11,18 @@ const AT = dynamic(() => import("@/features/admin_tools"), {
 
 export default function ThemePage() {
   const pathname = usePathname();
+  const adminService = useRef(new ThemeAdminService());
   const [themeData, setThemeData] = useState<Theme>();
 
-  const fetchTheme = async (themeId: string) => {
-    const resObj = await fetch(`/api/admin/temalar/${themeId}`);
-    const res = (await resObj.json()) as StatusResponse<Theme>;
-    if (res.status === "success" && res.data) {
-      setThemeData(Theme.from(res.data));
-    }
+  const fetchTheme = async (pathName: string) => {
+    setThemeData(await adminService.current.fetchTheme(pathName));
   };
 
   useEffect(() => {
     if (!pathname) return;
     const splitPathname = pathname.split("/");
-    const themeId = splitPathname[splitPathname.length - 1];
-    fetchTheme(themeId);
+    const themePathName = splitPathname[splitPathname.length - 1];
+    fetchTheme(themePathName);
   }, [pathname]);
 
   if (themeData) {

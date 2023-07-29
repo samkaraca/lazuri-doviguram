@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./app_bar.module.scss";
-import { Menu, MenuRounded } from "@mui/icons-material";
+import { MenuRounded } from "@mui/icons-material";
 import { useState } from "react";
 
 export function AppBar({ home }: { home: "/admin" | "/" }) {

@@ -1,30 +1,22 @@
-import { Activity } from "@/core/models/entities/learning_unit";
-import { StatusResponse } from "@/core/models/repositories/status_response";
 import { ActivityEditor } from "@/features/activity_editor";
+import { Activity } from "@/lib/activity/activity";
+import ActivityAdminService from "@/lib/services/activity_admin_service";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ActivityEditorPage() {
   const pathname = usePathname();
-  const [activityData, setActivityData] = useState<Activity<any>>();
+  const adminService = useRef(new ActivityAdminService());
+  const [activityData, setActivityData] = useState<Activity>();
 
-  const fetchActivity = async ({
-    themeId,
-    lessonId,
-    activityId,
-  }: {
-    themeId: string;
-    lessonId: string;
-    activityId: string;
-  }) => {
-    const resObj = await fetch(
-      `/api/admin/temalar/${themeId}/${lessonId}/${activityId}`
+  const fetchActivity = async (
+    themeId: string,
+    lessonId: string,
+    activityId: string
+  ) => {
+    setActivityData(
+      await adminService.current.fetchActivity(themeId, lessonId, activityId)
     );
-    const res = (await resObj.json()) as StatusResponse;
-
-    if (res.status === "success") {
-      setActivityData(Activity.from(res.data.activity));
-    }
   };
 
   useEffect(() => {
@@ -33,11 +25,12 @@ export default function ActivityEditorPage() {
     const themeId = splitPathname[splitPathname.length - 3];
     const lessonId = splitPathname[splitPathname.length - 2];
     const activityId = splitPathname[splitPathname.length - 1];
-    fetchActivity({ themeId, lessonId, activityId });
+    fetchActivity(themeId, lessonId, activityId);
   }, [pathname]);
 
-  if (activityData)
+  if (activityData) {
     return <ActivityEditor beginningActivityData={activityData} />;
+  }
 
   return (
     <div className="admin-waiting-room">

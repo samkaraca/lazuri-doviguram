@@ -1,37 +1,34 @@
-import { ThemeMetaDTO } from "@/core/models/dtos/theme_meta_dto";
-import { StatusResponse } from "@/core/models/repositories/status_response";
 import { LandingPageView } from "@/features/landing_page_view";
+import ThemeAdminService from "@/lib/services/theme_admin_service";
+import ApiService from "@/lib/services/theme_api_service";
+import { defaultTheme } from "@/lib/theme/default_theme";
+import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
+import { ThemeRepository } from "@/lib/theme/theme_repository";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function AdminPage() {
+  const adminService = useRef(new ThemeAdminService());
   const [themeMetas, setThemeMetas] = useState<ThemeMetaDTO[]>();
   const [stalling, setStalling] = useState(false);
 
   const fetchThemeMetas = async () => {
-    const resObj = await fetch(`/api/admin/temalar`);
-    const res = (await resObj.json()) as ThemeMetaDTO[];
-    setThemeMetas(res);
+    const resObj = await fetch(`/api/admin/temalar?r=theme-metas`);
+    const res = await (resObj.json() as ReturnType<
+      ApiService["getThemeMetas"]
+    >);
+    if (res.status === "success" && res.data) {
+      setThemeMetas(res.data);
+    }
   };
 
   useEffect(() => {
     fetchThemeMetas();
   }, []);
 
-  const createNewTheme = async () => {
+  const createTheme = async () => {
     setStalling(true);
-    const resObj = await fetch(`/api/admin/temalar`, {
-      method: "PUT",
-      body: JSON.stringify({
-        type: "createNewTheme",
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const res = (await resObj.json()) as Omit<StatusResponse, "data"> & {
-      data: { newThemeId: string };
-    };
+    const res = await adminService.current.createTheme(defaultTheme());
     if (res.status === "success") await fetchThemeMetas();
     setStalling(false);
   };
@@ -53,11 +50,11 @@ export default function AdminPage() {
       </Head>
       <LandingPageView
         home="/admin"
-        themeMetas={themeMetas}
+        themePreviews={themeMetas}
         createNewThemeButton={
           <button
             disabled={stalling}
-            onClick={createNewTheme}
+            onClick={createTheme}
             style={{
               minHeight: "14rem",
               backgroundColor: "#eee",

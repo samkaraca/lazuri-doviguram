@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useContext } from "react";
-import { Theme } from "@/core/models/entities/learning_unit";
 import { useBaseViewModel } from "../use_base_view_model";
 import { BaseViewModel } from "../../model/base_view_model";
+import { Theme } from "@/lib/theme/theme";
 
 const BaseViewModelContext = createContext<BaseViewModel | null>(null);
 

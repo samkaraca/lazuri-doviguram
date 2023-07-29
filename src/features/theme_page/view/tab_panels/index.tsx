@@ -1,4 +1,3 @@
-import { ActivityMap } from "@/core/models/entities/learning_unit";
 import { useBaseViewModelContext } from "../../view_model/context_providers/base_view_model";
 import styles from "./styles.module.scss";
 import {
@@ -7,8 +6,7 @@ import {
   TaskAltRounded,
 } from "@mui/icons-material";
 import { BaseViewModel } from "../../model/base_view_model";
-import { useEffect, useRef, useState } from "react";
-import { UserExerciseLocalRepositoryImplementation } from "@/features/activity/services/user_exercise_local_repository_implementation";
+import { Activity } from "@/lib/activity/activity";
 
 export function TabPanels() {
   const { lessons, activeLesson, openActivity, activeActivityId } =
@@ -17,10 +15,7 @@ export function TabPanels() {
   return (
     <div className={styles["tab-panels"]}>
       <div>
-        {lessons.meta.map((lessonMeta, i) => {
-          const { id, title } = lessonMeta;
-          const { explanation, activities } = lessons[id];
-
+        {lessons.map(({ id, title, explanation, activities }, i) => {
           return (
             activeLesson === i && (
               <div key={id} className={styles["panel"]}>
@@ -46,39 +41,20 @@ export function ActivitiesContainer({
   openActivity,
 }: {
   activeActivityId: string | null;
-  activities: ActivityMap;
+  activities: Activity[];
   openActivity: BaseViewModel["openActivity"];
 }) {
-  const userExerciseLocalRepository = useRef(
-    new UserExerciseLocalRepositoryImplementation()
-  );
-  const [localActivityData, setLocalActivityDatas] = useState<
-    ({ exerciseData: any; grade: string } | null)[]
-  >([]);
-
-  useEffect(() => {
-    setLocalActivityDatas(
-      activities["idOrderMeta"].map((activityId) => {
-        return userExerciseLocalRepository.current.getLocalUserActivityData({
-          activityId,
-        });
-      })
-    );
-  }, [activities, activeActivityId]);
-
   return (
     <section className={styles["activities"]} aria-label="aktiviteler">
-      {activities["idOrderMeta"].length === 0 ? (
+      {activities.length === 0 ? (
         <div className={styles["no-activity"]}>
           <Inbox fontSize="large" />
           <p>Bu derste henüz aktivite yok</p>
         </div>
       ) : (
         <ol className={styles["activity-list"]}>
-          {activities["idOrderMeta"].map((id, i) => {
-            const { title } = activities[id];
-            const localData = localActivityData[i];
-
+          {activities.map(({ id, title }, i) => {
+            const localData: any = null;
             return (
               <li key={id} className={styles["activity-card"]}>
                 <div className={styles["left-group"]}>
@@ -89,7 +65,7 @@ export function ActivitiesContainer({
                   <span>{localData && `%${localData.grade}`}</span>
                   <button
                     className={`simple lg ${styles["start"]}`}
-                    onClick={() => openActivity(id, activities[id])}
+                    //onClick={() => openActivity(id, activities[id])}
                   >
                     Başla
                   </button>

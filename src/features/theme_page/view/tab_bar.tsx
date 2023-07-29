@@ -14,8 +14,8 @@ export function TabBar() {
       centered
       onChange={(e, newValue) => setActiveLesson(newValue)}
     >
-      {lessons.meta.map((lesson: any, i: number) => {
-        return <Tab key={lesson.id} label={`Ders ${i + 1}`} />;
+      {lessons.map(({ id }, i: number) => {
+        return <Tab key={id} label={`Ders ${i + 1}`} />;
       })}
     </Tabs>
   );

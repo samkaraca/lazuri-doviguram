@@ -10,7 +10,6 @@ import { TextField } from "@mui/material";
 import { useBaseViewModelContext } from "../theme_page/view_model/context_providers/base_view_model";
 import { useAdminViewModelContext } from "../theme_page/view_model/context_providers/admin_view_model";
 import { usePathname, useRouter } from "next/navigation";
-import { title } from "process";
 
 export function LessonSideBar({
   isOpen,
@@ -29,9 +28,9 @@ export function LessonSideBar({
   const { lessons, activeLesson } = useBaseViewModelContext()!;
   const {
     saveLesson,
-    createNewLesson,
+    createLesson,
     deleteLesson,
-    createNewActivity,
+    createActivity,
     deleteActivity,
   } = useAdminViewModelContext()!;
 
@@ -41,8 +40,7 @@ export function LessonSideBar({
 
   const reset = () => {
     if (activeLesson === null) return;
-    const { id, title } = lessons.meta[activeLesson];
-    const { explanation } = lessons[id];
+    const { title, explanation } = lessons[activeLesson];
     setAdminLessonExplanation(explanation);
     setAdminLessonTitle(title);
     setModified(false);
@@ -51,8 +49,7 @@ export function LessonSideBar({
   useEffect(() => {
     if (activeLesson === null) return;
     setModified(false);
-    const { id, title } = lessons.meta[activeLesson];
-    const { explanation } = lessons[id];
+    const { id, title, explanation } = lessons[activeLesson];
     if (title !== adminLessonTitle || explanation !== adminLessonExplanation) {
       setModified(true);
     }
@@ -66,7 +63,7 @@ export function LessonSideBar({
       >
         <header>
           <h3>Ders Editörü</h3>
-          <button onClick={createNewLesson} className="simple">
+          <button onClick={createLesson} className="simple">
             Yeni ders ekle
           </button>
         </header>
@@ -80,12 +77,13 @@ export function LessonSideBar({
                   <div className={"actions"}>
                     <button onClick={reset}>Geri al</button>
                     <button
-                      onClick={() =>
+                      onClick={() => {
                         saveLesson({
+                          id: lessons[activeLesson].id,
                           title: adminLessonTitle,
                           explanation: adminLessonExplanation,
-                        })
-                      }
+                        });
+                      }}
                     >
                       Kaydet
                     </button>
@@ -123,42 +121,37 @@ export function LessonSideBar({
                 <h3>Aktiviteler</h3>
               </header>
               <ol className={`simple`}>
-                {lessons[
-                  lessons.meta[activeLesson].id
-                ].activities.idOrderMeta.map((id, activityIndex) => {
-                  const { title } =
-                    lessons[lessons.meta[activeLesson].id].activities[id];
-                  return (
-                    <li key={id}>
-                      <div>
-                        <p>{title}</p>
-                        <div className={styles["group"]}>
-                          <button
-                            onClick={() =>
-                              push(
-                                `${pathname}/${lessons.meta[activeLesson].id}/${id}`
-                              )
-                            }
-                            className="simple"
-                          >
-                            <DesignServices />
-                          </button>
-                          <button
-                            onClick={() =>
-                              deleteActivity({ activityId: id, activityIndex })
-                            }
-                            className="simple error"
-                          >
-                            <DeleteForever />
-                          </button>
+                {activeLesson !== null &&
+                  lessons[activeLesson].activities.map(({ id, title }) => {
+                    return (
+                      <li key={id}>
+                        <div>
+                          <p>{title}</p>
+                          <div className={styles["group"]}>
+                            <button
+                              onClick={() =>
+                                push(
+                                  `${pathname}/${lessons[activeLesson].id}/${id}`
+                                )
+                              }
+                              className="simple"
+                            >
+                              <DesignServices />
+                            </button>
+                            <button
+                              onClick={() => deleteActivity(id)}
+                              className="simple error"
+                            >
+                              <DeleteForever />
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  );
-                })}
+                      </li>
+                    );
+                  })}
               </ol>
               <footer>
-                <button onClick={createNewActivity} className="simple">
+                <button onClick={createActivity} className="simple">
                   Yeni +
                 </button>
               </footer>

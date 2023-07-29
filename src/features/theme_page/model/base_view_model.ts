@@ -1,29 +1,31 @@
-import { Activity, LessonMap } from "@/core/models/entities/learning_unit";
+import { Activity } from "@/lib/activity/activity";
+import { Lesson } from "@/lib/lesson/lesson";
 import { Dispatch, SetStateAction } from "react";
 
 export interface BaseViewModel {
-  pathName: string;
-  setPathName: Dispatch<SetStateAction<BaseViewModel["pathName"]>>;
-  themeId: string;
-  themeTitle: string;
-  setThemeTitle: Dispatch<SetStateAction<BaseViewModel["themeTitle"]>>;
-  themeExplanation: string;
-  setThemeExplanation: Dispatch<
-    SetStateAction<BaseViewModel["themeExplanation"]>
-  >;
-  themeImage: string;
-  setThemeImage: Dispatch<SetStateAction<BaseViewModel["themeImage"]>>;
-  lessons: LessonMap;
-  setLessons: Dispatch<SetStateAction<BaseViewModel["lessons"]>>;
-  themeYoutubeVideoUrl: string;
-  setThemeYoutubeVideoUrl: Dispatch<
-    SetStateAction<BaseViewModel["themeYoutubeVideoUrl"]>
-  >;
+  // theme related
+  id: string;
+  title: string;
+  explanation: string;
+  image: string;
+  youtubeVideoUrl: string;
+  lessons: Lesson[];
+  createdAt: number;
+  // view related
   activeLesson: number | null;
-  setActiveLesson: Dispatch<SetStateAction<BaseViewModel["activeLesson"]>>;
-  isActivityDialogOpen: boolean;
-  openActivity: (activityId: string, activity: Activity<any>) => void;
-  closeActivity: () => void;
   activeActivityId: string | null;
-  activeActivity: Activity<any> | null;
+  activeActivity: Activity | null;
+  isActivityDialogOpen: boolean;
+  // setters
+  setId: Dispatch<SetStateAction<BaseViewModel["id"]>>;
+  setTitle: Dispatch<SetStateAction<BaseViewModel["title"]>>;
+  setExplanation: Dispatch<SetStateAction<BaseViewModel["explanation"]>>;
+  setImage: Dispatch<SetStateAction<BaseViewModel["image"]>>;
+  setYoutubeVideoUrl: Dispatch<
+    SetStateAction<BaseViewModel["youtubeVideoUrl"]>
+  >;
+  setLessons: Dispatch<SetStateAction<BaseViewModel["lessons"]>>;
+  setActiveLesson: Dispatch<SetStateAction<BaseViewModel["activeLesson"]>>;
+  openActivity: (activityId: string, activity: Activity) => void;
+  closeActivity: () => void;
 }

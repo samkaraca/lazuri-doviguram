@@ -3,63 +3,24 @@ import styles from "./styles.module.scss";
 import EditorForm from "./editor_form";
 import { Activity } from "@/features/activity";
 import useViewModelContext from "../view_model";
-import { useMemo } from "react";
-import { Activity as IActivity } from "@/core/models/entities/learning_unit";
-import { FillInBlanksQuestion } from "@/core/models/entities/question";
-import { ExerciseConverter } from "../services/exercise_converter";
+import { Activity as ActivityModel } from "@/lib/activity/activity";
 import { useBaseViewModelContext } from "@/features/theme_page/view_model/context_providers/base_view_model";
 
 export default function View() {
   const {
+    id,
     audio,
     image,
     youtubeVideoUrl,
     title,
     explanation,
     textContent,
-    activityType,
-    trueFalseExercise,
+    type,
     multipleChoiceExercise,
     fillInBlanksExercise,
     simpleExercise,
     saveActivity,
   } = useViewModelContext()!;
-  const { activeActivityId } = useBaseViewModelContext()!;
-
-  const activity: IActivity<any> = useMemo(() => {
-    const activityModifier = new ExerciseConverter().fromMap({
-      activityType,
-      fillInBlanksExercise,
-      multipleChoiceExercise,
-      simpleExercise,
-      trueFalseExercise,
-    });
-    let activityToReturn: IActivity<any> = {
-      activityType: "drag-into-blanks",
-      questions: [] as FillInBlanksQuestion[],
-      title,
-      explanation,
-      textContent,
-      audio: audio.status === "success" ? audio.value : null,
-      image: image.status === "success" ? image.value : null,
-      youtubeVideoUrl:
-        youtubeVideoUrl.status === "success" ? youtubeVideoUrl.value : null,
-    };
-
-    return { ...activityToReturn, ...activityModifier };
-  }, [
-    activityType,
-    audio,
-    explanation,
-    fillInBlanksExercise,
-    image,
-    multipleChoiceExercise,
-    simpleExercise,
-    textContent,
-    title,
-    trueFalseExercise,
-    youtubeVideoUrl,
-  ]);
 
   return (
     <div className={styles["main"]}>
@@ -78,13 +39,28 @@ export default function View() {
       <div className={styles["content"]}>
         <EditorForm />
         <div className={styles["simple-container"]}>
-          {activeActivityId && (
-            <Activity
-              activityId={activeActivityId}
-              closeActivity={() => {}}
-              activity={activity}
-            />
-          )}
+          <Activity
+            closeActivity={() => {}}
+            activity={ActivityModel.from({
+              id,
+              type,
+              title,
+              explanation,
+              textContent,
+              audio: audio.status === "success" ? audio.value : null,
+              image: image.status === "success" ? image.value : null,
+              youtubeVideoUrl:
+                youtubeVideoUrl.status === "success"
+                  ? youtubeVideoUrl.value
+                  : null,
+              exercise:
+                type === "drag-into-blanks" || type === "type-in-blanks"
+                  ? fillInBlanksExercise
+                  : type === "pair-texts-with-images" || type === "true-false"
+                  ? simpleExercise
+                  : multipleChoiceExercise,
+            })}
+          />
         </div>
       </div>
     </div>

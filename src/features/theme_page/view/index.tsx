@@ -25,21 +25,21 @@ export function View({
     isActivityDialogOpen,
     activeActivity,
     closeActivity,
-    themeTitle,
-    themeExplanation,
-    themeImage,
+    title,
+    explanation,
+    image,
     activeActivityId,
   } = useBaseViewModelContext() as BaseViewModel;
 
   return (
     <>
       <Head>
-        <title>{`${themeTitle} - Lazuri Doviguram!`}</title>
-        <meta property="og:title" content={themeTitle} key="title" />
-        <meta property="og:description" content={themeExplanation} key="desc" />
+        <title>{`${title} - Lazuri Doviguram!`}</title>
+        <meta property="og:title" content={title} key="title" />
+        <meta property="og:description" content={explanation} key="desc" />
         <meta
           property="og:image"
-          content={`${process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_IMAGE_BASE_URL}/${themeImage}`}
+          content={`${process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_IMAGE_BASE_URL}/${image}`}
           key="image"
         />
       </Head>

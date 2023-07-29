@@ -3,37 +3,49 @@ import { DndContext } from "@dnd-kit/core";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { BoardItemsBoard } from "./draggables_board";
 import styles from "./styles.module.scss";
+import { Item } from "@/lib/utils/dnd_setting/item";
+import { Blank } from "@/lib/utils/dnd_setting/blank";
 
 export function WrapperDndContext({
+  board,
+  blanks,
+  startDragging,
+  stopDragging,
   children,
-  dndSetting,
-  setDndSetting,
   disabled = false,
 }: {
+  board: Item[];
+  blanks: Blank[];
+  startDragging: (item: Item) => void;
+  stopDragging: (
+    action:
+      | {
+          type: "on-space";
+        }
+      | {
+          type: "on-blank";
+          blankId: string;
+        }
+  ) => void;
   children: ReactNode;
-  dndSetting: DndSetting;
-  setDndSetting: Dispatch<SetStateAction<DndSetting>>;
   disabled: boolean;
 }) {
   return (
     <DndContext
       onDragEnd={(e) => {
-        const blankKey = e.over?.data.current?.blankKey;
-        if (blankKey) {
-          setDndSetting(dndSetting.endMoving({ type: "on-blank", blankKey }));
+        const blankId = e.over?.data.current?.blankId;
+        if (blankId) {
+          stopDragging({ type: "on-blank", blankId });
         } else {
-          setDndSetting(dndSetting.endMoving({ type: "on-space" }));
+          stopDragging({ type: "on-space" });
         }
       }}
       onDragStart={(e) => {
-        setDndSetting(dndSetting.startMoving(e.active.data.current as any));
+        startDragging(e.active.data.current as any);
       }}
     >
       <section className={styles["exercise-content"]} aria-label="etkinlik">
-        <BoardItemsBoard
-          disabled={disabled}
-          boardItems={dndSetting.boardItems}
-        />
+        <BoardItemsBoard disabled={disabled} board={board} />
         {children}
       </section>
     </DndContext>

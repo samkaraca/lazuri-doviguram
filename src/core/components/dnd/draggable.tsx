@@ -2,25 +2,25 @@ import { BoardItemEntry } from "@/core/models/entities/dnd_setting";
 import { useDraggable } from "@dnd-kit/core";
 import styles from "./styles.module.scss";
 import { CSSProperties } from "react";
+import { Item } from "@/lib/utils/dnd_setting/item";
 
 export function Draggable({
-  boardItemEntry,
+  item,
   disabled = false,
   status,
   styleChip,
   styleContainer,
 }: {
   disabled: boolean;
-  boardItemEntry: BoardItemEntry;
+  item: Item;
   status: "error" | "success" | "neutral";
   styleChip?: CSSProperties;
   styleContainer?: CSSProperties;
 }) {
-  const [key, boardItem] = boardItemEntry;
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     disabled,
-    id: `draggable-${key}-${boardItem.value}`,
-    data: boardItemEntry,
+    id: item.id,
+    data: item,
   });
 
   return (
@@ -42,7 +42,7 @@ export function Draggable({
           status !== "neutral" ? styles[status] : ""
         }`}
       >
-        <p>{boardItem.value}</p>
+        <p>{item.value}</p>
       </div>
     </div>
   );

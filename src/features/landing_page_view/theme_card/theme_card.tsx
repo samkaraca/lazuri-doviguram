@@ -1,20 +1,20 @@
 import { Label } from "@mui/icons-material";
 import styles from "./theme_card.module.scss";
-import { ThemeMetaDTO } from "@/core/models/dtos/theme_meta_dto";
+import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
 
 export function ThemeCard({
-  themeMeta,
+  previewData,
   home,
 }: {
-  themeMeta: ThemeMetaDTO;
+  previewData: ThemeMetaDTO;
   home: "/admin" | "/";
 }) {
-  const { id, image, lessons, title, pathName } = themeMeta;
+  const { image, lessons, title, id } = previewData;
 
   return (
     <li>
       <a
-        href={`${home === "/" ? "" : home}/temalar/${pathName}`}
+        href={`${home === "/" ? "" : home}/temalar/${id}`}
         className={`${styles["card"]} card-button`}
       >
         <img

@@ -1,5 +1,5 @@
-import { Activity as IActivity } from "@/core/models/entities/learning_unit";
 import { Activity } from "@/features/activity";
+import { Activity as CActivity } from "@/lib/activity/activity";
 import { poppins } from "@/pages/_app";
 import { Dialog } from "@mui/material";
 
@@ -12,7 +12,7 @@ export default function ActivityDialog({
   activeActivityId: string | null;
   isActivityDialogOpen: boolean;
   closeActivity: VoidFunction;
-  activeActivity?: IActivity<any>;
+  activeActivity?: CActivity;
 }) {
   return (
     <Dialog

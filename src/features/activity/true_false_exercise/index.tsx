@@ -4,14 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { TrueFalseQuestion } from "@/core/models/entities/question";
 import { ActivityFooter } from "../layout/activity_footer";
 import { UserExerciseLocalRepositoryImplementation } from "../services/user_exercise_local_repository_implementation";
+import { SimpleExercise } from "@/lib/exercises/simple_question_exercise";
 
 export function TrueFalseExercise({
   exercise,
-  activityId,
   closeActivity,
 }: {
-  exercise: TrueFalseQuestion[];
-  activityId: string;
+  exercise: SimpleExercise;
   closeActivity: VoidFunction;
 }) {
   const userExerciseLocalRepository = useRef(
@@ -20,51 +19,7 @@ export function TrueFalseExercise({
   const [isFinished, setIsFinished] = useState(false);
   const [replies, setReplies] = useState<boolean[]>([]);
 
-  const gradeActivity = () => {
-    let correct = 0;
-    exercise.forEach((item, i) => {
-      if (exercise[i].check(replies[i])) {
-        correct++;
-      }
-    });
-    return (correct / exercise.length) * 100;
-  };
-
-  const finishActivity = () => {
-    setIsFinished(true);
-    userExerciseLocalRepository.current.saveUserActivityDataLocally({
-      activityId,
-      grade: gradeActivity(),
-      exerciseData: replies,
-    });
-  };
-
-  const reattemptToActivity = () => {
-    const localData =
-      userExerciseLocalRepository.current.getLocalUserActivityData({
-        activityId,
-      });
-    if (localData) {
-      userExerciseLocalRepository.current.saveUserActivityDataLocally({
-        activityId,
-        grade: parseInt(localData.grade),
-        exerciseData: null,
-      });
-    }
-    setReplies([]);
-    setIsFinished(false);
-  };
-
-  useEffect(() => {
-    const localData =
-      userExerciseLocalRepository.current.getLocalUserActivityData({
-        activityId,
-      });
-    if (localData && localData.exerciseData) {
-      setIsFinished(true);
-      setReplies(localData.exerciseData);
-    }
-  }, [exercise]);
+  useEffect(() => {}, [exercise]);
 
   return (
     <section
@@ -77,18 +32,13 @@ export function TrueFalseExercise({
           <span>Yanlış</span>
         </header>
         <ol className={`simple ${styles["questions"]}`}>
-          {exercise.map((item, i) => {
-            const { question } = item;
-            const reply = replies[i];
-            const isCorrect =
-              reply !== undefined && reply !== null ? item.check(reply) : false;
-
+          {exercise.questions.map(({ id, question, reply }, i) => {
             return (
               <li
                 className={`${
                   isFinished ? styles[isCorrect ? "success" : "error"] : ""
                 }`}
-                key={i}
+                key={id}
               >
                 <section aria-label="soru">
                   <p className={styles["question"]}>{question}</p>
@@ -96,9 +46,9 @@ export function TrueFalseExercise({
                     <div className={styles["radio-button"]}>
                       <input
                         type="radio"
-                        name={`true-false-${i}`}
+                        name={`true-false-${id}`}
                         disabled={isFinished}
-                        checked={reply === true}
+                        checked={reply === "true"}
                         onChange={() => {
                           setReplies((prev) => {
                             const newReplies = [...prev];
@@ -111,9 +61,9 @@ export function TrueFalseExercise({
                     <div className={styles["radio-button"]}>
                       <input
                         type="radio"
-                        name={`true-false-${i}`}
+                        name={`true-false-${id}`}
                         disabled={isFinished}
-                        checked={reply === false}
+                        checked={reply === "false"}
                         onChange={() => {
                           setReplies((prev) => {
                             const newReplies = [...prev];
@@ -130,12 +80,12 @@ export function TrueFalseExercise({
           })}
         </ol>
       </div>
-      <ActivityFooter
+      {/* <ActivityFooter
         finishActivity={finishActivity}
         closeActivity={closeActivity}
         isFinished={isFinished}
         reattemptToActivity={reattemptToActivity}
-      />
+      /> */}
     </section>
   );
 }

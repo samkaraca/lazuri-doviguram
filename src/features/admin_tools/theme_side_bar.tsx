@@ -21,7 +21,7 @@ export function ThemeSideBar({
   hide: boolean;
 }) {
   // context state
-  const { themeTitle, themeExplanation, themeImage, themeYoutubeVideoUrl } =
+  const { title, explanation, image, youtubeVideoUrl } =
     useBaseViewModelContext()!;
   const { saveTheme, deleteTheme } = useAdminViewModelContext()!;
 
@@ -49,42 +49,40 @@ export function ThemeSideBar({
   useEffect(() => {
     setModified(false);
     if (
-      themeTitle !== adminThemeTitle ||
-      themeExplanation !== adminThemeExplanation ||
+      title !== adminThemeTitle ||
+      explanation !== adminThemeExplanation ||
       adminTestfulThemeImage.status !== "success" ||
       adminTestfulThemeYoutubeVideoUrl.status !== "success" ||
       (adminTestfulThemeImage.status === "success" &&
-        adminTestfulThemeImage.value !== themeImage) ||
+        adminTestfulThemeImage.value !== image) ||
       (adminTestfulThemeYoutubeVideoUrl.status === "success" &&
-        adminTestfulThemeYoutubeVideoUrl.value !== themeYoutubeVideoUrl)
+        adminTestfulThemeYoutubeVideoUrl.value !== youtubeVideoUrl)
     ) {
       setModified(true);
     }
   });
 
   const reset = () => {
-    setAdminThemeTitle(themeTitle);
-    setAdminThemeExplanation(themeExplanation);
-    setAdminTestfulThemeImage({ status: "success", value: themeImage });
+    setAdminThemeTitle(title);
+    setAdminThemeExplanation(explanation);
+    setAdminTestfulThemeImage({ status: "success", value: image });
     setAdminTestfulThemeYoutubeVideoUrl({
       status: "success",
-      value: themeYoutubeVideoUrl,
+      value: youtubeVideoUrl,
     });
   };
 
   const save = () => {
-    saveTheme({
-      title: adminThemeTitle,
-      explanation: adminThemeExplanation,
-      image:
-        adminTestfulThemeImage.status === "success"
-          ? adminTestfulThemeImage.value
-          : themeImage,
-      youtubeVideoUrl:
-        adminTestfulThemeYoutubeVideoUrl.status === "success"
-          ? adminTestfulThemeYoutubeVideoUrl.value
-          : themeYoutubeVideoUrl,
-    });
+    saveTheme(
+      adminThemeTitle,
+      adminThemeExplanation,
+      adminTestfulThemeImage.status === "success"
+        ? adminTestfulThemeImage.value
+        : image,
+      adminTestfulThemeYoutubeVideoUrl.status === "success"
+        ? adminTestfulThemeYoutubeVideoUrl.value
+        : youtubeVideoUrl
+    );
   };
 
   return (

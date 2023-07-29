@@ -1,25 +1,31 @@
 import { useBaseViewModelContext } from "./context_providers/base_view_model";
 import { AdminViewModel } from "../model/admin_view_model";
-import { useState } from "react";
-import { StatusResponse } from "@/core/models/repositories/status_response";
-import { Activity, LessonMap } from "@/core/models/entities/learning_unit";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { defaultLesson } from "@/lib/lesson/default_lesson";
+import { ApiResponse } from "@/lib/types/api_response";
+import { defaultActivity } from "@/lib/activity/default_activity";
+import { Lesson } from "@/lib/lesson/lesson";
+import { slugifyLaz } from "@/lib/utils/slugify_laz";
+import ThemeAdminService from "@/lib/services/theme_admin_service";
 
 export function useAdminViewModel(): AdminViewModel {
   const {
-    themeId,
-    activeLesson,
+    id,
+    title,
     lessons,
-    setThemeTitle,
-    setThemeExplanation,
-    setThemeYoutubeVideoUrl,
+    activeLesson,
+    createdAt,
+    setId,
+    setTitle,
+    setExplanation,
+    setImage,
+    setYoutubeVideoUrl,
     setLessons,
     setActiveLesson,
-    setThemeImage,
-    pathName,
-    setPathName,
   } = useBaseViewModelContext()!;
   const { replace } = useRouter();
+  const adminService = useRef(new ThemeAdminService());
   const [stalling, setStalling] = useState(false);
   const [snackbar, setSnackbar] = useState<{
     severity: "error" | "success" | "warning" | "info";
@@ -27,32 +33,12 @@ export function useAdminViewModel(): AdminViewModel {
     visible: boolean;
   }>({ severity: "info", message: "", visible: false });
 
-  const saveTheme = async ({
-    title,
-    explanation,
-    image,
-    youtubeVideoUrl,
-  }: {
-    title: string;
-    explanation: string;
-    image: string;
-    youtubeVideoUrl: string;
-  }) => {
+  async function withFeedback<T>(
+    process: () => Promise<ApiResponse<T>>,
+    success: (res: ApiResponse<T>) => void
+  ): Promise<void> {
     setStalling(true);
-    const resObj = await fetch(`/api/admin/temalar/${themeId}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        type: "saveTheme",
-        title,
-        explanation,
-        image,
-        youtubeVideoUrl,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const res = (await resObj.json()) as StatusResponse<{ pathName: string }>;
+    const res = await process();
     setStalling(false);
 
     if (res.status === "error") {
@@ -63,267 +49,146 @@ export function useAdminViewModel(): AdminViewModel {
       });
       return;
     }
-
     setSnackbar({
       severity: res.status,
       message: res.message,
       visible: true,
     });
-    setPathName(res.data!.pathName);
-    setThemeTitle(title);
-    setThemeExplanation(explanation);
-    setThemeImage(image);
-    setThemeYoutubeVideoUrl(youtubeVideoUrl);
-    replace(`/admin/temalar/${res.data!.pathName}`);
+    success(res);
+    return;
+  }
+
+  const saveTheme = async (
+    newTitle: string,
+    newExplanation: string,
+    newImage: string,
+    newYoutubeVideoUrl: string
+  ) => {
+    if (title !== newTitle) {
+      const newId = slugifyLaz(newTitle);
+      withFeedback(
+        () =>
+          adminService.current.relocateTheme(id, {
+            id: newId,
+            title: newTitle,
+            explanation: newExplanation,
+            image: newImage,
+            youtubeVideoUrl: newYoutubeVideoUrl,
+            createdAt,
+            lessons,
+          }),
+        (res) => {
+          setId(newId);
+          setTitle(newTitle);
+          setExplanation(newExplanation);
+          setImage(newImage);
+          setYoutubeVideoUrl(newYoutubeVideoUrl);
+          replace(`/admin/temalar/${newId}`);
+        }
+      );
+    } else {
+      withFeedback(
+        () =>
+          adminService.current.saveTheme({
+            id,
+            explanation: newExplanation,
+            image: newImage,
+            youtubeVideoUrl: newYoutubeVideoUrl,
+          }),
+        (res) => {
+          setExplanation(newExplanation);
+          setImage(newImage);
+          setYoutubeVideoUrl(newYoutubeVideoUrl);
+        }
+      );
+    }
   };
 
   const deleteTheme = async () => {
-    setStalling(true);
-    const resObj = await fetch(`/api/admin/temalar/${themeId}`, {
-      method: "DELETE",
-    });
-    const res = (await resObj.json()) as StatusResponse;
-    setStalling(false);
-
-    if (res.status === "error") {
-      setSnackbar({
-        severity: res.status,
-        message: res.message,
-        visible: true,
-      });
-      return;
-    }
-
-    replace("/admin");
+    withFeedback(
+      () => adminService.current.deleteTheme(id),
+      (res) => replace("/admin")
+    );
   };
 
-  const saveLesson = async ({
-    title,
-    explanation,
-  }: {
-    title: string;
-    explanation: string;
-  }) => {
+  const saveLesson = async (lesson: Omit<Lesson, "activities">) => {
     if (activeLesson === null) return;
-    setStalling(true);
-    const lessonId = lessons.meta[activeLesson].id;
-    const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        type: "saveLesson",
-        themeId,
-        lessonId,
-        lessonIndex: activeLesson,
-        title,
-        explanation,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const res = (await resObj.json()) as StatusResponse;
-    setStalling(false);
-
-    if (res.status === "error") {
-      setSnackbar({
-        severity: res.status,
-        message: res.message,
-        visible: true,
-      });
-      return;
-    }
-
-    setSnackbar({
-      severity: res.status,
-      message: res.message,
-      visible: true,
-    });
-    setLessons((prev) => {
-      const newLessons = { ...prev };
-      const newLessonMeta = newLessons.meta[activeLesson];
-      newLessonMeta.title = title;
-      newLessons[newLessonMeta.id].explanation = explanation;
-      return newLessons;
-    });
+    await withFeedback(
+      () => adminService.current.saveLesson(id, lesson),
+      () => {
+        setLessons((prev) => {
+          const newLessons = [...prev];
+          newLessons[activeLesson] = { ...newLessons[activeLesson], ...lesson };
+          return newLessons;
+        });
+      }
+    );
   };
 
-  const createNewLesson = async () => {
-    setStalling(true);
-    const resObj = await fetch(`/api/admin/temalar/${themeId}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        type: "createLesson",
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const res = (await resObj.json()) as Omit<StatusResponse, "data"> & {
-      data: { lessons: LessonMap };
-    };
-    setStalling(false);
-
-    if (res.status === "error") {
-      setSnackbar({
-        severity: res.status,
-        message: res.message,
-        visible: true,
-      });
-      return;
-    }
-
-    setSnackbar({
-      severity: res.status,
-      message: res.message,
-      visible: true,
-    });
-    setLessons((prev) => ({ ...prev, ...res.data.lessons }));
-    if (activeLesson === null) {
-      setActiveLesson(0);
-    }
+  const createLesson = async () => {
+    const lesson = defaultLesson();
+    await withFeedback(
+      () => adminService.current.createLesson(id, lesson),
+      (res) => {
+        setLessons((prev) => [...prev, lesson]);
+        if (activeLesson === null) {
+          setActiveLesson(0);
+        }
+      }
+    );
   };
 
   const deleteLesson = async () => {
     if (activeLesson === null) return;
-    setStalling(true);
-    const lessonId = lessons.meta[activeLesson].id;
-    const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        type: "deleteLesson",
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const res = (await resObj.json()) as StatusResponse;
-    setStalling(false);
-
-    if (res.status === "error") {
-      setSnackbar({
-        severity: res.status,
-        message: res.message,
-        visible: true,
-      });
-      return;
-    }
-
-    setSnackbar({
-      severity: res.status,
-      message: res.message,
-      visible: true,
-    });
-    setLessons((prevLessons) => {
-      const newLessons = { ...prevLessons };
-      delete newLessons[lessonId];
-      newLessons.meta = newLessons.meta.filter(
-        (lessonMeta) => lessonMeta.id !== lessonId
-      );
-      return newLessons;
-    });
-    setActiveLesson((prev) => {
-      if (lessons.meta.length === 0) return null;
-      if (prev === null) return null;
-      if (prev > 0) return prev - 1;
-      return 0;
-    });
-  };
-
-  const createNewActivity = async () => {
-    if (activeLesson === null) return;
-    setStalling(true);
-    const lessonId = lessons.meta[activeLesson].id;
-    const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        type: "createNewActivity",
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const res = (await resObj.json()) as Omit<StatusResponse, "data"> & {
-      data: { meta: string; activity: Activity<any> };
-    };
-    setStalling(false);
-
-    if (res.status === "error") {
-      setSnackbar({
-        severity: res.status,
-        message: res.message,
-        visible: true,
-      });
-      return;
-    }
-
-    setSnackbar({
-      severity: res.status,
-      message: res.message,
-      visible: true,
-    });
-    setLessons((prev) => {
-      const newLessons = { ...prev };
-      let newActivities = { ...prev[lessonId].activities };
-      newActivities.idOrderMeta = [...newActivities.idOrderMeta, res.data.meta];
-      newActivities = {
-        ...newActivities,
-        [res.data.meta]: res.data.activity,
-      };
-      newLessons[lessonId].activities = newActivities;
-
-      return newLessons;
-    });
-  };
-
-  const deleteActivity = async ({
-    activityIndex,
-    activityId,
-  }: {
-    activityIndex: number;
-    activityId: string;
-  }) => {
-    if (activeLesson === null) return;
-    setStalling(true);
-    const lessonId = lessons.meta[activeLesson].id;
-    const resObj = await fetch(
-      `/api/admin/temalar/${themeId}/${lessonId}/${activityId}`,
-      {
-        method: "PUT",
-        body: JSON.stringify({
-          type: "deleteActivity",
-          activityIndex,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const lessonId = lessons[activeLesson].id;
+    await withFeedback(
+      () => adminService.current.deleteLesson(id, lessonId),
+      (res) => {
+        setLessons((prevLessons) =>
+          prevLessons.filter((l) => l.id !== lessonId)
+        );
+        setActiveLesson((prev) => {
+          if (prev === 0 || prev === null) return null;
+          if (prev > 0) return prev - 1;
+          return null;
+        });
       }
     );
-    const res = (await resObj.json()) as StatusResponse;
-    setStalling(false);
+  };
 
-    if (res.status === "error") {
-      setSnackbar({
-        severity: res.status,
-        message: res.message,
-        visible: true,
-      });
-      return;
-    }
+  const createActivity = async () => {
+    if (activeLesson === null) return;
+    const activity = defaultActivity();
+    const lessonId = lessons[activeLesson].id;
+    withFeedback(
+      () => adminService.current.createActivity(id, lessonId, activity),
+      () => {
+        setLessons((prev) => {
+          return prev.map((l) => {
+            if (l.id !== lessonId) return l;
+            l.activities.push(activity);
+            return l;
+          });
+        });
+      }
+    );
+  };
 
-    setSnackbar({
-      severity: res.status,
-      message: res.message,
-      visible: true,
-    });
-    setLessons((prev) => {
-      const newLessons = { ...prev };
-      const newActivities = newLessons[lessonId].activities;
-      newActivities.idOrderMeta = newActivities.idOrderMeta.filter(
-        (id, i) => id !== activityId
-      );
-      delete newActivities[activityId];
-      return newLessons;
-    });
+  const deleteActivity = async (activityId: string) => {
+    if (activeLesson === null) return;
+    const lessonId = lessons[activeLesson].id;
+    withFeedback(
+      () => adminService.current.deleteActivity(id, lessonId, activityId),
+      () => {
+        setLessons((prev) => {
+          const newLessons = [...prev] as any;
+          newLessons[activeLesson].activities = newLessons[
+            activeLesson
+          ].activities.filter((a: any) => a.id !== activityId);
+          return newLessons;
+        });
+      }
+    );
   };
 
   return {
@@ -331,10 +196,10 @@ export function useAdminViewModel(): AdminViewModel {
     snackbar,
     setSnackbar,
     // activity actions
-    createNewActivity,
+    createActivity,
     deleteActivity,
     // lesson actions
-    createNewLesson,
+    createLesson,
     saveLesson,
     deleteLesson,
     // theme actions

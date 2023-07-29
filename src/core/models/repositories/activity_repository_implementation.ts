@@ -1,8 +1,8 @@
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { ActivityRepository } from "./activity_repository";
+import { ActivityRepository } from "../../../lib/repositories/interfaces/activity_repository";
 import { Activity, LessonMap } from "../entities/learning_unit";
 import { GetItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
-import { DynamoDBClientSingleton } from "@/core/utils/dynamo_db_client_singleton";
+import { DynamoDBClientSingleton } from "@/lib/utils/dynamo_db_client_singleton";
 import { StatusResponse } from "./status_response";
 
 export class ActivityRepositoryImplementation implements ActivityRepository {

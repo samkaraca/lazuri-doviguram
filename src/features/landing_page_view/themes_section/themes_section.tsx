@@ -1,14 +1,14 @@
-import { ThemeMetaDTO } from "@/core/models/dtos/theme_meta_dto";
+import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
 import { ThemeCard } from "../theme_card/theme_card";
 import styles from "./themes_section.module.scss";
 import { ReactNode } from "react";
 
 export function ThemesSection({
-  themeMetas,
+  themePreviews,
   home,
   createNewThemeButton,
 }: {
-  themeMetas: ThemeMetaDTO[];
+  themePreviews: ThemeMetaDTO[];
   home: "/admin" | "/";
   createNewThemeButton?: ReactNode;
 }) {
@@ -18,13 +18,9 @@ export function ThemesSection({
         <h4>Temel Lazca</h4>
         <section aria-label="temalar">
           <ol className={styles["cards"]}>
-            {themeMetas.map((themeMeta) => {
+            {themePreviews.map((preview) => {
               return (
-                <ThemeCard
-                  home={home}
-                  key={themeMeta.id}
-                  themeMeta={themeMeta}
-                />
+                <ThemeCard home={home} key={preview.id} previewData={preview} />
               );
             })}
             {createNewThemeButton}

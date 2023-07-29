@@ -1,3 +1,4 @@
+import { Lesson } from "@/lib/lesson/lesson";
 import { Dispatch, SetStateAction } from "react";
 
 export interface AdminViewModel {
@@ -8,33 +9,16 @@ export interface AdminViewModel {
     visible: boolean;
   };
   setSnackbar: Dispatch<SetStateAction<AdminViewModel["snackbar"]>>;
-  createNewLesson: () => Promise<void>;
-  saveLesson: ({
-    title,
-    explanation,
-  }: {
-    title: string;
-    explanation: string;
-  }) => Promise<void>;
+  createLesson: () => Promise<void>;
+  saveLesson: (lesson: Omit<Lesson, "activities">) => Promise<void>;
   deleteLesson: () => Promise<void>;
-  createNewActivity: () => Promise<void>;
-  deleteActivity: ({
-    activityIndex,
-    activityId,
-  }: {
-    activityIndex: number;
-    activityId: string;
-  }) => Promise<void>;
-  saveTheme: ({
-    title,
-    explanation,
-    image,
-    youtubeVideoUrl,
-  }: {
-    title: string;
-    explanation: string;
-    image: string;
-    youtubeVideoUrl: string;
-  }) => Promise<void>;
+  createActivity: () => Promise<void>;
+  deleteActivity: (activityId: string) => Promise<void>;
+  saveTheme: (
+    title: string,
+    explanation: string,
+    image: string,
+    youtubeVideoUrl: string
+  ) => Promise<void>;
   deleteTheme: () => Promise<void>;
 }

@@ -8,72 +8,48 @@ import { Draggable } from "@/core/components/dnd/draggable";
 import { SimpleQuestion } from "@/core/models/entities/question";
 import { UserExerciseLocalRepositoryImplementation } from "../services/user_exercise_local_repository_implementation";
 import { ActivityFooter } from "../layout/activity_footer";
+import { SimpleExercise } from "@/lib/exercises/simple_question_exercise";
+import { useDndSetting } from "@/lib/utils/dnd_setting/use_dnd_setting";
+import { Item } from "@/lib/utils/dnd_setting/item";
+import { Blank } from "@/lib/utils/dnd_setting/blank";
+import { nanoid } from "nanoid";
 
 export function PairTextsWithImagesExercise({
   exercise,
-  activityId,
   closeActivity,
 }: {
-  exercise: SimpleQuestion[];
-  activityId: string;
+  exercise: SimpleExercise;
   closeActivity: VoidFunction;
 }) {
-  const userExerciseLocalRepository = useRef(
-    new UserExerciseLocalRepositoryImplementation()
-  );
+  const { blanks, board, startDragging, stopDragging } = useDndSetting({
+    boardData: exercise.questions.map(
+      (question) => new Item(question.id, question.answer)
+    ),
+    blanksData: exercise.questions.map(
+      (question) => new Blank(question.id, question.answer, null)
+    ),
+  });
   const [isFinished, setIsFinished] = useState(false);
-  const [dndSetting, setDndSetting] = useState<DndSetting>(
-    new DndSetting(activityId, userExerciseLocalRepository.current, new Map())
-  );
 
-  const finishActivity = () => {
-    setIsFinished(true);
-    dndSetting.saveUserDataLocally();
-  };
-
-  const reattemptToActivity = () => {
-    setDndSetting(dndSetting.reset());
-    setIsFinished(false);
-  };
-
-  useEffect(() => {
-    const answersWithKeys = new Map(
-      exercise.map(({ answer, question }, i) => {
-        return [`${i}-${question}`, answer];
-      })
-    );
-
-    const finalExerciseData = DndSetting.withUserDataFrom(
-      activityId,
-      userExerciseLocalRepository.current,
-      answersWithKeys
-    );
-
-    setDndSetting(finalExerciseData.dndSetting);
-    setIsFinished(finalExerciseData.userData);
-  }, [exercise]);
+  useEffect(() => {}, [exercise]);
 
   return (
     <article>
       <div className={activityStyles["exercise-body"]}>
         <WrapperDndContext
           disabled={isFinished}
-          dndSetting={dndSetting}
-          setDndSetting={setDndSetting}
+          blanks={blanks}
+          board={board}
+          startDragging={startDragging}
+          stopDragging={stopDragging}
         >
           <section
             aria-label="soru kartları"
             className={styles["question-cards"]}
           >
-            {exercise.map((item, index) => {
-              const { question, answer } = item;
-              const blankKey = `${index}-${question}`;
-              const boardItemEntry =
-                dndSetting.getBoardItemContainingTheLocation(blankKey);
-              const isCorrect = dndSetting.check(blankKey);
-
+            {exercise.questions.map(({ id, question }, index) => {
               return (
-                <div className={`simple-card`} key={index}>
+                <div className={`simple-card`} key={id}>
                   <img
                     alt="soru fotoğrafı"
                     src={`${process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_IMAGE_BASE_URL}/${question}`}
@@ -81,30 +57,32 @@ export function PairTextsWithImagesExercise({
                   {
                     <Droppable
                       className="full-width"
-                      status={
-                        isFinished
-                          ? isCorrect
-                            ? "success"
-                            : "error"
-                          : "neutral"
-                      }
+                      // status={
+                      //   isFinished
+                      //     ? isCorrect
+                      //       ? "success"
+                      //       : "error"
+                      //     : "neutral"
+                      // }
+                      status={"neutral"}
                       disabled={isFinished}
-                      key={blankKey}
-                      blankKey={blankKey}
+                      key={id}
+                      blankId={id}
                     >
-                      {boardItemEntry && (
+                      {blanks.find((blank) => blank.id === id)?.item && (
                         <Draggable
-                          status={
-                            isFinished
-                              ? isCorrect
-                                ? "success"
-                                : "error"
-                              : "neutral"
-                          }
+                          status={"neutral"}
+                          // status={
+                          //   isFinished
+                          //     ? isCorrect
+                          //       ? "success"
+                          //       : "error"
+                          //     : "neutral"
+                          // }
                           styleChip={{ width: "100%" }}
                           styleContainer={{ width: "100%" }}
                           disabled={isFinished}
-                          boardItemEntry={boardItemEntry}
+                          item={blanks.find((blank) => blank.id === id)!.item!}
                         />
                       )}
                     </Droppable>
@@ -115,12 +93,12 @@ export function PairTextsWithImagesExercise({
           </section>
         </WrapperDndContext>
       </div>
-      <ActivityFooter
+      {/* <ActivityFooter
         closeActivity={closeActivity}
         finishActivity={finishActivity}
         isFinished={isFinished}
         reattemptToActivity={reattemptToActivity}
-      />
+      /> */}
     </article>
   );
 }

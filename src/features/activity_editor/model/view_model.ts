@@ -1,10 +1,7 @@
-import { Activity } from "@/core/models/entities/learning_unit";
-import {
-  FillInBlanksQuestion,
-  MultipleChoiceQuestion,
-  SimpleQuestion,
-  TrueFalseQuestion,
-} from "@/core/models/entities/question";
+import { Activity } from "@/lib/activity/activity";
+import { FillInBlanksExercise } from "@/lib/exercises/fill_in_blanks_exercise";
+import { MultipleChoiceExercise } from "@/lib/exercises/multiple_choice_exercise";
+import { SimpleExercise } from "@/lib/exercises/simple_question_exercise";
 import { Dispatch, SetStateAction } from "react";
 
 export interface OptionalStringValueProperty {
@@ -17,33 +14,30 @@ export type OptionalImage = OptionalStringValueProperty;
 export type OptionalAudio = OptionalStringValueProperty;
 
 export interface IViewModel {
-  activityType: Activity<any>["activityType"];
-  changeActivityType: (newActivityType: IViewModel["activityType"]) => void;
+  id: string;
+  type: Activity["type"];
   title: string;
-  setTitle: Dispatch<SetStateAction<IViewModel["title"]>>;
   explanation: string;
-  setExplanation: Dispatch<SetStateAction<IViewModel["explanation"]>>;
   textContent: string;
-  setTextContent: Dispatch<SetStateAction<IViewModel["textContent"]>>;
-  image: OptionalImage;
-  setImage: Dispatch<SetStateAction<IViewModel["image"]>>;
   audio: OptionalAudio;
-  setAudio: Dispatch<SetStateAction<IViewModel["audio"]>>;
+  image: OptionalImage;
   youtubeVideoUrl: OptionalYoutubeVideoUrl;
+  setTitle: Dispatch<SetStateAction<IViewModel["title"]>>;
+  changeActivityType: (newActivityType: IViewModel["type"]) => void;
+  setExplanation: Dispatch<SetStateAction<IViewModel["explanation"]>>;
+  setTextContent: Dispatch<SetStateAction<IViewModel["textContent"]>>;
+  setImage: Dispatch<SetStateAction<IViewModel["image"]>>;
+  setAudio: Dispatch<SetStateAction<IViewModel["audio"]>>;
   setYoutubeVideoUrl: Dispatch<SetStateAction<IViewModel["youtubeVideoUrl"]>>;
-  fillInBlanksExercise: Map<string, FillInBlanksQuestion>;
+  fillInBlanksExercise: FillInBlanksExercise;
   setFillInBlanksExercise: Dispatch<
     SetStateAction<IViewModel["fillInBlanksExercise"]>
   >;
-  multipleChoiceExercise: Map<string, MultipleChoiceQuestion>;
+  multipleChoiceExercise: MultipleChoiceExercise;
   setMultipleChoiceExercise: Dispatch<
     SetStateAction<IViewModel["multipleChoiceExercise"]>
   >;
-  trueFalseExercise: Map<string, TrueFalseQuestion>;
-  setTrueFalseExercise: Dispatch<
-    SetStateAction<IViewModel["trueFalseExercise"]>
-  >;
-  simpleExercise: Map<string, SimpleQuestion>;
+  simpleExercise: SimpleExercise;
   setSimpleExercise: Dispatch<SetStateAction<IViewModel["simpleExercise"]>>;
   saveActivity: () => Promise<void>;
 }

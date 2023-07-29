@@ -1,12 +1,13 @@
 import { DndSetting } from "@/core/models/entities/dnd_setting";
 import { Draggable } from "@/core/components/dnd/draggable";
 import styles from "./styles.module.scss";
+import { Item } from "@/lib/utils/dnd_setting/item";
 
 export function BoardItemsBoard({
-  boardItems,
+  board,
   disabled = false,
 }: {
-  boardItems: DndSetting["boardItems"];
+  board: Item[];
   disabled: boolean;
 }) {
   return (
@@ -14,18 +15,16 @@ export function BoardItemsBoard({
       aria-label="sürüklenebilir cevaplar"
       className={`${styles["board-items-board"]}`}
     >
-      {Array.from(boardItems)
-        .filter(([key, boardItem]) => boardItem.location === null)
-        .map(([key, boardItem]) => {
-          return (
-            <Draggable
-              status="neutral"
-              disabled={disabled}
-              key={`draggable-${key}`}
-              boardItemEntry={[key, boardItem]}
-            />
-          );
-        })}
+      {board.map((item) => {
+        return (
+          <Draggable
+            status="neutral"
+            disabled={disabled}
+            key={item.id}
+            item={item}
+          />
+        );
+      })}
     </section>
   );
 }

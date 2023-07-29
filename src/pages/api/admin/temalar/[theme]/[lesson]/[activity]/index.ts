@@ -1,49 +1,30 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ActivityRepositoryImplementation } from "@/core/models/repositories/activity_repository_implementation";
+import { DynamoDBActivityRepository } from "@/lib/activity/dynamo_db_activity_repository";
+import ActivityApiService from "@/lib/services/activity_api_service";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const activityRepo = new ActivityRepositoryImplementation();
+  const activityRepo = new DynamoDBActivityRepository();
+  const activityApiService = new ActivityApiService(activityRepo);
+  const { theme, lesson, activity } = req.query as {
+    theme: string;
+    lesson: string;
+    activity: string;
+  };
 
-  if (req.method === "PUT") {
-    const { theme, lesson, activity } = req.query as {
-      theme: string;
-      lesson: string;
-      activity: string;
-    };
-    const { type } = req.body;
-
-    if (type === "saveActivity") {
-      const DBResponse = await activityRepo.saveActivity(
-        theme,
-        lesson,
-        activity,
-        req.body.activity
-      );
-      return res.status(200).send(DBResponse);
-    } else if (type === "deleteActivity") {
-      const DBResponse = await activityRepo.deleteActivity({
-        themeId: theme,
-        lessonId: lesson,
-        activityId: activity,
-        activityIndex: req.body.activityIndex,
-      });
-      return res.status(200).send(DBResponse);
-    }
-
-    return res.status(501).json({ error: "Unsopported action" });
-  } else if (req.method === "GET") {
-    const { theme, lesson, activity } = req.query as {
-      theme: string;
-      lesson: string;
-      activity: string;
-    };
-    const activityRepo = new ActivityRepositoryImplementation();
-    const rawData = await activityRepo.getActivity({
-      themeId: theme,
-      lessonId: lesson,
-      activityId: activity,
-    });
+  if (req.method === "GET") {
+    const rawData = await activityApiService.getActivity(
+      theme,
+      lesson,
+      activity
+    );
     return res.status(200).json(rawData);
+  } else if (req.method === "DELETE") {
+    const repRes = await activityApiService.deleteActivity(
+      theme,
+      lesson,
+      activity
+    );
+    return res.status(200).send(repRes);
   }
 
   return res.status(501).json({ error: "Unsopported request method" });
