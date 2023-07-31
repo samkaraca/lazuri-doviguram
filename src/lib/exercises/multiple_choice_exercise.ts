@@ -5,8 +5,7 @@ export class MultipleChoiceQuestion {
     readonly id: string,
     readonly question: string,
     readonly choices: [string, string, string, string],
-    readonly answer: 0 | 1 | 2 | 3,
-    public reply?: 0 | 1 | 2 | 3
+    readonly answer: 0 | 1 | 2 | 3
   ) {}
 
   static from(obj: MultipleChoiceQuestion) {
@@ -14,47 +13,34 @@ export class MultipleChoiceQuestion {
       obj.id,
       obj.question,
       obj.choices,
-      obj.answer,
-      obj.reply
+      obj.answer
     );
-  }
-
-  get isCorrect() {
-    return this.answer === this.reply;
   }
 }
 
-export class MultipleChoiceExercise extends Exercise<MultipleChoiceQuestion> {
-  constructor(
-    readonly activityId: string,
-    readonly questions: MultipleChoiceQuestion[]
-  ) {
-    super(activityId, questions);
+export class MultipleChoiceExercise {
+  constructor(readonly questions: MultipleChoiceQuestion[]) {}
+
+  get repliesTemplate(): {
+    id: string;
+    value: null | MultipleChoiceQuestion["answer"];
+  }[] {
+    return this.questions.map((q) => ({ id: q.id, value: null }));
   }
 
-  get grade(): number {
+  grade(
+    replies: { id: string; value: null | MultipleChoiceQuestion["answer"] }[]
+  ): number {
     let correct = 0;
     let total = 0;
 
     this.questions.forEach((question) => {
-      if (question.answer === question.reply) correct++;
+      const reply = replies.find((r) => r.id === question.id);
+      if (reply && question.answer === reply.value) correct++;
       total++;
     });
 
     return (correct / total) * 100;
-  }
-
-  protected createFrom(exercise: MultipleChoiceExercise) {
-    return MultipleChoiceExercise.from(exercise);
-  }
-
-  replyTheQuestion(questionId: string, reply: MultipleChoiceQuestion["reply"]) {
-    const questions = this.questions.map((q) => {
-      if (q.id !== questionId) return q;
-      q.reply = reply;
-      return MultipleChoiceQuestion.from(q);
-    });
-    return new MultipleChoiceExercise(this.activityId, questions);
   }
 
   static from(obj: MultipleChoiceExercise) {
@@ -64,10 +50,9 @@ export class MultipleChoiceExercise extends Exercise<MultipleChoiceQuestion> {
           question.id,
           question.question,
           question.choices,
-          question.answer,
-          question.reply
+          question.answer
         )
     );
-    return new MultipleChoiceExercise(obj.activityId, questionObjs);
+    return new MultipleChoiceExercise(questionObjs);
   }
 }

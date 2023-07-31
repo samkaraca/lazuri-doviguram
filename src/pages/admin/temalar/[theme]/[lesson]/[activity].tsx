@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 export default function ActivityEditorPage() {
   const pathname = usePathname();
   const adminService = useRef(new ActivityAdminService());
+  const [pathnames, setPathnames] = useState<[string, string, string]>();
   const [activityData, setActivityData] = useState<Activity>();
 
   const fetchActivity = async (
@@ -25,11 +26,18 @@ export default function ActivityEditorPage() {
     const themeId = splitPathname[splitPathname.length - 3];
     const lessonId = splitPathname[splitPathname.length - 2];
     const activityId = splitPathname[splitPathname.length - 1];
+    setPathnames([themeId, lessonId, activityId]);
     fetchActivity(themeId, lessonId, activityId);
   }, [pathname]);
 
-  if (activityData) {
-    return <ActivityEditor beginningActivityData={activityData} />;
+  if (activityData && pathnames) {
+    return (
+      <ActivityEditor
+        themeId={pathnames[0]}
+        lessonId={pathnames[1]}
+        activityData={activityData}
+      />
+    );
   }
 
   return (

@@ -1,85 +1,79 @@
-import { DndSetting } from "@/core/models/entities/dnd_setting";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { WrapperDndContext } from "@/core/components/dnd/wrapper_dnd_context";
 import { Droppable } from "@/core/components/dnd/droppable";
-import styles from "./styles.module.scss";
 import activityStyles from "../activity.module.scss";
 import { Draggable } from "@/core/components/dnd/draggable";
-import { ActivityFooter } from "../layout/activity_footer";
-import { UserExerciseLocalRepositoryImplementation } from "../services/user_exercise_local_repository_implementation";
-import { useDndSetting } from "@/lib/utils/dnd_setting/use_dnd_setting";
 import { Item } from "@/lib/utils/dnd_setting/item";
-import { nanoid } from "nanoid";
-import { Blank } from "@/lib/utils/dnd_setting/blank";
 import { FillInBlanksExercise } from "@/lib/exercises/fill_in_blanks_exercise";
+import { dndSettingFrom } from "@/lib/exercises/fibe_service";
+import { ActivityFooter } from "../layout/activity_footer";
+import DndSetting from "@/lib/utils/dnd_setting/dnd_setting";
 
 export function DragIntoBlanksExercise({
-  exercise,
-  activityId,
+  localData,
+  saveLocalData,
   closeActivity,
+  exercise,
 }: {
-  exercise: FillInBlanksExercise;
-  activityId: string;
+  localData?: any;
+  saveLocalData?: (data: any, grade: number) => void;
   closeActivity: VoidFunction;
+  exercise: FillInBlanksExercise;
 }) {
-  // const { blanks, board, startDragging, stopDragging } = useDndSetting({
-  //   boardData: Array.from(
-  //     exercise.answers,
-  //     ([key, { type, value }]) => new Item(key, value)
-  //   ),
-  //   blanksData: Array.from(
-  //     exercise.answers,
-  //     ([key, { type, value }]) => new Blank(key, value, null)
-  //   ),
-  // });
-  // const [isFinished, setIsFinished] = useState(false);
-  // const userExerciseLocalRepository = useRef(
-  //   new UserExerciseLocalRepositoryImplementation()
-  // );
-  // const [dndSetting, setDndSetting] = useState<DndSetting>(
-  //   new DndSetting(activityId, userExerciseLocalRepository.current, new Map())
-  // );
+  const [dndSetting, setDndSetting] = useState(dndSettingFrom(exercise));
+  const [isFinished, setIsFinished] = useState(false);
 
-  // const finishActivity = () => {
-  //   setIsFinished(true);
-  //   dndSetting.saveUserDataLocally();
-  // };
+  useEffect(() => {
+    setIsFinished(false);
+    setDndSetting(dndSettingFrom(exercise));
+    if (localData) {
+      setDndSetting(DndSetting.from(localData));
+      setIsFinished(true);
+      return;
+    }
+  }, [exercise, localData]);
 
-  // const reattemptToActivity = () => {
-  //   setDndSetting(dndSetting.reset());
-  //   setIsFinished(false);
-  // };
+  const finishActivity = () => {
+    if (saveLocalData) {
+      saveLocalData(dndSetting, 0);
+    }
+    setIsFinished(true);
+  };
 
-  // useEffect(() => {
-  //   let answersWithKeys = new Map();
+  const reattemptToActivity = () => {
+    if (saveLocalData) {
+      saveLocalData(null, 0);
+    }
+    setDndSetting(dndSettingFrom(exercise));
+    setIsFinished(false);
+  };
 
-  //   exercise.forEach((item, key) => {
-  //     const answers = item.answer;
-  //     answersWithKeys = new Map([
-  //       ...Array.from(answersWithKeys),
-  //       ...Array.from(answers),
-  //     ]);
-  //   });
+  const handleStartDragging = (item: Item) => {
+    setDndSetting(dndSetting.startDragging(item));
+  };
 
-  //   const finalExerciseData = DndSetting.withUserDataFrom(
-  //     activityId,
-  //     userExerciseLocalRepository.current,
-  //     answersWithKeys
-  //   );
-
-  //   setDndSetting(finalExerciseData.dndSetting);
-  //   setIsFinished(finalExerciseData.userData);
-  // }, [exercise]);
+  const handleStopDragging = (
+    action:
+      | {
+          type: "on-space";
+        }
+      | {
+          type: "on-blank";
+          blankId: string;
+        }
+  ) => {
+    setDndSetting(dndSetting.stopDragging(action));
+  };
 
   return (
     <article>
       <div className={activityStyles["exercise-body"]}>
         <WrapperDndContext
           disabled={isFinished}
-          blanks={blanks}
-          board={board}
-          startDragging={startDragging}
-          stopDragging={stopDragging}
+          blanks={dndSetting.blanks}
+          board={dndSetting.board}
+          startDragging={handleStartDragging}
+          stopDragging={handleStopDragging}
         >
           <section aria-label="sorular">
             <ol className={`simple composite-question-list`}>
@@ -87,50 +81,45 @@ export function DragIntoBlanksExercise({
                 return (
                   <li key={index}>
                     <section aria-label="soru içeriği">
-                      {Array.from(
-                        item.rawQuestion,
-                        ([pieceKey, { type, value }], index) => {
-                          if (type === "text") {
-                            return <p key={pieceKey}>{value}</p>;
-                          } else if (type === "blank") {
-                            return (
-                              <Droppable
-                                status={"neutral"}
-                                // status={
-                                //   isFinished
-                                //     ? isCorrect
-                                //       ? "success"
-                                //       : "error"
-                                //     : "neutral"
-                                // }
-                                disabled={isFinished}
-                                key={pieceKey}
-                                blankId={pieceKey}
-                              >
-                                {blanks.find((blank) => blank.id === pieceKey)
-                                  ?.item && (
-                                  <Draggable
-                                    status={"neutral"}
-                                    // status={
-                                    //   isFinished
-                                    //     ? isCorrect
-                                    //       ? "success"
-                                    //       : "error"
-                                    //     : "neutral"
-                                    // }
-                                    disabled={isFinished}
-                                    item={
-                                      blanks.find(
-                                        (blank) => blank.id === pieceKey
-                                      )!.item!
-                                    }
-                                  />
-                                )}
-                              </Droppable>
-                            );
-                          }
+                      {item.rawQuestion.map(({ id, type, value }) => {
+                        if (type === "text") {
+                          return <p key={id}>{value}</p>;
+                        } else if (type === "blank") {
+                          const blankItem = dndSetting.blanks.find(
+                            (blank) => blank.id === id
+                          )?.item;
+                          const isCorrect = blankItem?.value === value;
+
+                          return (
+                            <Droppable
+                              status={
+                                isFinished
+                                  ? isCorrect
+                                    ? "success"
+                                    : "error"
+                                  : "neutral"
+                              }
+                              disabled={isFinished}
+                              key={id}
+                              blankId={id}
+                            >
+                              {blankItem && (
+                                <Draggable
+                                  status={
+                                    isFinished
+                                      ? isCorrect
+                                        ? "success"
+                                        : "error"
+                                      : "neutral"
+                                  }
+                                  disabled={isFinished}
+                                  item={blankItem}
+                                />
+                              )}
+                            </Droppable>
+                          );
                         }
-                      )}
+                      })}
                     </section>
                   </li>
                 );
@@ -139,12 +128,12 @@ export function DragIntoBlanksExercise({
           </section>
         </WrapperDndContext>
       </div>
-      {/* <ActivityFooter
+      <ActivityFooter
         closeActivity={closeActivity}
         finishActivity={finishActivity}
         isFinished={isFinished}
         reattemptToActivity={reattemptToActivity}
-      /> */}
+      />
     </article>
   );
 }

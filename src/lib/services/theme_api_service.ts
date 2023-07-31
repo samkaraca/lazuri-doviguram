@@ -27,12 +27,12 @@ export default class ThemeApiService {
     }
   };
 
-  getThemePathNames = async (): Promise<ApiResponse<string[]>> => {
+  getThemeIds = async (): Promise<ApiResponse<string[]>> => {
     try {
-      const pathNames = await this.themeRepository.getThemePathNames();
+      const pathNames = await this.themeRepository.getThemeIds();
       return { status: "success", message: "", data: pathNames };
     } catch (error) {
-      console.error("ThemeApiService -> getThemePathNames: ", error);
+      console.error("ThemeApiService -> getThemeIds: ", error);
       return { status: "error", message: "" };
     }
   };

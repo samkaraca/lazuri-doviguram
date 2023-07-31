@@ -9,8 +9,7 @@ import { BaseViewModel } from "../../model/base_view_model";
 import { Activity } from "@/lib/activity/activity";
 
 export function TabPanels() {
-  const { lessons, activeLesson, openActivity, activeActivityId } =
-    useBaseViewModelContext()!;
+  const { lessons, activeLesson, openActivity } = useBaseViewModelContext()!;
 
   return (
     <div className={styles["tab-panels"]}>
@@ -22,7 +21,6 @@ export function TabPanels() {
                 <h2>{title}</h2>
                 <p style={{ maxWidth: "45em" }}>{explanation}</p>
                 <ActivitiesContainer
-                  activeActivityId={activeActivityId}
                   openActivity={openActivity}
                   activities={activities}
                 />
@@ -36,11 +34,9 @@ export function TabPanels() {
 }
 
 export function ActivitiesContainer({
-  activeActivityId,
   activities,
   openActivity,
 }: {
-  activeActivityId: string | null;
   activities: Activity[];
   openActivity: BaseViewModel["openActivity"];
 }) {
@@ -65,7 +61,7 @@ export function ActivitiesContainer({
                   <span>{localData && `%${localData.grade}`}</span>
                   <button
                     className={`simple lg ${styles["start"]}`}
-                    //onClick={() => openActivity(id, activities[id])}
+                    onClick={() => openActivity(id, activities[i])}
                   >
                     Başla
                   </button>

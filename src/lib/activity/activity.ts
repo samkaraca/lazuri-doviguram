@@ -11,6 +11,7 @@ export class Activity {
     readonly image: string | null,
     readonly youtubeVideoUrl: string | null,
     readonly audio: string | null,
+    readonly savedAt: number,
     readonly type:
       | "true-false"
       | "type-in-blanks"
@@ -32,6 +33,7 @@ export class Activity {
       obj.image,
       obj.youtubeVideoUrl,
       obj.audio,
+      obj.savedAt,
       obj.type,
       obj.type === "drag-into-blanks" || obj.type === "type-in-blanks"
         ? FillInBlanksExercise.from(obj.exercise as any)

@@ -23,7 +23,7 @@ export default async function handler(
   } else if (req.method === "GET") {
     const r = req.query.r;
     if (r === "path-names") {
-      const repRes = await themeApiService.getThemePathNames();
+      const repRes = await themeApiService.getThemeIds();
       return res.status(200).json(repRes);
     } else if (r === "theme-metas") {
       const repRes = await themeApiService.getThemeMetas();

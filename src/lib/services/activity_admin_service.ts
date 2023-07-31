@@ -14,4 +14,20 @@ export default class ActivityAdminService {
     }
     return undefined;
   }
+
+  async saveActivity(themeId: string, lessonId: string, activity: Activity) {
+    const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        type: "saveActivity",
+        activity,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return await (resObj.json() as ReturnType<
+      ActivityApiService["saveActivity"]
+    >);
+  }
 }

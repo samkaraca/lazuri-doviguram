@@ -6,7 +6,7 @@ import { MultipleChoiceExerciseForm } from "./multiple_choice_exercise_form";
 import { PairTextsWithImagesExerciseForm } from "./pair_texts_with_images_exercise_form";
 
 export default function ExerciseEditor() {
-  const { activityType } = useViewModelContext()!;
+  const { type } = useViewModelContext()!;
 
   return (
     <Paper
@@ -19,14 +19,13 @@ export default function ExerciseEditor() {
       }}
       variant="outlined"
     >
-      {activityType === "true-false" ? (
+      {type === "true-false" ? (
         <TrueOrFalseExercise />
-      ) : activityType === "type-in-blanks" ||
-        activityType === "drag-into-blanks" ? (
+      ) : type === "type-in-blanks" || type === "drag-into-blanks" ? (
         <FillOrDragExercise />
-      ) : activityType === "multiple-choice" ? (
+      ) : type === "multiple-choice" ? (
         <MultipleChoiceExerciseForm />
-      ) : activityType === "pair-texts-with-images" ? (
+      ) : type === "pair-texts-with-images" ? (
         <PairTextsWithImagesExerciseForm />
       ) : null}
     </Paper>

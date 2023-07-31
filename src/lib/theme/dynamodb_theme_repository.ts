@@ -97,7 +97,7 @@ export class DynamoDBThemeRepository implements ThemeRepository {
     return unmarshall(resItem) as any;
   };
 
-  getThemePathNames = async (): Promise<string[]> => {
+  getThemeIds = async (): Promise<string[]> => {
     const queryCommand = new QueryCommand({
       TableName: "themes",
       KeyConditionExpression: "#pk = :pk",
@@ -107,12 +107,12 @@ export class DynamoDBThemeRepository implements ThemeRepository {
       ExpressionAttributeValues: marshall({
         ":pk": "theme",
       }),
-      ProjectionExpression: "pathName",
+      ProjectionExpression: "id",
     });
 
     const resItems = (await dynamoDB.send(queryCommand)).Items;
     if (!resItems) throw Error();
-    return resItems.map((item) => unmarshall(item).pathName);
+    return resItems.map((item) => unmarshall(item).id);
   };
 
   getThemeMetas = async (): Promise<

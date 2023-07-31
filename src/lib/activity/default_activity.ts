@@ -10,11 +10,12 @@ export function defaultActivity(activity?: Partial<Activity>) {
     title: "Yeni aktivite",
     explanation: "Aktivite açıklaması...",
     type: "true-false",
-    exercise: new SimpleExercise("a123456", []),
+    exercise: new SimpleExercise([]),
     textContent: null,
     audio: null,
     image: null,
     youtubeVideoUrl: null,
+    savedAt: Date.now(),
     ...activity,
   } as Activity;
 }

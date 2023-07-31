@@ -1,4 +1,3 @@
-import { DndSetting } from "@/core/models/entities/dnd_setting";
 import { Draggable } from "@/core/components/dnd/draggable";
 import styles from "./styles.module.scss";
 import { Item } from "@/lib/utils/dnd_setting/item";

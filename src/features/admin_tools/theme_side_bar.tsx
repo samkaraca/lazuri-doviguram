@@ -8,8 +8,8 @@ import {
 } from "@mui/icons-material";
 import { useAdminViewModelContext } from "../theme_page/view_model/context_providers/admin_view_model";
 import { useBaseViewModelContext } from "../theme_page/view_model/context_providers/base_view_model";
-import { Testable } from "@/core/models/entities/testable";
 import { TextField } from "@mui/material";
+import { Testable } from "@/lib/types/testable";
 
 export function ThemeSideBar({
   isOpen,

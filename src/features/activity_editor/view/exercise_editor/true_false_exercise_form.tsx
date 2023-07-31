@@ -12,12 +12,13 @@ import {
 import { Add, Clear } from "@mui/icons-material";
 import useViewModelContext from "@/features/activity_editor/view_model";
 import { ActivityListItemPaper } from "@/core/components/list_item_paper";
-import { TrueFalseQuestion } from "@/core/models/entities/question";
 import { nanoid } from "nanoid";
 import {
-  SimpleExercise,
-  SimpleQuestion,
-} from "@/lib/exercises/simple_question_exercise";
+  addNewQuestion,
+  changeAnswer,
+  changeQuestionText,
+  removeQuestion,
+} from "@/lib/exercises/se_service";
 
 export default function TrueFalseExerciseForm() {
   const { simpleExercise, setSimpleExercise } = useViewModelContext()!;
@@ -25,7 +26,7 @@ export default function TrueFalseExerciseForm() {
   return (
     <>
       <List>
-        {simpleExercise.questions.map(({ id, answer, reply, question }) => {
+        {simpleExercise.questions.map(({ id, answer, question }) => {
           return (
             <ActivityListItemPaper key={id}>
               <ListItem
@@ -34,23 +35,11 @@ export default function TrueFalseExerciseForm() {
                     <RadioGroup
                       row
                       value={answer === "true"}
-                      onChange={(e, value) =>
-                        setSimpleExercise((prev) => {
-                          const newQuestions = prev.questions.map((q) => {
-                            if (q.id !== id) return SimpleQuestion.from(q);
-                            return SimpleQuestion.from({
-                              id: q.id,
-                              question: q.question,
-                              reply: q.reply,
-                              answer: value,
-                            });
-                          });
-                          return new SimpleExercise(
-                            prev.activityId,
-                            newQuestions
-                          );
-                        })
-                      }
+                      onChange={(e, value) => {
+                        setSimpleExercise((prev) =>
+                          changeAnswer(id, value, prev)
+                        );
+                      }}
                     >
                       <FormControlLabel
                         control={<Radio color="success" />}
@@ -64,17 +53,9 @@ export default function TrueFalseExerciseForm() {
                       />
                     </RadioGroup>
                     <IconButton
-                      onClick={() =>
-                        setSimpleExercise((prev) => {
-                          const newQuestions = prev.questions.filter(
-                            (q) => q.id !== id
-                          );
-                          return new SimpleExercise(
-                            prev.activityId,
-                            newQuestions
-                          );
-                        })
-                      }
+                      onClick={() => {
+                        setSimpleExercise((prev) => removeQuestion(id, prev));
+                      }}
                     >
                       <Clear color="error" />
                     </IconButton>
@@ -86,18 +67,9 @@ export default function TrueFalseExerciseForm() {
                   sx={{ marginRight: "13rem" }}
                   value={question}
                   onChange={(e) => {
-                    setSimpleExercise((prev) => {
-                      const newQuestions = prev.questions.map((q) => {
-                        if (q.id !== id) return SimpleQuestion.from(q);
-                        return new SimpleQuestion(
-                          q.id,
-                          e.target.value,
-                          q.answer,
-                          q.reply
-                        );
-                      });
-                      return new SimpleExercise(prev.activityId, newQuestions);
-                    });
+                    setSimpleExercise((prev) =>
+                      changeQuestionText(id, e.target.value, prev)
+                    );
                   }}
                 />
               </ListItem>
@@ -106,15 +78,9 @@ export default function TrueFalseExerciseForm() {
         })}
       </List>
       <Fab
-        onClick={() => {
-          setSimpleExercise((prev) => {
-            const newQuestions = [
-              ...prev.questions,
-              new SimpleQuestion(nanoid(), "", "false", null),
-            ];
-            return new SimpleExercise(prev.activityId, newQuestions);
-          });
-        }}
+        onClick={() =>
+          setSimpleExercise((prev) => addNewQuestion(nanoid(), "false", prev))
+        }
         color="secondary"
         size="small"
         sx={{

@@ -31,7 +31,7 @@ export async function getStaticProps(context: GetServerSidePropsContext) {
 export async function getStaticPaths() {
   const themeRepo = new DynamoDBThemeRepository();
   const adminThemeRepoService = new ApiService(themeRepo);
-  const result = await adminThemeRepoService.getThemePathNames();
+  const result = await adminThemeRepoService.getThemeIds();
 
   if (result.status === "success" && result.data) {
     const themePaths = result.data.map((item) => ({ params: { theme: item } }));
@@ -39,6 +39,6 @@ export async function getStaticPaths() {
   }
 
   console.error(
-    `/temalar/[theme] -> getStaticPaths. Error: DynamoDBThemeRepository -> getThemePathNames returned error.`
+    `/temalar/[theme] -> getStaticPaths. Error: DynamoDBThemeRepository -> getThemeIds returned error.`
   );
 }

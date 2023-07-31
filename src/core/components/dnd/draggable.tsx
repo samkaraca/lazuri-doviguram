@@ -1,4 +1,3 @@
-import { BoardItemEntry } from "@/core/models/entities/dnd_setting";
 import { useDraggable } from "@dnd-kit/core";
 import styles from "./styles.module.scss";
 import { CSSProperties } from "react";

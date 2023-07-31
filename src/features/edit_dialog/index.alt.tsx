@@ -3,9 +3,9 @@ import { YouTube as YouTubeIcon } from "@mui/icons-material";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import YouTube from "react-youtube";
 import getYouTubeID from "get-youtube-id";
-import { Testable } from "@/core/models/entities/testable";
 import styles from "./styles.module.scss";
 import { poppins } from "@/pages/_app";
+import { Testable } from "@/lib/types/testable";
 
 export interface IDialog {
   isOpen: boolean;

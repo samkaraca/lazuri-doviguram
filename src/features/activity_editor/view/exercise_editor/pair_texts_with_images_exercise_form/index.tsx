@@ -9,17 +9,14 @@ import { useState } from "react";
 import { nanoid } from "nanoid";
 import { Fab } from "@mui/material";
 import { AltEditDialog } from "@/features/edit_dialog/index.alt";
-import { Testable } from "@/core/models/entities/testable";
 import useViewModelContext from "@/features/activity_editor/view_model";
 import {
-  SimpleExercise,
-  SimpleQuestion,
-} from "@/lib/exercises/simple_question_exercise";
-
-interface ImageCard {
-  question: string;
-  answer: string;
-}
+  addNewQuestion,
+  changeAnswer,
+  changeQuestionText,
+  removeQuestion,
+} from "@/lib/exercises/se_service";
+import { Testable } from "@/lib/types/testable";
 
 export function PairTextsWithImagesExerciseForm() {
   const { simpleExercise, setSimpleExercise } = useViewModelContext()!;
@@ -30,62 +27,31 @@ export function PairTextsWithImagesExerciseForm() {
         aria-label="fotoğraf eşleştirme sorusu oluşturma formu"
         className={styles["container"]}
       >
-        {simpleExercise.questions.map(({ id, answer, question, reply }) => {
+        {simpleExercise.questions.map(({ id, answer, question }) => {
           return (
             <TextDroppableImageCard
               key={id}
               question={question}
               answer={answer}
               setAnswer={(newAnswer: string) =>
-                setSimpleExercise((prev) => {
-                  const newQuestions = prev.questions.map((q) => {
-                    if (q.id !== id) return SimpleQuestion.from(q);
-                    return new SimpleQuestion(
-                      q.id,
-                      q.question,
-                      newAnswer,
-                      q.reply
-                    );
-                  });
-                  return new SimpleExercise(prev.activityId, newQuestions);
-                })
+                setSimpleExercise((prev) => changeAnswer(id, newAnswer, prev))
               }
               setQuestion={(newQuestion: string) =>
-                setSimpleExercise((prev) => {
-                  const newQuestions = prev.questions.map((q) => {
-                    if (q.id !== id) return SimpleQuestion.from(q);
-                    return new SimpleQuestion(
-                      q.id,
-                      newQuestion,
-                      q.answer,
-                      q.reply
-                    );
-                  });
-                  return new SimpleExercise(prev.activityId, newQuestions);
-                })
+                setSimpleExercise((prev) =>
+                  changeQuestionText(id, newQuestion, prev)
+                )
               }
-              deleteItem={() => {
-                setSimpleExercise((prev) => {
-                  const newQuestions = prev.questions.filter(
-                    (q) => q.id !== id
-                  );
-                  return new SimpleExercise(prev.activityId, newQuestions);
-                });
-              }}
+              deleteItem={() =>
+                setSimpleExercise((prev) => removeQuestion(id, prev))
+              }
             />
           );
         })}
       </section>
       <Fab
-        onClick={() => {
-          setSimpleExercise((prev) => {
-            const newQuestions = [
-              ...prev.questions,
-              new SimpleQuestion(nanoid(), "", "", null),
-            ];
-            return new SimpleExercise(prev.activityId, newQuestions);
-          });
-        }}
+        onClick={() =>
+          setSimpleExercise((prev) => addNewQuestion(nanoid(), "", prev))
+        }
         color="secondary"
         size="small"
         sx={{

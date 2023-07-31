@@ -15,6 +15,7 @@ export type OptionalAudio = OptionalStringValueProperty;
 
 export interface IViewModel {
   id: string;
+  savedAt: number;
   type: Activity["type"];
   title: string;
   explanation: string;

@@ -3,12 +3,20 @@ import View from "./view";
 import { ViewModel } from "./view_model";
 
 export function ActivityEditor({
-  beginningActivityData,
+  themeId,
+  lessonId,
+  activityData,
 }: {
-  beginningActivityData: Activity;
+  themeId: string;
+  lessonId: string;
+  activityData: Activity;
 }) {
   return (
-    <ViewModel beginningActivityData={beginningActivityData}>
+    <ViewModel
+      themeId={themeId}
+      lessonId={lessonId}
+      activityData={activityData}
+    >
       <View />
     </ViewModel>
   );

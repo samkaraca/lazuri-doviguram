@@ -1,6 +1,5 @@
-import { DndSetting } from "@/core/models/entities/dnd_setting";
 import { DndContext } from "@dnd-kit/core";
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { ReactNode } from "react";
 import { BoardItemsBoard } from "./draggables_board";
 import styles from "./styles.module.scss";
 import { Item } from "@/lib/utils/dnd_setting/item";

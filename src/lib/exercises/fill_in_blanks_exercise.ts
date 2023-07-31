@@ -15,68 +15,33 @@ export class FillInBlanksQuestion {
   }
 }
 
-export class AnswerAndReply {
-  constructor(
-    readonly id: string,
-    readonly answer: string,
-    public reply?: string
-  ) {}
+export class FillInBlanksExercise {
+  constructor(readonly questions: FillInBlanksQuestion[]) {}
 
-  get isCorrect() {
-    return this.answer === this.reply;
+  get repliesTemplate(): { id: string; value: null | string }[] {
+    return this.blanks.map((b) => ({ id: b.id, value: null }));
   }
 
-  static from(obj: AnswerAndReply) {
-    return new AnswerAndReply(obj.id, obj.answer, obj.reply);
-  }
-}
-
-export class FillInBlanksExercise extends Exercise<FillInBlanksQuestion> {
-  readonly answerAndReplys: AnswerAndReply[];
-
-  constructor(
-    readonly activityId: string,
-    readonly questions: FillInBlanksQuestion[],
-    answerAndReplys?: AnswerAndReply[]
-  ) {
-    super(activityId, questions);
-    if (answerAndReplys) {
-      this.answerAndReplys = answerAndReplys;
-    } else {
-      this.answerAndReplys = questions
-        .map((q) => {
-          const blanks = q.rawQuestion.filter((e) => e.type === "blank");
-          return blanks.map((e) => new AnswerAndReply(e.id, e.value));
-        })
-        .flat();
-    }
+  get blanks() {
+    return this.questions
+      .map((q) => q.rawQuestion.filter((e) => e.type === "blank"))
+      .flat();
   }
 
-  get grade() {
+  grade(replies: { id: string; value: null | string }[]) {
     let correct = 0;
-    this.answerAndReplys.forEach((aar) => {
-      if (aar.isCorrect) correct++;
-    });
-    return (correct / this.answerAndReplys.length) * 100;
-  }
+    let total = 0;
 
-  replyTheQuestion(replyId: string, reply: AnswerAndReply["reply"]) {
-    const aars = this.answerAndReplys.map((aar) => {
-      if (aar.id !== replyId) return aar;
-      return new AnswerAndReply(aar.id, aar.answer, reply);
+    this.blanks.forEach((b) => {
+      const reply = replies.find((r) => r.id === b.id);
+      if (reply && reply.value === b.value) correct++;
+      total++;
     });
-    return new FillInBlanksExercise(this.activityId, this.questions, aars);
-  }
-
-  protected createFrom(exercise: FillInBlanksExercise) {
-    return FillInBlanksExercise.from(exercise);
+    return (correct / total) * 100;
   }
 
   static from(obj: FillInBlanksExercise) {
     const questions = obj.questions.map((q) => FillInBlanksQuestion.from(q));
-    const answerAndReplys = obj.answerAndReplys.map((aar) =>
-      AnswerAndReply.from(aar)
-    );
-    return new FillInBlanksExercise(obj.activityId, questions, answerAndReplys);
+    return new FillInBlanksExercise(questions);
   }
 }

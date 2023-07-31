@@ -9,7 +9,7 @@ export interface ThemeRepository {
   deleteTheme: (themeId: string) => Promise<any>;
   getTheme: (themeId: string) => Promise<DBTheme>;
   getThemeId: (pathName: string) => Promise<string>;
-  getThemePathNames: () => Promise<string[]>;
+  getThemeIds: () => Promise<string[]>;
   getThemeMetas: () => Promise<
     Pick<DBTheme, "id" | "title" | "image" | "lessons" | "createdAt">[]
   >;

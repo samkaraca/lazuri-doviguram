@@ -8,12 +8,16 @@ const useViewModelContext = () => useContext(ViewModelContext);
 
 export function ViewModel({
   children,
-  beginningActivityData,
+  themeId,
+  lessonId,
+  activityData,
 }: {
   children: ReactNode;
-  beginningActivityData: Activity;
+  themeId: string;
+  lessonId: string;
+  activityData: Activity;
 }) {
-  const viewModel = useViewModel(beginningActivityData);
+  const viewModel = useViewModel(themeId, lessonId, activityData);
 
   return (
     <ViewModelContext.Provider value={viewModel}>

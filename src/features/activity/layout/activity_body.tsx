@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import YouTube from "react-youtube";
 import getYouTubeID from "get-youtube-id";
 import styles from "./styles.module.scss";
-import { Activity } from "@/core/models/entities/learning_unit";
+import { Activity } from "@/lib/activity/activity";
 
 export function ActivityBody({
   title,
@@ -12,12 +12,12 @@ export function ActivityBody({
   image,
   youtubeVideoUrl,
 }: {
-  title: Activity<any>["title"];
-  textContent: Activity<any>["textContent"];
-  explanation: Activity<any>["explanation"];
-  audio: Activity<any>["audio"];
-  image: Activity<any>["image"];
-  youtubeVideoUrl: Activity<any>["youtubeVideoUrl"];
+  title: Activity["title"];
+  textContent: Activity["textContent"];
+  explanation: Activity["explanation"];
+  audio: Activity["audio"];
+  image: Activity["image"];
+  youtubeVideoUrl: Activity["youtubeVideoUrl"];
 }) {
   return (
     <section className={styles["container"]} aria-label="aktivite">

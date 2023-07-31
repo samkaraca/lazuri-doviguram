@@ -5,9 +5,11 @@ import { AddFab } from "@/core/components/add_fab";
 import { ActivityListItemPaper } from "@/core/components/list_item_paper";
 import { nanoid } from "nanoid";
 import {
-  FillInBlanksExercise,
-  FillInBlanksQuestion,
-} from "@/lib/exercises/fill_in_blanks_exercise";
+  addNewQuestion,
+  changeQuestionText,
+  joinFromTemplate,
+  removeQuestion,
+} from "@/lib/exercises/fibe_service";
 
 export default function TypeOrDragExerciseForm() {
   const { fillInBlanksExercise, setFillInBlanksExercise } =
@@ -16,22 +18,16 @@ export default function TypeOrDragExerciseForm() {
   return (
     <>
       <List>
-        {fillInBlanksExercise.questions.map((question) => {
+        {fillInBlanksExercise.questions.map(({ id, rawQuestion }) => {
           return (
-            <ActivityListItemPaper key={question.id}>
+            <ActivityListItemPaper key={id}>
               <ListItem
                 secondaryAction={
                   <IconButton
                     onClick={() => {
-                      setFillInBlanksExercise((prev) => {
-                        const newQuestions = prev.questions.filter(
-                          (q) => q.id !== question.id
-                        );
-                        return new FillInBlanksExercise(
-                          prev.activityId,
-                          newQuestions
-                        );
-                      });
+                      setFillInBlanksExercise((prev) =>
+                        removeQuestion(id, prev)
+                      );
                     }}
                   >
                     <Clear color="error" />
@@ -40,21 +36,13 @@ export default function TypeOrDragExerciseForm() {
               >
                 <Input
                   fullWidth
-                  sx={{ marginRight: "1.5rem" }}
-                  value={question}
-                  onChange={(e) => {
-                    setFillInBlanksExercise((prev) => {
-                      const newQuestions = prev.questions.map((q) => {
-                        if (q.id !== question.id)
-                          return FillInBlanksQuestion.from(q);
-                        return FillInBlanksQuestion.fromText(e.target.value);
-                      });
-                      return new FillInBlanksExercise(
-                        prev.activityId,
-                        newQuestions
-                      );
-                    });
-                  }}
+                  style={{ marginRight: "1rem" }}
+                  value={joinFromTemplate(rawQuestion)}
+                  onChange={(e) =>
+                    setFillInBlanksExercise((prev) =>
+                      changeQuestionText(id, e.target.value, prev)
+                    )
+                  }
                 />
               </ListItem>
             </ActivityListItemPaper>
@@ -62,15 +50,9 @@ export default function TypeOrDragExerciseForm() {
         })}
       </List>
       <AddFab
-        onClick={() => {
-          setFillInBlanksExercise((prev) => {
-            const newQuestions = [
-              ...prev.questions,
-              new FillInBlanksQuestion(nanoid(), new Map(), new Map()),
-            ];
-            return new FillInBlanksExercise(prev.activityId, newQuestions);
-          });
-        }}
+        onClick={() =>
+          setFillInBlanksExercise((prev) => addNewQuestion(nanoid(), prev))
+        }
       />
     </>
   );

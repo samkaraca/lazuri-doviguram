@@ -1,6 +1,7 @@
 import { Exercise } from "./exercise";
 
 export interface LocalExerciseDTO {
-  exercise: Exercise<unknown>;
+  savedAt: number;
+  data: any;
   grade: number;
 }

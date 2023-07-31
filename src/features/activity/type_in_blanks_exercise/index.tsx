@@ -1,37 +1,55 @@
 import activityStyles from "../activity.module.scss";
-import { useEffect, useRef, useState } from "react";
-import { FillInBlanksQuestion } from "@/core/models/entities/question";
+import { useEffect, useState } from "react";
 import { ActivityFooter } from "../layout/activity_footer";
-import { UserExerciseLocalRepositoryImplementation } from "../services/user_exercise_local_repository_implementation";
 import { FillInBlanksExercise } from "@/lib/exercises/fill_in_blanks_exercise";
 
 export function TypeInBlanksExercise({
-  exercise,
+  localData,
+  saveLocalData,
   closeActivity,
+  exercise,
 }: {
-  exercise: FillInBlanksExercise;
+  localData?: any;
+  saveLocalData?: (data: any, grade: number) => void;
   closeActivity: VoidFunction;
+  exercise: FillInBlanksExercise;
 }) {
-  const userExerciseLocalRepository = useRef(
-    new UserExerciseLocalRepositoryImplementation()
-  );
   const [isFinished, setIsFinished] = useState(false);
-  const [replies, setReplies] = useState<Map<string, string>[]>([]);
+  const [replies, setReplies] = useState(exercise.repliesTemplate);
 
   useEffect(() => {
-    // const localData =
-    //   userExerciseLocalRepository.current.getLocalUserActivityData({
-    //     activityId,
-    //   });
-    // if (localData && localData.exerciseData) {
-    //   setIsFinished(true);
-    //   setReplies(
-    //     localData.exerciseData.map(
-    //       (reply: [string, string][]) => new Map(reply)
-    //     )
-    //   );
-    // }
-  }, [exercise]);
+    setReplies(exercise.repliesTemplate);
+    setIsFinished(false);
+    if (localData) {
+      setReplies(localData);
+      setIsFinished(true);
+      return;
+    }
+  }, [exercise, localData]);
+
+  const finishActivity = () => {
+    if (saveLocalData) {
+      saveLocalData(replies, exercise.grade(replies));
+    }
+    setIsFinished(true);
+  };
+
+  const reattemptToActivity = () => {
+    if (saveLocalData) {
+      saveLocalData(null, exercise.grade(replies));
+    }
+    setReplies(exercise.repliesTemplate);
+    setIsFinished(false);
+  };
+
+  const handleReply = (id: string, reply: string) => {
+    setReplies((prev) => {
+      return prev.map((r) => {
+        if (r.id !== id) return r;
+        return { ...r, value: reply };
+      });
+    });
+  };
 
   return (
     <article>
@@ -41,50 +59,40 @@ export function TypeInBlanksExercise({
             return (
               <li key={index}>
                 <section aria-label="soru">
-                  {Array.from(
-                    item.rawQuestion,
-                    ([pieceKey, { type, value }]) => {
-                      if (type === "text") {
-                        return <p key={pieceKey}>{value}</p>;
-                      }
-
-                      return (
-                        <input
-                          type="text"
-                          style={{ width: "10rem" }}
-                          // className={`basic ${
-                          //   isFinished ? (isCorrect ? "success" : "error") : ""
-                          // }`}
-                          key={pieceKey}
-                          disabled={isFinished}
-                          // value={replyMap?.get(pieceKey) ?? ""}
-                          onChange={(e) => {
-                            setReplies((prev) => {
-                              const newReplies = [...prev];
-                              const newReplyMap = new Map(
-                                newReplies[index] ?? new Map()
-                              );
-                              newReplyMap.set(pieceKey, e.target.value);
-                              newReplies[index] = newReplyMap;
-                              return newReplies;
-                            });
-                          }}
-                        />
-                      );
+                  {item.rawQuestion.map(({ id, type, value }) => {
+                    if (type === "text") {
+                      return <p key={id}>{value}</p>;
                     }
-                  )}
+
+                    const reply = replies.find((r) => r.id === id);
+                    const isCorrect = reply?.value === value;
+
+                    return (
+                      <input
+                        type="text"
+                        style={{ width: "10rem" }}
+                        className={`basic ${
+                          isFinished ? (isCorrect ? "success" : "error") : ""
+                        }`}
+                        key={id}
+                        disabled={isFinished}
+                        value={reply?.value ?? ""}
+                        onChange={(e) => handleReply(id, e.target.value)}
+                      />
+                    );
+                  })}
                 </section>
               </li>
             );
           })}
         </ol>
       </div>
-      {/* <ActivityFooter
+      <ActivityFooter
         closeActivity={closeActivity}
         finishActivity={finishActivity}
         isFinished={isFinished}
         reattemptToActivity={reattemptToActivity}
-      /> */}
+      />
     </article>
   );
 }

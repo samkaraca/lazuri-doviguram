@@ -11,5 +11,6 @@ export interface DBActivity {
     | "drag-into-blanks"
     | "multiple-choice"
     | "pair-texts-with-images";
+  savedAt: number;
   exercise: any;
 }

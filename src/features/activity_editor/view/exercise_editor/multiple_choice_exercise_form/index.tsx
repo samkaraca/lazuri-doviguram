@@ -4,9 +4,12 @@ import { Fab, IconButton, Radio } from "@mui/material";
 import styles from "./styles.module.scss";
 import { nanoid } from "nanoid";
 import {
-  MultipleChoiceExercise,
-  MultipleChoiceQuestion,
-} from "@/lib/exercises/multiple_choice_exercise";
+  addNewQuestion,
+  changeAnswer,
+  changeChoiceText,
+  changeQuestionText,
+  removeQuestion,
+} from "@/lib/exercises/mce_service";
 
 export function MultipleChoiceExerciseForm() {
   const { multipleChoiceExercise, setMultipleChoiceExercise } =
@@ -16,45 +19,26 @@ export function MultipleChoiceExerciseForm() {
     <div className={styles["container"]}>
       <ol aria-label="multiple choice questions">
         {multipleChoiceExercise.questions.map(
-          ({ id, answer, choices, question, reply }) => {
+          ({ id, answer, choices, question }) => {
             return (
               <li key={id}>
                 <div className={styles["question-bar"]}>
                   <textarea
                     aria-label="question text"
                     placeholder="soru..."
+                    value={question}
                     onChange={(e) =>
-                      setMultipleChoiceExercise((prev) => {
-                        const newQuestions = prev.questions.map((q) => {
-                          if (q.id !== id)
-                            return MultipleChoiceQuestion.from(q);
-                          return new MultipleChoiceQuestion(
-                            q.id,
-                            e.target.value,
-                            q.choices,
-                            q.answer,
-                            q.reply
-                          );
-                        });
-                        return new MultipleChoiceExercise(
-                          prev.activityId,
-                          newQuestions
-                        );
-                      })
+                      setMultipleChoiceExercise((prev) =>
+                        changeQuestionText(id, e.target.value, prev)
+                      )
                     }
                   />
                   <IconButton
                     color="error"
                     onClick={() =>
-                      setMultipleChoiceExercise((prev) => {
-                        const newQuestions = prev.questions.filter(
-                          (q) => q.id !== id
-                        );
-                        return new MultipleChoiceExercise(
-                          prev.activityId,
-                          newQuestions
-                        );
-                      })
+                      setMultipleChoiceExercise((prev) =>
+                        removeQuestion(id, prev)
+                      )
                     }
                   >
                     <Clear />
@@ -67,45 +51,23 @@ export function MultipleChoiceExerciseForm() {
                         <Radio
                           checked={answer === i}
                           onClick={() =>
-                            setMultipleChoiceExercise((prev) => {
-                              const newQuestions = prev.questions.map((q) => {
-                                if (q.id !== id)
-                                  return MultipleChoiceQuestion.from(q);
-                                return new MultipleChoiceQuestion(
-                                  q.id,
-                                  q.question,
-                                  q.choices,
-                                  i as 0 | 1 | 2 | 3,
-                                  null
-                                );
-                              });
-                              return new MultipleChoiceExercise(
-                                prev.activityId,
-                                newQuestions
-                              );
-                            })
+                            setMultipleChoiceExercise((prev) =>
+                              changeAnswer(id, i as any, prev)
+                            )
                           }
                         />
                         <textarea
                           placeholder={`cevap ${i + 1}`}
+                          value={choice}
                           onChange={(e) =>
-                            setMultipleChoiceExercise((prev) => {
-                              const newQuestions = prev.questions.map((q) => {
-                                if (q.id !== id)
-                                  return MultipleChoiceQuestion.from(q);
-                                return new MultipleChoiceQuestion(
-                                  q.id,
-                                  e.target.value,
-                                  q.choices,
-                                  q.answer,
-                                  q.reply
-                                );
-                              });
-                              return new MultipleChoiceExercise(
-                                prev.activityId,
-                                newQuestions
-                              );
-                            })
+                            setMultipleChoiceExercise((prev) =>
+                              changeChoiceText(
+                                id,
+                                i as any,
+                                e.target.value,
+                                prev
+                              )
+                            )
                           }
                         />
                       </li>
@@ -119,19 +81,7 @@ export function MultipleChoiceExerciseForm() {
       </ol>
       <Fab
         onClick={() => {
-          setMultipleChoiceExercise((prev) => {
-            const newQuestions = [
-              ...prev.questions,
-              new MultipleChoiceQuestion(
-                nanoid(),
-                "",
-                ["", "", "", ""],
-                0,
-                null
-              ),
-            ];
-            return new MultipleChoiceExercise(prev.activityId, newQuestions);
-          });
+          setMultipleChoiceExercise((prev) => addNewQuestion(nanoid(), prev));
         }}
         color="secondary"
         size="small"

@@ -4,7 +4,6 @@ import EditorForm from "./editor_form";
 import { Activity } from "@/features/activity";
 import useViewModelContext from "../view_model";
 import { Activity as ActivityModel } from "@/lib/activity/activity";
-import { useBaseViewModelContext } from "@/features/theme_page/view_model/context_providers/base_view_model";
 
 export default function View() {
   const {
@@ -19,6 +18,7 @@ export default function View() {
     multipleChoiceExercise,
     fillInBlanksExercise,
     simpleExercise,
+    savedAt,
     saveActivity,
   } = useViewModelContext()!;
 
@@ -40,6 +40,7 @@ export default function View() {
         <EditorForm />
         <div className={styles["simple-container"]}>
           <Activity
+            localData={null}
             closeActivity={() => {}}
             activity={ActivityModel.from({
               id,
@@ -47,6 +48,7 @@ export default function View() {
               title,
               explanation,
               textContent,
+              savedAt,
               audio: audio.status === "success" ? audio.value : null,
               image: image.status === "success" ? image.value : null,
               youtubeVideoUrl:
