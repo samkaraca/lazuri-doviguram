@@ -1,5 +1,5 @@
 import IFillInBlanksExercise from "@/lib/exercise/fill_in_blanks_exercise/fill_in_blanks_exercise";
-import * as DndService from "./dnd_service";
+import * as DndService from "./dnd_services";
 
 describe("dnd_service module", () => {
   describe("stopDragging()", () => {

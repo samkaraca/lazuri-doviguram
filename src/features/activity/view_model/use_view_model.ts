@@ -4,7 +4,7 @@ import IDraggable from "@/lib/utils/dnd_setting/draggable";
 import IActivity from "@/lib/activity/activity";
 import IReply from "@/lib/exercise/reply";
 import * as ExerciseServices from "@/lib/exercise/exercise_services";
-import * as DndService from "@/lib/utils/dnd_setting/dnd_service";
+import * as DndService from "@/lib/utils/dnd_setting/dnd_services";
 
 export function useViewModel(
   activityData: IActivity,

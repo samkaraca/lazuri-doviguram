@@ -24,7 +24,6 @@ export function PairTextsWithImagesExercise() {
       <div className={activityStyles["exercise-body"]}>
         <WrapperDndContext
           disabled={isSolved}
-          blanks={replies}
           board={dndBoard}
           startDragging={handleStartDragging}
           stopDragging={handleStopDragging}

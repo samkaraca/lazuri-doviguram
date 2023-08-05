@@ -23,7 +23,6 @@ export function DragIntoBlanksExercise() {
       <div className={activityStyles["exercise-body"]}>
         <WrapperDndContext
           disabled={isSolved}
-          blanks={replies}
           board={dndBoard}
           startDragging={handleStartDragging}
           stopDragging={handleStopDragging}
