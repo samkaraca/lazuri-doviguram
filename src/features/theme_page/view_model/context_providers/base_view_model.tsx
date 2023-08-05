@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useContext } from "react";
 import { useBaseViewModel } from "../use_base_view_model";
 import { BaseViewModel } from "../../model/base_view_model";
-import { Theme } from "@/lib/theme/theme";
+import ITheme from "@/lib/theme/theme";
 
 const BaseViewModelContext = createContext<BaseViewModel | null>(null);
 
@@ -10,7 +10,7 @@ export function BaseViewModel({
   theme,
 }: {
   children: ReactNode;
-  theme: Theme;
+  theme: ITheme;
 }) {
   const viewModel = useBaseViewModel(theme);
 

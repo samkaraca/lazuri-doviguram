@@ -1,4 +1,4 @@
-import { Activity } from "@/lib/activity/activity";
+import IActivity from "@/lib/activity/activity";
 import View from "./view";
 import { ViewModel } from "./view_model";
 
@@ -9,7 +9,7 @@ export function ActivityEditor({
 }: {
   themeId: string;
   lessonId: string;
-  activityData: Activity;
+  activityData: IActivity;
 }) {
   return (
     <ViewModel

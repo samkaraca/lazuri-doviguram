@@ -1,7 +1,5 @@
-import { Activity } from "@/lib/activity/activity";
-import { FillInBlanksExercise } from "@/lib/exercises/fill_in_blanks_exercise";
-import { MultipleChoiceExercise } from "@/lib/exercises/multiple_choice_exercise";
-import { SimpleExercise } from "@/lib/exercises/simple_question_exercise";
+import IActivity from "@/lib/activity/activity";
+import IExercise from "@/lib/exercise/exercise";
 import { Dispatch, SetStateAction } from "react";
 
 export interface OptionalStringValueProperty {
@@ -16,7 +14,7 @@ export type OptionalAudio = OptionalStringValueProperty;
 export interface IViewModel {
   id: string;
   savedAt: number;
-  type: Activity["type"];
+  type: IActivity["type"];
   title: string;
   explanation: string;
   textContent: string;
@@ -30,15 +28,7 @@ export interface IViewModel {
   setImage: Dispatch<SetStateAction<IViewModel["image"]>>;
   setAudio: Dispatch<SetStateAction<IViewModel["audio"]>>;
   setYoutubeVideoUrl: Dispatch<SetStateAction<IViewModel["youtubeVideoUrl"]>>;
-  fillInBlanksExercise: FillInBlanksExercise;
-  setFillInBlanksExercise: Dispatch<
-    SetStateAction<IViewModel["fillInBlanksExercise"]>
-  >;
-  multipleChoiceExercise: MultipleChoiceExercise;
-  setMultipleChoiceExercise: Dispatch<
-    SetStateAction<IViewModel["multipleChoiceExercise"]>
-  >;
-  simpleExercise: SimpleExercise;
-  setSimpleExercise: Dispatch<SetStateAction<IViewModel["simpleExercise"]>>;
+  exercise: IExercise;
+  setExercise: Dispatch<SetStateAction<IViewModel["exercise"]>>;
   saveActivity: () => Promise<void>;
 }

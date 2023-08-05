@@ -1,6 +1,6 @@
 import { ActivityEditor } from "@/features/activity_editor";
-import { Activity } from "@/lib/activity/activity";
-import ActivityAdminService from "@/lib/services/activity_admin_service";
+import IActivity from "@/lib/activity/activity";
+import ActivityAdminService from "@/lib/services/activity/activity_admin_service";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -8,7 +8,7 @@ export default function ActivityEditorPage() {
   const pathname = usePathname();
   const adminService = useRef(new ActivityAdminService());
   const [pathnames, setPathnames] = useState<[string, string, string]>();
-  const [activityData, setActivityData] = useState<Activity>();
+  const [activityData, setActivityData] = useState<IActivity>();
 
   const fetchActivity = async (
     themeId: string,

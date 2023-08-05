@@ -1,8 +1,8 @@
 import { nanoid } from "nanoid";
 import { slugifyLaz } from "../utils/slugify_laz";
-import { Theme } from "./theme";
+import ITheme from "./theme";
 
-export const defaultTheme = (theme?: Partial<Theme>) => {
+export const defaultTheme = (theme?: Partial<ITheme>) => {
   const id = nanoid(7);
 
   return {
@@ -17,5 +17,5 @@ export const defaultTheme = (theme?: Partial<Theme>) => {
       createdAt: Date.now(),
     },
     ...theme,
-  } as Theme;
+  } as ITheme;
 };

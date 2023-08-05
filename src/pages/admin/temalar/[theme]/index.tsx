@@ -2,8 +2,8 @@ import TP from "@/features/theme_page";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
-import { Theme } from "@/lib/theme/theme";
-import ThemeAdminService from "@/lib/services/theme_admin_service";
+import ThemeAdminService from "@/lib/services/theme/theme_admin_service";
+import ITheme from "@/lib/theme/theme";
 
 const AT = dynamic(() => import("@/features/admin_tools"), {
   ssr: false,
@@ -12,7 +12,7 @@ const AT = dynamic(() => import("@/features/admin_tools"), {
 export default function ThemePage() {
   const pathname = usePathname();
   const adminService = useRef(new ThemeAdminService());
-  const [themeData, setThemeData] = useState<Theme>();
+  const [themeData, setThemeData] = useState<ITheme>();
 
   const fetchTheme = async (pathName: string) => {
     setThemeData(await adminService.current.fetchTheme(pathName));

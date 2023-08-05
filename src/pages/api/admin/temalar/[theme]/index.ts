@@ -1,13 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { DynamoDBThemeRepository } from "@/lib/theme/dynamodb_theme_repository";
-import { DynamoDBLessonRepository } from "@/lib/lesson/dynamodb_lesson_repository";
-import ThemeApiService from "@/lib/services/theme_api_service";
-import LessonApiService from "@/lib/services/lesson_api_service";
+import { DynamoDBThemeRepository } from "@/lib/repositories/theme/dynamodb_theme_repository";
+import { DynamoDBLessonRepository } from "@/lib/repositories/lesson/dynamodb_lesson_repository";
+import LessonApiService from "@/lib/services/lesson/lesson_api_service";
+import ThemeApiService from "@/lib/services/theme/theme_api_service";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const themeRepo = new DynamoDBThemeRepository();
   const lessonRepo = new DynamoDBLessonRepository();
-  const apiService = new ThemeApiService(themeRepo);
   const lessonApiService = new LessonApiService(lessonRepo);
   const themeApiService = new ThemeApiService(themeRepo);
   const theme = req.query.theme as string;
@@ -29,10 +28,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(200).send(repRes);
     }
   } else if (req.method === "DELETE") {
-    const repRes = await apiService.deleteTheme(theme);
+    const repRes = await themeApiService.deleteTheme(theme);
     return res.status(200).json(repRes);
   } else if (req.method === "GET") {
-    const repRes = await apiService.getTheme(theme);
+    const repRes = await themeApiService.getTheme(theme);
     return res.status(200).json(repRes);
   } else if (req.method === "POST") {
     const type = req.body.type;

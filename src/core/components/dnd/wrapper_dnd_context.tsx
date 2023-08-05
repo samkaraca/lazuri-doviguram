@@ -1,9 +1,9 @@
 import { DndContext } from "@dnd-kit/core";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { BoardItemsBoard } from "./draggables_board";
 import styles from "./styles.module.scss";
-import { Item } from "@/lib/utils/dnd_setting/item";
-import { Blank } from "@/lib/utils/dnd_setting/blank";
+import IBlank from "@/lib/utils/dnd_setting/blank";
+import IDraggable from "@/lib/utils/dnd_setting/draggable";
 
 export function WrapperDndContext({
   board,
@@ -13,9 +13,9 @@ export function WrapperDndContext({
   children,
   disabled = false,
 }: {
-  board: Item[];
-  blanks: Blank[];
-  startDragging: (item: Item) => void;
+  board: IDraggable[];
+  blanks: IBlank[];
+  startDragging: (item: IDraggable) => void;
   stopDragging: (
     action:
       | {

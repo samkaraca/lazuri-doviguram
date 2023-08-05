@@ -1,4 +1,4 @@
-import { Lesson } from "@/lib/lesson/lesson";
+import ILesson from "@/lib/lesson/lesson";
 import { Dispatch, SetStateAction } from "react";
 
 export interface AdminViewModel {
@@ -10,7 +10,7 @@ export interface AdminViewModel {
   };
   setSnackbar: Dispatch<SetStateAction<AdminViewModel["snackbar"]>>;
   createLesson: () => Promise<void>;
-  saveLesson: (lesson: Omit<Lesson, "activities">) => Promise<void>;
+  saveLesson: (lesson: Omit<ILesson, "activities">) => Promise<void>;
   deleteLesson: () => Promise<void>;
   createActivity: () => Promise<void>;
   deleteActivity: (activityId: string) => Promise<void>;

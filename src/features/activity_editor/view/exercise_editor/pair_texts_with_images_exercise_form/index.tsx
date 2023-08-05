@@ -10,16 +10,14 @@ import { nanoid } from "nanoid";
 import { Fab } from "@mui/material";
 import { AltEditDialog } from "@/features/edit_dialog/index.alt";
 import useViewModelContext from "@/features/activity_editor/view_model";
-import {
-  addNewQuestion,
-  changeAnswer,
-  changeQuestionText,
-  removeQuestion,
-} from "@/lib/exercises/se_service";
 import { Testable } from "@/lib/types/testable";
+import * as AdminBEServices from "@/lib/exercise/qa_exercise/admin_qae_services";
+import IQAExercise from "@/lib/exercise/qa_exercise/qa_exercise";
 
 export function PairTextsWithImagesExerciseForm() {
-  const { simpleExercise, setSimpleExercise } = useViewModelContext()!;
+  const viewModel = useViewModelContext()!;
+  const { setExercise } = viewModel;
+  const exercise = viewModel.exercise as IQAExercise;
 
   return (
     <div>
@@ -27,22 +25,32 @@ export function PairTextsWithImagesExerciseForm() {
         aria-label="fotoğraf eşleştirme sorusu oluşturma formu"
         className={styles["container"]}
       >
-        {simpleExercise.questions.map(({ id, answer, question }) => {
+        {exercise.template.map(({ id, questionText }) => {
+          const answer = exercise.answers.find((a) => a.id === id);
+
           return (
             <TextDroppableImageCard
               key={id}
-              question={question}
-              answer={answer}
+              question={questionText}
+              answer={answer?.value ?? ""}
               setAnswer={(newAnswer: string) =>
-                setSimpleExercise((prev) => changeAnswer(id, newAnswer, prev))
+                setExercise((prev) =>
+                  AdminBEServices.changeAnswer(id, newAnswer, prev as any)
+                )
               }
               setQuestion={(newQuestion: string) =>
-                setSimpleExercise((prev) =>
-                  changeQuestionText(id, newQuestion, prev)
+                setExercise((prev) =>
+                  AdminBEServices.changeQuestionText(
+                    id,
+                    newQuestion,
+                    prev as any
+                  )
                 )
               }
               deleteItem={() =>
-                setSimpleExercise((prev) => removeQuestion(id, prev))
+                setExercise((prev) =>
+                  AdminBEServices.removeQuestion(id, prev as any)
+                )
               }
             />
           );
@@ -50,7 +58,9 @@ export function PairTextsWithImagesExerciseForm() {
       </section>
       <Fab
         onClick={() =>
-          setSimpleExercise((prev) => addNewQuestion(nanoid(), "", prev))
+          setExercise((prev) =>
+            AdminBEServices.addNewQuestion(nanoid(), "", "", prev as any)
+          )
         }
         color="secondary"
         size="small"

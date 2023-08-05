@@ -1,17 +1,17 @@
 import { GetServerSidePropsContext } from "next";
 import TP from "@/features/theme_page";
-import { Theme } from "@/lib/theme/theme";
-import { DynamoDBThemeRepository } from "@/lib/theme/dynamodb_theme_repository";
-import ApiService from "@/lib/services/theme_api_service";
+import { DynamoDBThemeRepository } from "@/lib/repositories/theme/dynamodb_theme_repository";
+import ITheme from "@/lib/theme/theme";
+import ThemeApiService from "@/lib/services/theme/theme_api_service";
 
-export default function ThemePage({ themeData }: { themeData: Theme }) {
-  return <TP home="/" theme={Theme.from(themeData)} />;
+export default function ThemePage({ themeData }: { themeData: ITheme }) {
+  return <TP home="/" theme={themeData} />;
 }
 
 export async function getStaticProps(context: GetServerSidePropsContext) {
   const path = context.params as unknown as { theme: string };
   const themeRepo = new DynamoDBThemeRepository();
-  const adminThemeRepoService = new ApiService(themeRepo);
+  const adminThemeRepoService = new ThemeApiService(themeRepo);
   const res = await adminThemeRepoService.getTheme(path.theme);
 
   if (res.status === "success" && res.data) {
@@ -30,7 +30,7 @@ export async function getStaticProps(context: GetServerSidePropsContext) {
 
 export async function getStaticPaths() {
   const themeRepo = new DynamoDBThemeRepository();
-  const adminThemeRepoService = new ApiService(themeRepo);
+  const adminThemeRepoService = new ThemeApiService(themeRepo);
   const result = await adminThemeRepoService.getThemeIds();
 
   if (result.status === "success" && result.data) {

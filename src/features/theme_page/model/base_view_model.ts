@@ -1,5 +1,6 @@
-import { Activity } from "@/lib/activity/activity";
-import { Lesson } from "@/lib/lesson/lesson";
+import IActivity from "@/lib/activity/activity";
+import ILesson from "@/lib/lesson/lesson";
+import ILocalExercise from "@/lib/repositories/local_exercise_repository/local_exercise";
 import { Dispatch, SetStateAction } from "react";
 
 export interface BaseViewModel {
@@ -9,13 +10,14 @@ export interface BaseViewModel {
   explanation: string;
   image: string;
   youtubeVideoUrl: string;
-  lessons: Lesson[];
+  lessons: ILesson[];
   createdAt: number;
   // view related
   activeLesson: number | null;
   activeActivityId: string | null;
-  activeActivity: Activity | null;
+  activeActivity: IActivity | null;
   isActivityDialogOpen: boolean;
+  localExerciseDatas: Map<string, ILocalExercise | null>;
   // setters
   setId: Dispatch<SetStateAction<BaseViewModel["id"]>>;
   setTitle: Dispatch<SetStateAction<BaseViewModel["title"]>>;
@@ -26,6 +28,6 @@ export interface BaseViewModel {
   >;
   setLessons: Dispatch<SetStateAction<BaseViewModel["lessons"]>>;
   setActiveLesson: Dispatch<SetStateAction<BaseViewModel["activeLesson"]>>;
-  openActivity: (activityId: string, activity: Activity) => void;
+  openActivity: (activityId: string, activity: IActivity) => void;
   closeActivity: () => void;
 }

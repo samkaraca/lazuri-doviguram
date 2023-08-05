@@ -1,9 +1,8 @@
 import { AppBar, Button, Toolbar, Typography } from "@mui/material";
 import styles from "./styles.module.scss";
 import EditorForm from "./editor_form";
-import { Activity } from "@/features/activity";
 import useViewModelContext from "../view_model";
-import { Activity as ActivityModel } from "@/lib/activity/activity";
+import { Activity } from "@/features/activity";
 
 export default function View() {
   const {
@@ -15,9 +14,7 @@ export default function View() {
     explanation,
     textContent,
     type,
-    multipleChoiceExercise,
-    fillInBlanksExercise,
-    simpleExercise,
+    exercise,
     savedAt,
     saveActivity,
   } = useViewModelContext()!;
@@ -40,9 +37,8 @@ export default function View() {
         <EditorForm />
         <div className={styles["simple-container"]}>
           <Activity
-            localData={null}
             closeActivity={() => {}}
-            activity={ActivityModel.from({
+            activityData={{
               id,
               type,
               title,
@@ -55,13 +51,8 @@ export default function View() {
                 youtubeVideoUrl.status === "success"
                   ? youtubeVideoUrl.value
                   : null,
-              exercise:
-                type === "drag-into-blanks" || type === "type-in-blanks"
-                  ? fillInBlanksExercise
-                  : type === "pair-texts-with-images" || type === "true-false"
-                  ? simpleExercise
-                  : multipleChoiceExercise,
-            })}
+              exercise,
+            }}
           />
         </div>
       </div>

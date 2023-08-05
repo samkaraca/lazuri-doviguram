@@ -1,4 +1,4 @@
-import { Theme } from "@/lib/theme/theme";
+import ITheme from "@/lib/theme/theme";
 import { View } from "./view";
 import { ViewModel } from "./view_model";
 import { ReactNode } from "react";
@@ -8,7 +8,7 @@ export default function ThemePage({
   home,
   adminTools,
 }: {
-  theme: Theme;
+  theme: ITheme;
   home: "/admin" | "/";
   adminTools?: ReactNode;
 }) {

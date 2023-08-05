@@ -6,10 +6,14 @@ import {
   TaskAltRounded,
 } from "@mui/icons-material";
 import { BaseViewModel } from "../../model/base_view_model";
-import { Activity } from "@/lib/activity/activity";
+import { useEffect, useRef, useState } from "react";
+import IActivity from "@/lib/activity/activity";
+import createLocalExerciseRepository from "@/lib/repositories/local_exercise_repository/local_exercise_repository_implementation";
+import ILocalExercise from "@/lib/repositories/local_exercise_repository/local_exercise";
 
 export function TabPanels() {
-  const { lessons, activeLesson, openActivity } = useBaseViewModelContext()!;
+  const { lessons, activeLesson, openActivity, localExerciseDatas } =
+    useBaseViewModelContext()!;
 
   return (
     <div className={styles["tab-panels"]}>
@@ -21,6 +25,7 @@ export function TabPanels() {
                 <h2>{title}</h2>
                 <p style={{ maxWidth: "45em" }}>{explanation}</p>
                 <ActivitiesContainer
+                  localExerciseDatas={localExerciseDatas}
                   openActivity={openActivity}
                   activities={activities}
                 />
@@ -36,9 +41,11 @@ export function TabPanels() {
 export function ActivitiesContainer({
   activities,
   openActivity,
+  localExerciseDatas,
 }: {
-  activities: Activity[];
+  activities: IActivity[];
   openActivity: BaseViewModel["openActivity"];
+  localExerciseDatas: Map<string, ILocalExercise | null>;
 }) {
   return (
     <section className={styles["activities"]} aria-label="aktiviteler">
@@ -50,15 +57,22 @@ export function ActivitiesContainer({
       ) : (
         <ol className={styles["activity-list"]}>
           {activities.map(({ id, title }, i) => {
-            const localData: any = null;
+            const localExerciseData = localExerciseDatas.get(id);
+
             return (
               <li key={id} className={styles["activity-card"]}>
                 <div className={styles["left-group"]}>
-                  {localData ? <TaskAltRounded /> : <RadioButtonUnchecked />}
+                  {localExerciseData ? (
+                    <TaskAltRounded />
+                  ) : (
+                    <RadioButtonUnchecked />
+                  )}
                   <h3>{title}</h3>
                 </div>
                 <div className={styles["right-group"]}>
-                  <span>{localData && `%${localData.grade}`}</span>
+                  <span>
+                    {localExerciseData && `%${localExerciseData.grade}`}
+                  </span>
                   <button
                     className={`simple lg ${styles["start"]}`}
                     onClick={() => openActivity(id, activities[i])}

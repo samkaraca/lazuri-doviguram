@@ -1,12 +1,12 @@
 import { Draggable } from "@/core/components/dnd/draggable";
 import styles from "./styles.module.scss";
-import { Item } from "@/lib/utils/dnd_setting/item";
+import IDraggable from "@/lib/utils/dnd_setting/draggable";
 
 export function BoardItemsBoard({
   board,
   disabled = false,
 }: {
-  board: Item[];
+  board: IDraggable[];
   disabled: boolean;
 }) {
   return (

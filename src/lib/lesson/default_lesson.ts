@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
-import { Lesson } from "./lesson";
+import ILesson from "./lesson";
 
-export function defaultLesson(lesson?: Partial<Lesson>) {
+export function defaultLesson(lesson?: Partial<ILesson>) {
   const id = nanoid(7);
 
   return {
@@ -10,5 +10,5 @@ export function defaultLesson(lesson?: Partial<Lesson>) {
     explanation: "Ders açıklaması...",
     activities: [],
     ...lesson,
-  } as Lesson;
+  } as ILesson;
 }

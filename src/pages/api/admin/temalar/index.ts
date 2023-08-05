@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { DynamoDBThemeRepository } from "@/lib/theme/dynamodb_theme_repository";
-import ThemeApiService from "@/lib/services/theme_api_service";
+import { DynamoDBThemeRepository } from "@/lib/repositories/theme/dynamodb_theme_repository";
+import ThemeApiService from "@/lib/services/theme/theme_api_service";
 
 export default async function handler(
   req: NextApiRequest,

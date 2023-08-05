@@ -1,9 +1,8 @@
 import { LandingPageView } from "@/features/landing_page_view";
-import ThemeAdminService from "@/lib/services/theme_admin_service";
-import ApiService from "@/lib/services/theme_api_service";
+import ThemeAdminService from "@/lib/services/theme/theme_admin_service";
+import ThemeApiService from "@/lib/services/theme/theme_api_service";
 import { defaultTheme } from "@/lib/theme/default_theme";
 import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
-import { ThemeRepository } from "@/lib/theme/theme_repository";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 
@@ -15,7 +14,7 @@ export default function AdminPage() {
   const fetchThemeMetas = async () => {
     const resObj = await fetch(`/api/admin/temalar?r=theme-metas`);
     const res = await (resObj.json() as ReturnType<
-      ApiService["getThemeMetas"]
+      ThemeApiService["getThemeMetas"]
     >);
     if (res.status === "success" && res.data) {
       setThemeMetas(res.data);

@@ -28,7 +28,6 @@ export function View({
     title,
     explanation,
     image,
-    activeActivityId,
   } = useBaseViewModelContext() as BaseViewModel;
 
   return (

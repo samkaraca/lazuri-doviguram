@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useContext } from "react";
 import { IViewModel } from "../model/view_model";
 import { useViewModel } from "./use_view_model";
-import { Activity } from "@/lib/activity/activity";
+import IActivity from "@/lib/activity/activity";
 
 const ViewModelContext = createContext<IViewModel | null>(null);
 const useViewModelContext = () => useContext(ViewModelContext);
@@ -15,7 +15,7 @@ export function ViewModel({
   children: ReactNode;
   themeId: string;
   lessonId: string;
-  activityData: Activity;
+  activityData: IActivity;
 }) {
   const viewModel = useViewModel(themeId, lessonId, activityData);
 

@@ -6,7 +6,7 @@ import YouTube from "react-youtube";
 import { NextImageContainer } from "@/core/components/next_image_container";
 import getYouTubeID from "get-youtube-id";
 import ExerciseEditor from "./exercise_editor";
-import { Activity } from "@/lib/activity/activity";
+import IActivity from "@/lib/activity/activity";
 
 const activityTypeMap = {
   "true-false": "Doğru yanlış",
@@ -43,7 +43,7 @@ export default function EditorForm() {
         <Select
           value={type}
           onChange={(e) =>
-            changeActivityType(e.target.value as Activity["type"])
+            changeActivityType(e.target.value as IActivity["type"])
           }
           label="Aktivite türü"
           labelId="activity-type-select-label"

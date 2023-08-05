@@ -3,85 +3,91 @@ import { Add, Clear } from "@mui/icons-material";
 import { Fab, IconButton, Radio } from "@mui/material";
 import styles from "./styles.module.scss";
 import { nanoid } from "nanoid";
-import {
-  addNewQuestion,
-  changeAnswer,
-  changeChoiceText,
-  changeQuestionText,
-  removeQuestion,
-} from "@/lib/exercises/mce_service";
+import * as AdminMCEServices from "@/lib/exercise/multiple_choice_exercise/admin_mce_services";
+import IMultipleChoiceExercise from "@/lib/exercise/multiple_choice_exercise/multiple_choice_exercise";
 
 export function MultipleChoiceExerciseForm() {
-  const { multipleChoiceExercise, setMultipleChoiceExercise } =
-    useViewModelContext()!;
+  const viewModel = useViewModelContext()!;
+  const { setExercise } = viewModel;
+  const exercise = viewModel.exercise as IMultipleChoiceExercise;
 
   return (
     <div className={styles["container"]}>
       <ol aria-label="multiple choice questions">
-        {multipleChoiceExercise.questions.map(
-          ({ id, answer, choices, question }) => {
-            return (
-              <li key={id}>
-                <div className={styles["question-bar"]}>
-                  <textarea
-                    aria-label="question text"
-                    placeholder="soru..."
-                    value={question}
-                    onChange={(e) =>
-                      setMultipleChoiceExercise((prev) =>
-                        changeQuestionText(id, e.target.value, prev)
+        {exercise.template.map(({ id, choices, questionText }) => {
+          return (
+            <li key={id}>
+              <div className={styles["question-bar"]}>
+                <textarea
+                  aria-label="question text"
+                  placeholder="soru..."
+                  value={questionText}
+                  onChange={(e) =>
+                    setExercise((prev) =>
+                      AdminMCEServices.changeQuestionText(
+                        id,
+                        e.target.value,
+                        prev as any
                       )
-                    }
-                  />
-                  <IconButton
-                    color="error"
-                    onClick={() =>
-                      setMultipleChoiceExercise((prev) =>
-                        removeQuestion(id, prev)
-                      )
-                    }
-                  >
-                    <Clear />
-                  </IconButton>
-                </div>
-                <ul aria-label="choices">
-                  {choices.map((choice, i) => {
-                    return (
-                      <li key={i}>
-                        <Radio
-                          checked={answer === i}
-                          onClick={() =>
-                            setMultipleChoiceExercise((prev) =>
-                              changeAnswer(id, i as any, prev)
+                    )
+                  }
+                />
+                <IconButton
+                  color="error"
+                  onClick={() =>
+                    setExercise((prev) =>
+                      AdminMCEServices.removeQuestion(id, prev as any)
+                    )
+                  }
+                >
+                  <Clear />
+                </IconButton>
+              </div>
+              <ul aria-label="choices">
+                {choices.map((choice, i) => {
+                  const answer = exercise.answers.find((a) => a.id === id);
+
+                  return (
+                    <li key={i}>
+                      <Radio
+                        checked={answer?.value === i.toString()}
+                        onClick={() => {
+                          setExercise((prev) =>
+                            AdminMCEServices.changeAnswer(
+                              id,
+                              i.toString() as "0" | "1" | "2" | "3",
+                              prev as any
                             )
-                          }
-                        />
-                        <textarea
-                          placeholder={`cevap ${i + 1}`}
-                          value={choice}
-                          onChange={(e) =>
-                            setMultipleChoiceExercise((prev) =>
-                              changeChoiceText(
-                                id,
-                                i as any,
-                                e.target.value,
-                                prev
-                              )
+                          );
+                        }}
+                      />
+                      <textarea
+                        placeholder={`cevap ${i + 1}`}
+                        value={choice}
+                        onChange={(e) =>
+                          setExercise((prev) =>
+                            AdminMCEServices.changeChoiceText(
+                              id,
+                              i as any,
+                              e.target.value,
+                              prev as any
                             )
-                          }
-                        />
-                      </li>
-                    );
-                  })}
-                </ul>
-              </li>
-            );
-          }
-        )}
+                          )
+                        }
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            </li>
+          );
+        })}
       </ol>
       <Fab
         onClick={() => {
-          setMultipleChoiceExercise((prev) => addNewQuestion(nanoid(), prev));
+          setExercise((prev) =>
+            AdminMCEServices.addNewQuestion(nanoid(), prev as any)
+          );
         }}
         color="secondary"
         size="small"

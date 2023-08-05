@@ -1,8 +1,7 @@
 import { nanoid } from "nanoid";
-import { SimpleExercise } from "../exercises/simple_question_exercise";
-import { Activity } from "./activity";
+import IActivity from "./activity";
 
-export function defaultActivity(activity?: Partial<Activity>) {
+export function defaultActivity(activity?: Partial<IActivity>) {
   const id = nanoid(7);
 
   return {
@@ -10,12 +9,12 @@ export function defaultActivity(activity?: Partial<Activity>) {
     title: "Yeni aktivite",
     explanation: "Aktivite açıklaması...",
     type: "true-false",
-    exercise: new SimpleExercise([]),
+    exercise: { type: "qa-exercise", template: [], answers: [] },
     textContent: null,
     audio: null,
     image: null,
     youtubeVideoUrl: null,
     savedAt: Date.now(),
     ...activity,
-  } as Activity;
+  } as IActivity;
 }

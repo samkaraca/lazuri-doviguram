@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { IViewModel } from "../model/view_model";
-import { FillInBlanksExercise } from "@/lib/exercises/fill_in_blanks_exercise";
-import { Activity } from "@/lib/activity/activity";
-import { SimpleExercise } from "@/lib/exercises/simple_question_exercise";
-import { MultipleChoiceExercise } from "@/lib/exercises/multiple_choice_exercise";
-import ActivityAdminService from "@/lib/services/activity_admin_service";
+import ActivityAdminService from "@/lib/services/activity/activity_admin_service";
+import IActivity from "@/lib/activity/activity";
+import IExercise from "@/lib/exercise/exercise";
 
 export function useViewModel(
   themeId: string,
   lessonId: string,
-  activityData: Activity
+  activityData: IActivity
 ): IViewModel {
   const adminService = useRef(new ActivityAdminService());
   const [type, setType] = useState<IViewModel["type"]>(activityData.type);
@@ -53,20 +51,9 @@ export function useViewModel(
           status: "idle",
         }
   );
-  const [fillInBlanksExercise, setFillInBlanksExercise] = useState<
-    IViewModel["fillInBlanksExercise"]
-  >(new FillInBlanksExercise([]));
-  const [multipleChoiceExercise, setMultipleChoiceExercise] = useState<
-    IViewModel["multipleChoiceExercise"]
-  >(new MultipleChoiceExercise([]));
-  const [simpleExercise, setSimpleExercise] = useState<
-    IViewModel["simpleExercise"]
-  >(new SimpleExercise([]));
+  const [exercise, setExercise] = useState<IExercise>(activityData.exercise);
 
   const changeActivityType = (newActivityType: IViewModel["type"]) => {
-    setFillInBlanksExercise(new FillInBlanksExercise([]));
-    setMultipleChoiceExercise(new MultipleChoiceExercise([]));
-    setSimpleExercise(new SimpleExercise([]));
     setType(newActivityType);
   };
 
@@ -80,12 +67,7 @@ export function useViewModel(
         savedAt: Date.now(),
         type,
         audio: audio.status === "success" ? audio.value : activityData.audio,
-        exercise:
-          type === "type-in-blanks" || type === "drag-into-blanks"
-            ? fillInBlanksExercise
-            : type === "pair-texts-with-images" || type === "true-false"
-            ? simpleExercise
-            : multipleChoiceExercise,
+        exercise,
         image: image.status === "success" ? image.value : activityData.image,
         youtubeVideoUrl:
           youtubeVideoUrl.status === "success"
@@ -95,22 +77,6 @@ export function useViewModel(
       localStorage.removeItem(activityData.id);
     } catch (error) {}
   };
-
-  useEffect(() => {
-    if (
-      activityData.type === "drag-into-blanks" ||
-      activityData.type === "type-in-blanks"
-    ) {
-      setFillInBlanksExercise(activityData.exercise as any);
-    } else if (
-      activityData.type === "pair-texts-with-images" ||
-      activityData.type === "true-false"
-    ) {
-      setSimpleExercise(activityData.exercise as any);
-    } else if (activityData.type === "multiple-choice") {
-      setMultipleChoiceExercise(activityData.exercise as any);
-    }
-  }, [activityData]);
 
   return {
     id: activityData.id,
@@ -129,12 +95,8 @@ export function useViewModel(
     setAudio,
     youtubeVideoUrl,
     setYoutubeVideoUrl,
-    fillInBlanksExercise,
-    setFillInBlanksExercise,
-    multipleChoiceExercise,
-    setMultipleChoiceExercise,
-    simpleExercise,
-    setSimpleExercise,
+    exercise,
+    setExercise,
     saveActivity,
   };
 }

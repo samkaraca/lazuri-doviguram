@@ -1,0 +1,59 @@
+@use "../../../../styles/global-variables.scss" as gv;
+
+.container {
+  header {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 0.6rem;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding-right: 0.4rem;
+    margin-bottom: 1rem;
+
+    span {
+      max-width: 2.5rem;
+      width: 2.5rem;
+    }
+  }
+}
+
+.questions {
+  li {
+    padding-block: 1rem;
+    padding-left: 1.3rem;
+    padding-right: 0.4rem;
+
+    &.success {
+      background-color: gv.$success-color-light;
+    }
+
+    &.error {
+      background-color: gv.$error-color-light;
+    }
+
+    section[aria-label="soru"] {
+      display: flex;
+      align-items: flex-start;
+
+      .question {
+        flex-grow: 1;
+        margin: 0;
+      }
+
+      .radio-buttons {
+        display: flex;
+        align-items: center;
+        width: 5.6rem;
+        min-width: 5.6rem;
+        min-height: 1.5rem;
+        column-gap: 0.6rem;
+
+        .radio-button {
+          flex-grow: 1;
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}

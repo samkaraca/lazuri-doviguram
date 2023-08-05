@@ -4,29 +4,26 @@ import useViewModelContext from "@/features/activity_editor/view_model";
 import { AddFab } from "@/core/components/add_fab";
 import { ActivityListItemPaper } from "@/core/components/list_item_paper";
 import { nanoid } from "nanoid";
-import {
-  addNewQuestion,
-  changeQuestionText,
-  joinFromTemplate,
-  removeQuestion,
-} from "@/lib/exercises/fibe_service";
+import * as AdminFIBEServices from "@/lib/exercise/fill_in_blanks_exercise/admin_fibe_services";
+import { useState } from "react";
 
 export default function TypeOrDragExerciseForm() {
-  const { fillInBlanksExercise, setFillInBlanksExercise } =
-    useViewModelContext()!;
+  const viewModel = useViewModelContext()!;
+  const { setExercise } = viewModel;
+  const exercise = viewModel.exercise;
 
   return (
     <>
       <List>
-        {fillInBlanksExercise.questions.map(({ id, rawQuestion }) => {
+        {exercise.template.map(({ id, atoms }) => {
           return (
             <ActivityListItemPaper key={id}>
               <ListItem
                 secondaryAction={
                   <IconButton
                     onClick={() => {
-                      setFillInBlanksExercise((prev) =>
-                        removeQuestion(id, prev)
+                      setExercise((prev) =>
+                        AdminFIBEServices.removeQuestion(id, prev as any)
                       );
                     }}
                   >
@@ -37,12 +34,20 @@ export default function TypeOrDragExerciseForm() {
                 <Input
                   fullWidth
                   style={{ marginRight: "1rem" }}
-                  value={joinFromTemplate(rawQuestion)}
-                  onChange={(e) =>
-                    setFillInBlanksExercise((prev) =>
-                      changeQuestionText(id, e.target.value, prev)
-                    )
-                  }
+                  value={AdminFIBEServices.formTextFromTemplate(
+                    atoms,
+                    exercise.answers
+                  )}
+                  onChange={(e) => {
+                    setExercise((prev) =>
+                      AdminFIBEServices.changeQuestionText(
+                        id,
+                        e.target.value,
+                        prev as any,
+                        nanoid
+                      )
+                    );
+                  }}
                 />
               </ListItem>
             </ActivityListItemPaper>
@@ -50,9 +55,11 @@ export default function TypeOrDragExerciseForm() {
         })}
       </List>
       <AddFab
-        onClick={() =>
-          setFillInBlanksExercise((prev) => addNewQuestion(nanoid(), prev))
-        }
+        onClick={() => {
+          setExercise((prev) =>
+            AdminFIBEServices.addNewQuestion(nanoid(), prev as any)
+          );
+        }}
       />
     </>
   );

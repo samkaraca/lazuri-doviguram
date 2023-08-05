@@ -1,9 +1,9 @@
-import { Lesson } from "../lesson/lesson";
-import { Theme } from "../theme/theme";
+import ILesson from "../lesson/lesson";
+import ITheme from "../theme/theme";
 import { DBLesson } from "../types/db_types/db_lesson";
 import { DBTheme } from "../types/db_types/db_theme";
 
-export const convertThemeUserToDB = (theme: Theme): DBTheme => {
+export const convertThemeUserToDB = (theme: ITheme): DBTheme => {
   const newTheme = { ...theme } as any;
   let newLessons = Object.fromEntries(
     newTheme.lessons.map((l: any) => {
@@ -20,7 +20,7 @@ export const convertThemeUserToDB = (theme: Theme): DBTheme => {
   return newTheme;
 };
 
-export const convertThemeDBToUser = (themeData: DBTheme): Theme => {
+export const convertThemeDBToUser = (themeData: DBTheme): ITheme => {
   const newTheme = { ...themeData } as any;
   delete newTheme.pk;
   newTheme.lessons = newTheme.lessons.idOrder.map((lessonId: string) => {
@@ -29,7 +29,7 @@ export const convertThemeDBToUser = (themeData: DBTheme): Theme => {
   return newTheme;
 };
 
-export const convertLessonUserToDB = (lesson: Lesson): DBLesson => {
+export const convertLessonUserToDB = (lesson: ILesson): DBLesson => {
   const newLesson = { ...lesson } as any;
   let newActivities = Object.fromEntries(
     newLesson.activities.map((a: any) => {
@@ -50,7 +50,7 @@ export const convertLessonUserToDB = (lesson: Lesson): DBLesson => {
 export const convertLessonDBToUser = (
   lessonData: DBLesson,
   lessonId: string
-): Lesson => {
+): ILesson => {
   const newLesson = { ...lessonData };
   newLesson.activities = newLesson.activities.idOrder.map(
     (activityId: string) => ({

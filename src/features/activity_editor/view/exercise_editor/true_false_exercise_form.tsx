@@ -13,20 +13,20 @@ import { Add, Clear } from "@mui/icons-material";
 import useViewModelContext from "@/features/activity_editor/view_model";
 import { ActivityListItemPaper } from "@/core/components/list_item_paper";
 import { nanoid } from "nanoid";
-import {
-  addNewQuestion,
-  changeAnswer,
-  changeQuestionText,
-  removeQuestion,
-} from "@/lib/exercises/se_service";
+import * as AdminBEServices from "@/lib/exercise/qa_exercise/admin_qae_services";
+import IQAExercise from "@/lib/exercise/qa_exercise/qa_exercise";
 
 export default function TrueFalseExerciseForm() {
-  const { simpleExercise, setSimpleExercise } = useViewModelContext()!;
+  const viewModel = useViewModelContext()!;
+  const { setExercise } = viewModel;
+  const exercise = viewModel.exercise as IQAExercise;
 
   return (
     <>
       <List>
-        {simpleExercise.questions.map(({ id, answer, question }) => {
+        {exercise.template.map(({ id, questionText }) => {
+          const answer = exercise.answers.find((a) => a.id === id);
+
           return (
             <ActivityListItemPaper key={id}>
               <ListItem
@@ -34,10 +34,10 @@ export default function TrueFalseExerciseForm() {
                   <Stack direction="row" position="relative" right="-0.8rem">
                     <RadioGroup
                       row
-                      value={answer === "true"}
+                      value={answer?.value === "true"}
                       onChange={(e, value) => {
-                        setSimpleExercise((prev) =>
-                          changeAnswer(id, value, prev)
+                        setExercise((prev) =>
+                          AdminBEServices.changeAnswer(id, value, prev as any)
                         );
                       }}
                     >
@@ -54,7 +54,9 @@ export default function TrueFalseExerciseForm() {
                     </RadioGroup>
                     <IconButton
                       onClick={() => {
-                        setSimpleExercise((prev) => removeQuestion(id, prev));
+                        setExercise((prev) =>
+                          AdminBEServices.removeQuestion(id, prev as any)
+                        );
                       }}
                     >
                       <Clear color="error" />
@@ -65,10 +67,14 @@ export default function TrueFalseExerciseForm() {
                 <Input
                   fullWidth
                   sx={{ marginRight: "13rem" }}
-                  value={question}
+                  value={questionText}
                   onChange={(e) => {
-                    setSimpleExercise((prev) =>
-                      changeQuestionText(id, e.target.value, prev)
+                    setExercise((prev) =>
+                      AdminBEServices.changeQuestionText(
+                        id,
+                        e.target.value,
+                        prev as any
+                      )
                     );
                   }}
                 />
@@ -79,7 +85,9 @@ export default function TrueFalseExerciseForm() {
       </List>
       <Fab
         onClick={() =>
-          setSimpleExercise((prev) => addNewQuestion(nanoid(), "false", prev))
+          setExercise((prev) =>
+            AdminBEServices.addNewQuestion(nanoid(), "", "false", prev as any)
+          )
         }
         color="secondary"
         size="small"

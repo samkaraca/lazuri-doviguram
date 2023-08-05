@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { defaultLesson } from "@/lib/lesson/default_lesson";
 import { ApiResponse } from "@/lib/types/api_response";
 import { defaultActivity } from "@/lib/activity/default_activity";
-import { Lesson } from "@/lib/lesson/lesson";
 import { slugifyLaz } from "@/lib/utils/slugify_laz";
-import ThemeAdminService from "@/lib/services/theme_admin_service";
+import ThemeAdminService from "@/lib/services/theme/theme_admin_service";
+import ILesson from "@/lib/lesson/lesson";
 
 export function useAdminViewModel(): AdminViewModel {
   const {
@@ -111,7 +111,7 @@ export function useAdminViewModel(): AdminViewModel {
     );
   };
 
-  const saveLesson = async (lesson: Omit<Lesson, "activities">) => {
+  const saveLesson = async (lesson: Omit<ILesson, "activities">) => {
     if (activeLesson === null) return;
     await withFeedback(
       () => adminService.current.saveLesson(id, lesson),
@@ -144,14 +144,17 @@ export function useAdminViewModel(): AdminViewModel {
     await withFeedback(
       () => adminService.current.deleteLesson(id, lessonId),
       (res) => {
-        setLessons((prevLessons) =>
-          prevLessons.filter((l) => l.id !== lessonId)
-        );
-        setActiveLesson((prev) => {
-          if (prev === 0 || prev === null) return null;
-          if (prev > 0) return prev - 1;
-          return null;
-        });
+        const newLessons = lessons.filter((l) => l.id !== lessonId);
+        let newActiveLesson: number | null = activeLesson;
+        if (newLessons.length === 0 || newActiveLesson === null) {
+          newActiveLesson = null;
+        } else if (newActiveLesson > 0) {
+          newActiveLesson -= 1;
+        } else if (newActiveLesson === 0) {
+          newActiveLesson = 0;
+        }
+        setLessons(() => newLessons);
+        setActiveLesson(() => newActiveLesson);
       }
     );
   };
