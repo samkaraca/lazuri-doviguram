@@ -2,19 +2,16 @@ import { DndContext } from "@dnd-kit/core";
 import { ReactNode, useEffect } from "react";
 import { BoardItemsBoard } from "./draggables_board";
 import styles from "./styles.module.scss";
-import IBlank from "@/lib/utils/dnd_setting/blank";
 import IDraggable from "@/lib/utils/dnd_setting/draggable";
 
 export function WrapperDndContext({
   board,
-  blanks,
   startDragging,
   stopDragging,
   children,
   disabled = false,
 }: {
   board: IDraggable[];
-  blanks: IBlank[];
   startDragging: (item: IDraggable) => void;
   stopDragging: (
     action:

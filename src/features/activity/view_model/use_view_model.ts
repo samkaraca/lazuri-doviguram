@@ -5,6 +5,9 @@ import IDraggable from "@/lib/utils/dnd_setting/draggable";
 import IActivity from "@/lib/activity/activity";
 import IReply from "@/lib/exercise/reply";
 import * as ExerciseServices from "@/lib/exercise/exercise_services";
+import IBlank from "@/lib/utils/dnd_setting/blank";
+import { nanoid } from "nanoid";
+import IAnswer from "@/lib/exercise/answer";
 
 export function useViewModel(
   activityData: IActivity,
@@ -18,6 +21,14 @@ export function useViewModel(
   const [dndBoard, setDndBoard] = useState<IDraggable[]>();
   const [replies, setReplies] = useState<IReply[]>();
 
+  const boardFrom = (exerciseAnswers: IAnswer[], replies: IReply[]) => {
+    const idBlackList = replies
+      .filter((r) => r.value !== null && r.value !== undefined)
+      .map((e) => e.id);
+    const board = exerciseAnswers.filter((a) => !idBlackList.includes(a.id));
+    return board.map((e) => ({ ...e, id: nanoid() }));
+  };
+
   useEffect(() => {
     const { replies, beenSolved } = ExerciseServices.getUltimateReplies(
       activityData.id,
@@ -26,7 +37,7 @@ export function useViewModel(
     );
     setReplies(replies);
     setIsSolved(beenSolved);
-    setDndBoard(activityData.exercise.answers);
+    setDndBoard(boardFrom(activityData.exercise.answers, replies));
   }, [activityData]);
 
   const handleStartDragging = (item: { id: string; value: string }) => {
@@ -65,8 +76,12 @@ export function useViewModel(
       replies: null,
       savedAt: Date.now(),
     });
+    const newReplies = ExerciseServices.getRrepliesTemplate(
+      activityData.exercise
+    );
     setIsSolved(false);
-    setReplies(ExerciseServices.getRrepliesTemplate(activityData.exercise));
+    setReplies(newReplies);
+    setDndBoard(boardFrom(activityData.exercise.answers, newReplies));
   };
 
   return {
