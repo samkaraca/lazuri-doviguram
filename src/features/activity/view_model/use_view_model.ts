@@ -1,13 +1,10 @@
 import { ViewModel } from "../model/view_model";
-import { useEffect, useRef, useState } from "react";
-import { stopDragging } from "@/lib/utils/dnd_setting/dnd_service";
+import { useEffect, useState } from "react";
 import IDraggable from "@/lib/utils/dnd_setting/draggable";
 import IActivity from "@/lib/activity/activity";
 import IReply from "@/lib/exercise/reply";
 import * as ExerciseServices from "@/lib/exercise/exercise_services";
-import IBlank from "@/lib/utils/dnd_setting/blank";
-import { nanoid } from "nanoid";
-import IAnswer from "@/lib/exercise/answer";
+import * as DndService from "@/lib/utils/dnd_setting/dnd_service";
 
 export function useViewModel(
   activityData: IActivity,
@@ -21,14 +18,6 @@ export function useViewModel(
   const [dndBoard, setDndBoard] = useState<IDraggable[]>();
   const [replies, setReplies] = useState<IReply[]>();
 
-  const boardFrom = (exerciseAnswers: IAnswer[], replies: IReply[]) => {
-    const idBlackList = replies
-      .filter((r) => r.value !== null && r.value !== undefined)
-      .map((e) => e.id);
-    const board = exerciseAnswers.filter((a) => !idBlackList.includes(a.id));
-    return board.map((e) => ({ ...e, id: nanoid() }));
-  };
-
   useEffect(() => {
     const { replies, beenSolved } = ExerciseServices.getUltimateReplies(
       activityData.id,
@@ -37,7 +26,7 @@ export function useViewModel(
     );
     setReplies(replies);
     setIsSolved(beenSolved);
-    setDndBoard(boardFrom(activityData.exercise.answers, replies));
+    setDndBoard(DndService.boardFrom(activityData.exercise, replies));
   }, [activityData]);
 
   const handleStartDragging = (item: { id: string; value: string }) => {
@@ -48,7 +37,7 @@ export function useViewModel(
     action: { type: "on-space" } | { type: "on-blank"; blankId: string }
   ) => {
     if (!dndBoard || !replies || !dndDraggedItem) return;
-    const { board, blanks, draggedItem } = stopDragging(
+    const { board, blanks, draggedItem } = DndService.stopDragging(
       {
         board: dndBoard,
         blanks: replies,
@@ -81,7 +70,7 @@ export function useViewModel(
     );
     setIsSolved(false);
     setReplies(newReplies);
-    setDndBoard(boardFrom(activityData.exercise.answers, newReplies));
+    setDndBoard(DndService.boardFrom(activityData.exercise, newReplies));
   };
 
   return {

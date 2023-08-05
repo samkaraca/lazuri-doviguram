@@ -2,6 +2,9 @@ import { nanoid } from "nanoid";
 import DndSetting from "./dnd_setting";
 import IDraggable from "./draggable";
 import IBlank from "./blank";
+import IExercise from "@/lib/exercise/exercise";
+import IReply from "@/lib/exercise/reply";
+import IAnswer from "@/lib/exercise/answer";
 /**
  * DnD Serice assumes:
  * - There is a board that contains items with certain values
@@ -69,4 +72,22 @@ export const stopDragging = (
     blanks: newBlanks,
     draggedItem: null,
   };
+};
+
+export const boardFrom = (
+  exercise: IExercise,
+  replies: IReply[]
+): IAnswer[] => {
+  const valueBlacklist = replies
+    .filter((r) => r.value !== null && r.value !== undefined)
+    .map((e) => e.value as string);
+  const board = valueBlacklist.reduce(
+    (acc, cur) => {
+      const index = acc.findIndex((e) => e.value === cur);
+      if (index === -1) return acc;
+      return acc.filter((e, i) => i !== index);
+    },
+    [...exercise.answers]
+  );
+  return board.map((e) => ({ ...e, id: nanoid() }));
 };
