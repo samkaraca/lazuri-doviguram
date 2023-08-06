@@ -37,14 +37,16 @@
 
   .menu-button {
     display: none;
-    border: 2px solid black;
-    border-radius: 5px;
     background-color: transparent;
-    width: 2.5rem;
-    aspect-ratio: 1;
-    padding: 0;
+    // aspect-ratio: 1;
+    // width: 2.5rem;
+    // border-radius: 5px;
+    // border: 2px solid black;
+    // padding: 0;
 
     svg {
+      color: black;
+      font-size: 2.5rem;
       vertical-align: middle;
     }
   }

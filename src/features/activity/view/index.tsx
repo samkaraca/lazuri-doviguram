@@ -9,7 +9,7 @@ import { TypeInBlanksExercise } from "./type_in_blanks_exercise";
 
 export function View() {
   return (
-    <article>
+    <article style={{ overflow: "hidden" }}>
       <ActivityBody />
       <Exercise />
       <ActivityFooter />

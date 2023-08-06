@@ -6,9 +6,7 @@ import {
   TaskAltRounded,
 } from "@mui/icons-material";
 import { BaseViewModel } from "../../model/base_view_model";
-import { useEffect, useRef, useState } from "react";
 import IActivity from "@/lib/activity/activity";
-import createLocalExerciseRepository from "@/lib/repositories/local_exercise_repository/local_exercise_repository_implementation";
 import ILocalExercise from "@/lib/repositories/local_exercise_repository/local_exercise";
 
 export function TabPanels() {
@@ -70,7 +68,7 @@ export function ActivitiesContainer({
                   <h3>{title}</h3>
                 </div>
                 <div className={styles["right-group"]}>
-                  <span>
+                  <span className={styles["grade"]}>
                     {localExerciseData && `%${localExerciseData.grade}`}
                   </span>
                   <button

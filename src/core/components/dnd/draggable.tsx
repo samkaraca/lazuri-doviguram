@@ -25,6 +25,7 @@ export function Draggable({
   return (
     <div
       style={{
+        touchAction: "none",
         transform: transform
           ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
           : undefined,

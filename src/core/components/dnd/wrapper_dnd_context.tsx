@@ -28,6 +28,7 @@ export function WrapperDndContext({
 }) {
   return (
     <DndContext
+      modifiers={[]}
       onDragEnd={(e) => {
         const blankId = e.over?.data.current?.blankId;
         if (blankId) {
