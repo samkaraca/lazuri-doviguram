@@ -54,7 +54,16 @@ export function useViewModel(
   const [exercise, setExercise] = useState<IExercise>(activityData.exercise);
 
   const changeActivityType = (newActivityType: IViewModel["type"]) => {
+    const exerciseType: IExercise["type"] =
+      newActivityType === "drag-into-blanks" ||
+      newActivityType === "type-in-blanks"
+        ? "fill-in-blanks-exercise"
+        : newActivityType === "pair-texts-with-images" ||
+          newActivityType === "true-false"
+        ? "qa-exercise"
+        : "multiple-choice-exercise";
     setType(newActivityType);
+    setExercise({ type: exerciseType, answers: [], template: [] });
   };
 
   const saveActivity = async () => {
