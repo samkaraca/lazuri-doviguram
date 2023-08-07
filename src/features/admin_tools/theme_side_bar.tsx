@@ -60,7 +60,16 @@ export function ThemeSideBar({
     ) {
       setModified(true);
     }
-  });
+  }, [
+    title,
+    explanation,
+    image,
+    youtubeVideoUrl,
+    adminThemeTitle,
+    adminThemeExplanation,
+    adminTestfulThemeImage,
+    adminTestfulThemeYoutubeVideoUrl,
+  ]);
 
   const reset = () => {
     setAdminThemeTitle(title);

@@ -53,7 +53,7 @@ export function LessonSideBar({
     if (title !== adminLessonTitle || explanation !== adminLessonExplanation) {
       setModified(true);
     }
-  }, [adminLessonExplanation, adminLessonTitle]);
+  }, [adminLessonExplanation, adminLessonTitle, lessons]);
 
   return (
     <aside className={`side-bar ${styles["lesson-side-bar"]}`}>
