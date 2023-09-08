@@ -44,7 +44,7 @@ export function AppBar({ home }: { home: "/admin" | "/" }) {
         aria-label="navigasyon menüsü"
       >
         <nav>
-          <a className="simple" href="#">
+          <a className="simple" href={`${home}#temalar`}>
             Temalar
           </a>
           <a

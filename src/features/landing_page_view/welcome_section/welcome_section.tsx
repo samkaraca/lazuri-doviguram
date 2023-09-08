@@ -10,7 +10,16 @@ export function WelcomeSection() {
           tercüman olmuş, yaşamlarına eşlik etmiş bir dili, daha yakından
           tanımak ister misin?
         </p>
-        <button className="simple">Öğrenmeye Başla</button>
+        <button
+          className="simple"
+          onClick={() => {
+            document.getElementById("temalar")?.scrollIntoView({
+              behavior: "smooth",
+            });
+          }}
+        >
+          Öğrenmeye Başla
+        </button>
         <img src="/reading-kid.png" />
       </div>
     </section>
