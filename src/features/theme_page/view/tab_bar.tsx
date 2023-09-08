@@ -5,7 +5,6 @@ import { BaseViewModel } from "../model/base_view_model";
 export function TabBar() {
   const { lessons, activeLesson, setActiveLesson } =
     useBaseViewModelContext() as BaseViewModel;
-
   if (activeLesson === null) return null;
 
   return (
@@ -13,9 +12,10 @@ export function TabBar() {
       variant="scrollable"
       scrollButtons={true}
       allowScrollButtonsMobile
-      value={activeLesson}
       centered
+      value={activeLesson}
       onChange={(e, newValue) => setActiveLesson(newValue)}
+      sx={{ maxWidth: "100%", width: "max-content", margin: "0 auto" }}
     >
       {lessons.map(({ id }, i: number) => {
         return <Tab key={id} label={`Ders ${i + 1}`} />;
