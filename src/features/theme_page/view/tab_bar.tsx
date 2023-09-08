@@ -10,6 +10,9 @@ export function TabBar() {
 
   return (
     <Tabs
+      variant="scrollable"
+      scrollButtons={true}
+      allowScrollButtonsMobile
       value={activeLesson}
       centered
       onChange={(e, newValue) => setActiveLesson(newValue)}
