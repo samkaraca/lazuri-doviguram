@@ -3,7 +3,13 @@ import styles from "./app_bar.module.scss";
 import { MenuRounded } from "@mui/icons-material";
 import { useState } from "react";
 
-export function AppBar({ home }: { home: "/admin" | "/" }) {
+export function AppBar({
+  home,
+  pageTemplate,
+}: {
+  home: "/admin" | "/";
+  pageTemplate: IndexPageTemplate;
+}) {
   const [isAltMenuOpen, setIsAltMenuOpen] = useState(false);
 
   return (
@@ -11,24 +17,16 @@ export function AppBar({ home }: { home: "/admin" | "/" }) {
       <header className={styles["header"]}>
         <div>
           <Link className={styles["header-logo"]} href={home}>
-            <img src="/header-logo.png" alt="" />
+            <img src={pageTemplate.logoUrl} alt="" />
           </Link>
           <nav>
-            <a className="simple" href={`${home}#temalar`}>
-              Temalar
-            </a>
-            <a
-              className="simple"
-              href="https://drive.google.com/file/d/1ogVdEciTUea-WW0jvXmXGF25cEpW8c2F/view"
-            >
-              Ders Kitabı
-            </a>
-            <a className="simple" href="https://www.lazcasozluk.org/">
-              Sözlük
-            </a>
-            <a className="simple" href="https://www.lazenstitu.com/">
-              Laz Enstitüsü
-            </a>
+            {pageTemplate.headerNavigationItems.map((item) => {
+              return (
+                <a className="simple" href={item.link} key={item.title}>
+                  {item.title}
+                </a>
+              );
+            })}
           </nav>
           <button
             onClick={() => setIsAltMenuOpen((prev) => !prev)}
@@ -44,21 +42,13 @@ export function AppBar({ home }: { home: "/admin" | "/" }) {
         aria-label="navigasyon menüsü"
       >
         <nav>
-          <a className="simple" href={`${home}#temalar`}>
-            Temalar
-          </a>
-          <a
-            className="simple"
-            href="https://drive.google.com/file/d/1ogVdEciTUea-WW0jvXmXGF25cEpW8c2F/view"
-          >
-            Ders Kitabı
-          </a>
-          <a className="simple" href="https://www.lazcasozluk.org/">
-            Sözlük
-          </a>
-          <a className="simple" href="https://www.lazenstitu.com/">
-            Laz Enstitüsü
-          </a>
+          {pageTemplate.headerNavigationItems.map((item) => {
+            return (
+              <a className="simple" href={item.link} key={item.title}>
+                {item.title}
+              </a>
+            );
+          })}
         </nav>
       </section>
     </>

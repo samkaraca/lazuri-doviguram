@@ -1,15 +1,15 @@
 import styles from "./welcome_section.module.scss";
 
-export function WelcomeSection() {
+export function WelcomeSection({
+  pageTemplate,
+}: {
+  pageTemplate: IndexPageTemplate;
+}) {
   return (
     <section className={styles["welcome"]}>
       <div>
-        <h1>Lazuri Doviguram!</h1>
-        <p>
-          Tarihin en eski dönemlerinden beri Kafkas insanının duygularına
-          tercüman olmuş, yaşamlarına eşlik etmiş bir dili, daha yakından
-          tanımak ister misin?
-        </p>
+        <h1>{pageTemplate.welcomeHeadline}</h1>
+        <p>{pageTemplate.welcomeText}</p>
         <button
           className="simple"
           onClick={() => {
@@ -20,7 +20,7 @@ export function WelcomeSection() {
         >
           Öğrenmeye Başla
         </button>
-        <img src="/reading-kid.png" />
+        <img src={pageTemplate.welcomeImageUrl} />
       </div>
     </section>
   );
