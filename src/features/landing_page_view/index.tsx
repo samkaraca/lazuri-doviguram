@@ -4,6 +4,7 @@ import { WelcomeSection } from "./welcome_section/welcome_section";
 import { Footer } from "../footer";
 import { ReactNode } from "react";
 import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
+import { IndexPageTemplate } from "@/lib/types/website_page_templates/index_page_template";
 
 export function LandingPageView({
   themePreviews,

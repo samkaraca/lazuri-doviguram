@@ -2,6 +2,7 @@ import Link from "next/link";
 import styles from "./app_bar.module.scss";
 import { MenuRounded } from "@mui/icons-material";
 import { useState } from "react";
+import { IndexPageTemplate } from "@/lib/types/website_page_templates/index_page_template";
 
 export function AppBar({
   home,

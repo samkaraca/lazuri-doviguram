@@ -1,3 +1,4 @@
+import { IndexPageTemplate } from "@/lib/types/website_page_templates/index_page_template";
 import styles from "./welcome_section.module.scss";
 
 export function WelcomeSection({
