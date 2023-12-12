@@ -8,7 +8,7 @@ export function Footer({ pageTemplate }: { pageTemplate: IndexPageTemplate }) {
       <div className={styles["inner-container"]}>
         <section className={styles["about-us"]} aria-label="hakkımızda">
           <img
-            src={pageTemplate.footerTextLogoUrl}
+            src={`/${process.env.PROJECT_OWNER}/footer-text-logo.png`}
             alt="yazı logo"
           />
           <p>{pageTemplate.footerText}</p>

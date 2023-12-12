@@ -18,7 +18,10 @@ export function AppBar({
       <header className={styles["header"]}>
         <div>
           <Link className={styles["header-logo"]} href={home}>
-            <img src={pageTemplate.logoUrl} alt="" />
+            <img
+              src={`/${process.env.PROJECT_OWNER}/header-composite-logo.png`}
+              alt=""
+            />
           </Link>
           <nav>
             {pageTemplate.headerNavigationItems.map((item) => {

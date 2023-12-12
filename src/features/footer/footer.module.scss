@@ -45,10 +45,10 @@
   grid-area: about-us;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 
   img {
-    height: 2.5rem;
-    width: max-content;
+    height: 2.8rem;
     max-width: 100%;
     object-fit: contain;
     margin-bottom: 0.8rem;
