@@ -51,7 +51,7 @@ export function View({
         <TabBar />
         <TabPanels />
       </div>
-      <Footer />
+      <Footer pageTemplate={pageTemplate} />
       {adminTools}
       {
         <ActivityDialog

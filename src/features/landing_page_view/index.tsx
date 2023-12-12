@@ -26,7 +26,7 @@ export function LandingPageView({
         themePreviews={themePreviews}
         createNewThemeButton={createNewThemeButton}
       />
-      <Footer />
+      <Footer pageTemplate={pageTemplate} />
     </>
   );
 }

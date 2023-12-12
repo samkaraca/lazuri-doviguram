@@ -5,4 +5,7 @@ export interface IndexPageTemplate {
   welcomeHeadline: string;
   welcomeText: string;
   welcomeImageUrl: string;
+  footerTextLogoUrl: string;
+  footerText: string;
+  footerAddress: string;
 }

@@ -47,7 +47,10 @@
   flex-direction: column;
 
   img {
-    width: 10rem;
+    height: 2.5rem;
+    width: max-content;
+    max-width: 100%;
+    object-fit: contain;
     margin-bottom: 0.8rem;
   }
 
@@ -73,6 +76,7 @@
 .eu {
   grid-area: eu;
   width: 20rem;
+  max-width: 100%;
 }
 
 @media (max-width: gv.$bp-md-alt-2) {

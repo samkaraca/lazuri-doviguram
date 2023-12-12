@@ -1,6 +1,0 @@
-@startuml Lazuri Doviguram
-!include question.puml
-!include services.puml
-
-GradingService .right.> Question
-@enduml
