@@ -36,7 +36,7 @@ export function View({
   return (
     <>
       <Head>
-        <title>{`${title} - Lazuri Doviguram!`}</title>
+        <title>{`${title} - ${pageTemplate.pageTitle}`}</title>
         <meta property="og:title" content={title} key="title" />
         <meta property="og:description" content={explanation} key="desc" />
         <meta
