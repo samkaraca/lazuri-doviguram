@@ -19,7 +19,7 @@ export function AppBar({
         <div>
           <Link className={styles["header-logo"]} href={home}>
             <img
-              src={`/${process.env.PROJECT_OWNER}/header-composite-logo.png`}
+              src={`/${process.env.NEXT_PUBLIC_PROJECT_OWNER}/header-composite-logo.png`}
               alt=""
             />
           </Link>
