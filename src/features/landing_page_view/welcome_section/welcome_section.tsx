@@ -16,7 +16,9 @@ export function WelcomeSection() {
         >
           Öğrenmeye Başla
         </button>
-        <img src={process.env.NEXT_PUBLIC_WELCOME_IMAGE_URL} />
+        <img
+          src={`/${process.env.NEXT_PUBLIC_PROJECT_OWNER}/welcome-image.png`}
+        />
       </div>
     </section>
   );
