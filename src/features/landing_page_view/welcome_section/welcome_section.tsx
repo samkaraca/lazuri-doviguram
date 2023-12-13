@@ -1,16 +1,11 @@
-import { IndexPageTemplate } from "@/lib/types/website_page_templates/index_page_template";
 import styles from "./welcome_section.module.scss";
 
-export function WelcomeSection({
-  pageTemplate,
-}: {
-  pageTemplate: IndexPageTemplate;
-}) {
+export function WelcomeSection() {
   return (
     <section className={styles["welcome"]}>
       <div>
-        <h1>{pageTemplate.welcomeHeadline}</h1>
-        <p>{pageTemplate.welcomeText}</p>
+        <h1>{process.env.NEXT_PUBLIC_WELCOME_HEADLINE}</h1>
+        <p>{process.env.NEXT_PUBLIC_WELCOME_TEXT}</p>
         <button
           className="simple"
           onClick={() => {
@@ -21,7 +16,7 @@ export function WelcomeSection({
         >
           Öğrenmeye Başla
         </button>
-        <img src={pageTemplate.welcomeImageUrl} />
+        <img src={process.env.NEXT_PUBLIC_WELCOME_IMAGE_URL} />
       </div>
     </section>
   );

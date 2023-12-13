@@ -9,7 +9,6 @@ import { Footer } from "@/features/footer";
 import { TabBar } from "./tab_bar";
 import { ReactNode } from "react";
 import dynamic from "next/dynamic";
-import { IndexPageTemplate } from "@/lib/types/website_page_templates/index_page_template";
 
 const ActivityDialog = dynamic(() => import("./activity_dialog"), {
   ssr: false,
@@ -18,11 +17,9 @@ const ActivityDialog = dynamic(() => import("./activity_dialog"), {
 export function View({
   home,
   adminTools,
-  pageTemplate,
 }: {
   home: "/admin" | "/";
   adminTools?: ReactNode;
-  pageTemplate: IndexPageTemplate;
 }) {
   const {
     isActivityDialogOpen,
@@ -36,7 +33,7 @@ export function View({
   return (
     <>
       <Head>
-        <title>{`${title} - ${pageTemplate.pageTitle}`}</title>
+        <title>{`${title} - ${process.env.NEXT_PUBLIC_PROJECT_NAME}`}</title>
         <meta property="og:title" content={title} key="title" />
         <meta property="og:description" content={explanation} key="desc" />
         <meta
@@ -45,13 +42,13 @@ export function View({
           key="image"
         />
       </Head>
-      <AppBar home={home} pageTemplate={pageTemplate} />
+      <AppBar home={home} />
       <div className={styles["main"]}>
         <Banner />
         <TabBar />
         <TabPanels />
       </div>
-      <Footer pageTemplate={pageTemplate} />
+      <Footer />
       {adminTools}
       {
         <ActivityDialog

@@ -2,15 +2,8 @@ import Link from "next/link";
 import styles from "./app_bar.module.scss";
 import { MenuRounded } from "@mui/icons-material";
 import { useState } from "react";
-import { IndexPageTemplate } from "@/lib/types/website_page_templates/index_page_template";
 
-export function AppBar({
-  home,
-  pageTemplate,
-}: {
-  home: "/admin" | "/";
-  pageTemplate: IndexPageTemplate;
-}) {
+export function AppBar({ home }: { home: "/admin" | "/" }) {
   const [isAltMenuOpen, setIsAltMenuOpen] = useState(false);
 
   return (
@@ -24,13 +17,15 @@ export function AppBar({
             />
           </Link>
           <nav>
-            {pageTemplate.headerNavigationItems.map((item) => {
-              return (
-                <a className="simple" href={item.link} key={item.title}>
-                  {item.title}
-                </a>
-              );
-            })}
+            {JSON.parse(process.env.NEXT_PUBLIC_NAVIGATION_ITEMS!).map(
+              (item: any) => {
+                return (
+                  <a className="simple" href={item.link} key={item.title}>
+                    {item.title}
+                  </a>
+                );
+              }
+            )}
           </nav>
           <button
             onClick={() => setIsAltMenuOpen((prev) => !prev)}
@@ -46,13 +41,15 @@ export function AppBar({
         aria-label="navigasyon menüsü"
       >
         <nav>
-          {pageTemplate.headerNavigationItems.map((item) => {
-            return (
-              <a className="simple" href={item.link} key={item.title}>
-                {item.title}
-              </a>
-            );
-          })}
+          {JSON.parse(process.env.NEXT_PUBLIC_NAVIGATION_ITEMS!).map(
+            (item: any) => {
+              return (
+                <a className="simple" href={item.link} key={item.title}>
+                  {item.title}
+                </a>
+              );
+            }
+          )}
         </nav>
       </section>
     </>
