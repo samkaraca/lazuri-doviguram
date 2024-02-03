@@ -8,7 +8,7 @@ export class DynamoDBClientSingleton {
   public static getInstance(): DynamoDBClient {
     if (!DynamoDBClientSingleton.instance) {
       DynamoDBClientSingleton.instance = new DynamoDBClient({
-        region: "eu-west-2",
+        region: process.env.DYNAMODB_REGION,
       });
     }
 

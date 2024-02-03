@@ -15,12 +15,15 @@ import { IThemeRepository } from "./theme_repository";
 const dynamoDB = DynamoDBClientSingleton.getInstance();
 
 export class DynamoDBThemeRepository implements IThemeRepository {
+  private static tableName = process.env.DYNAMODB_TABLE_NAME;
+  private static primaryKey = "theme";
+
   relocateTheme = async (oldThemeId: string, theme: DBTheme): Promise<any> => {
     const command = new TransactWriteItemsCommand({
       TransactItems: [
         {
           Put: {
-            TableName: "themes",
+            TableName: DynamoDBThemeRepository.tableName,
             Item: marshall({
               ...theme,
             }),
@@ -29,9 +32,9 @@ export class DynamoDBThemeRepository implements IThemeRepository {
         },
         {
           Delete: {
-            TableName: "themes",
+            TableName: DynamoDBThemeRepository.tableName,
             Key: marshall({
-              pk: "theme",
+              pk: DynamoDBThemeRepository.primaryKey,
               id: oldThemeId,
             }),
             ConditionExpression: "attribute_exists(pk)",
@@ -45,7 +48,7 @@ export class DynamoDBThemeRepository implements IThemeRepository {
 
   createTheme = async (theme: DBTheme): Promise<any> => {
     const command = new PutItemCommand({
-      TableName: "themes",
+      TableName: DynamoDBThemeRepository.tableName,
       Item: marshall({
         ...theme,
       }),
@@ -58,8 +61,8 @@ export class DynamoDBThemeRepository implements IThemeRepository {
     theme: Pick<DBTheme, "id" | "explanation" | "image" | "youtubeVideoUrl">
   ): Promise<any> => {
     const updateCommand = new UpdateItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: theme.id }),
+      TableName: DynamoDBThemeRepository.tableName,
+      Key: marshall({ pk: DynamoDBThemeRepository.primaryKey, id: theme.id }),
       UpdateExpression:
         "SET #explanation = :explanation, #image = :image, #youtubeVideoUrl = :youtubeVideoUrl",
       ExpressionAttributeNames: {
@@ -79,8 +82,8 @@ export class DynamoDBThemeRepository implements IThemeRepository {
 
   deleteTheme = async (themeId: string): Promise<any> => {
     const deleteCommand = new DeleteItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: themeId }),
+      TableName: DynamoDBThemeRepository.tableName,
+      Key: marshall({ pk: DynamoDBThemeRepository.primaryKey, id: themeId }),
     });
 
     return await dynamoDB.send(deleteCommand);
@@ -88,8 +91,8 @@ export class DynamoDBThemeRepository implements IThemeRepository {
 
   getTheme = async (themeId: string): Promise<DBTheme> => {
     const queryCommand = new GetItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: themeId }),
+      TableName: DynamoDBThemeRepository.tableName,
+      Key: marshall({ pk: DynamoDBThemeRepository.primaryKey, id: themeId }),
     });
 
     const resItem = (await dynamoDB.send(queryCommand)).Item;
@@ -99,7 +102,7 @@ export class DynamoDBThemeRepository implements IThemeRepository {
 
   getThemeIds = async (): Promise<string[]> => {
     const queryCommand = new QueryCommand({
-      TableName: "themes",
+      TableName: DynamoDBThemeRepository.tableName,
       KeyConditionExpression: "#pk = :pk",
       ExpressionAttributeNames: {
         "#pk": "pk",
@@ -119,7 +122,7 @@ export class DynamoDBThemeRepository implements IThemeRepository {
     Pick<DBTheme, "id" | "title" | "image" | "lessons" | "createdAt">[]
   > => {
     const queryCommand = new QueryCommand({
-      TableName: "themes",
+      TableName: DynamoDBThemeRepository.tableName,
       KeyConditionExpression: "#pk = :pk",
       ExpressionAttributeNames: {
         "#pk": "pk",
@@ -137,7 +140,7 @@ export class DynamoDBThemeRepository implements IThemeRepository {
 
   getThemeId = async (pathName: string): Promise<string> => {
     const command = new ScanCommand({
-      TableName: "themes",
+      TableName: DynamoDBThemeRepository.tableName,
       FilterExpression: "#pathName = :pathName",
       ProjectionExpression: "id",
       ExpressionAttributeNames: {

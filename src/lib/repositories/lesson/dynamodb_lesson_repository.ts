@@ -7,14 +7,17 @@ import ILessonRepository from "./lesson_repository";
 const dynamoDB = DynamoDBClientSingleton.getInstance();
 
 export class DynamoDBLessonRepository implements ILessonRepository {
+  private static tableName = process.env.DYNAMODB_TABLE_NAME;
+  private static primaryKey = "theme";
+
   createLesson = async (
     themeId: string,
     lessonId: string,
     lesson: DBLesson
   ) => {
     const updateCommand = new UpdateItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: themeId }),
+      TableName: DynamoDBLessonRepository.tableName,
+      Key: marshall({ pk: DynamoDBLessonRepository.primaryKey, id: themeId }),
       UpdateExpression: `SET #lessons.#idOrder = list_append(#lessons.#idOrder, :lessonId), #lessons.#lessonId = :lesson`,
       ExpressionAttributeNames: {
         "#lessons": "lessons",
@@ -36,8 +39,8 @@ export class DynamoDBLessonRepository implements ILessonRepository {
     lesson: Omit<DBLesson, "activities">
   ): Promise<any> => {
     const command = new UpdateItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: themeId }),
+      TableName: DynamoDBLessonRepository.tableName,
+      Key: marshall({ pk: DynamoDBLessonRepository.primaryKey, id: themeId }),
       UpdateExpression: `SET #lessons.#lessonId.#title = :title, #lessons.#lessonId.#explanation = :explanation`,
       ConditionExpression:
         "contains(#lessons.#idOrder, :lessonId) and attribute_exists(#lessons.#lessonId)",
@@ -61,8 +64,8 @@ export class DynamoDBLessonRepository implements ILessonRepository {
   deleteLesson = async (themeId: string, lessonId: string): Promise<any> => {
     const lessonIndex = await this.getLessonOrder(themeId, lessonId);
     const deleteLessonCommand = new UpdateItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: themeId }),
+      TableName: DynamoDBLessonRepository.tableName,
+      Key: marshall({ pk: DynamoDBLessonRepository.primaryKey, id: themeId }),
       UpdateExpression: `REMOVE #lessons.#lessonId, #lessons.#idOrder[${lessonIndex}]`,
       ExpressionAttributeNames: {
         "#lessons": "lessons",
@@ -79,8 +82,8 @@ export class DynamoDBLessonRepository implements ILessonRepository {
   ): Promise<number> => {
     let lessonIndex = -1;
     const getIdOrderCommand = new GetItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: themeId }),
+      TableName: DynamoDBLessonRepository.tableName,
+      Key: marshall({ pk: DynamoDBLessonRepository.primaryKey, id: themeId }),
       ProjectionExpression: "lessons.idOrder",
     });
 

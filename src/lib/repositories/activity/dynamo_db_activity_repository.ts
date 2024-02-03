@@ -7,6 +7,9 @@ import { DynamoDBClientSingleton } from "@/lib/utils/dynamo_db_client_singleton"
 const dynamoDB = DynamoDBClientSingleton.getInstance();
 
 export class DynamoDBActivityRepository implements IActivityRepository {
+  private static tableName = process.env.DYNAMODB_TABLE_NAME;
+  private static primaryKey = "theme";
+
   createActivity = async (
     themeId: string,
     lessonId: string,
@@ -17,8 +20,8 @@ export class DynamoDBActivityRepository implements IActivityRepository {
     delete activityToSave.id;
 
     const updateCommand = new UpdateItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: themeId }),
+      TableName: DynamoDBActivityRepository.tableName,
+      Key: marshall({ pk: DynamoDBActivityRepository.primaryKey, id: themeId }),
       UpdateExpression: `SET #lessons.#lessonId.#activities.#idOrder = list_append(#lessons.#lessonId.#activities.#idOrder, :activityId), #lessons.#lessonId.#activities.#activityId = :activity`,
       ExpressionAttributeNames: {
         "#lessons": "lessons",
@@ -46,8 +49,8 @@ export class DynamoDBActivityRepository implements IActivityRepository {
     delete activityToSave.id;
 
     const updateCommand = new UpdateItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: themeId }),
+      TableName: DynamoDBActivityRepository.tableName,
+      Key: marshall({ pk: DynamoDBActivityRepository.primaryKey, id: themeId }),
       UpdateExpression: `SET #lessons.#lessonId.#activities.#activityId = :activity`,
       ExpressionAttributeNames: {
         "#lessons": "lessons",
@@ -74,8 +77,8 @@ export class DynamoDBActivityRepository implements IActivityRepository {
       activityId
     );
     const updateCommand = new UpdateItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: themeId }),
+      TableName: DynamoDBActivityRepository.tableName,
+      Key: marshall({ pk: DynamoDBActivityRepository.primaryKey, id: themeId }),
       UpdateExpression: `REMOVE #lessons.#lessonId.#activities.#activityId, #lessons.#lessonId.#activities.#idOrder[${activityIndex}]`,
       ExpressionAttributeNames: {
         "#lessons": "lessons",
@@ -95,8 +98,8 @@ export class DynamoDBActivityRepository implements IActivityRepository {
     activityId: string
   ): Promise<DBActivity> => {
     const queryCommand = new GetItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: themeId }),
+      TableName: DynamoDBActivityRepository.tableName,
+      Key: marshall({ pk: DynamoDBActivityRepository.primaryKey, id: themeId }),
       ProjectionExpression: "#lessons.#lessonId.#activities.#activityId",
       ExpressionAttributeNames: {
         "#lessons": "lessons",
@@ -118,8 +121,8 @@ export class DynamoDBActivityRepository implements IActivityRepository {
   ): Promise<number> => {
     let activityIndex = -1;
     const getIdOrderCommand = new GetItemCommand({
-      TableName: "themes",
-      Key: marshall({ pk: "theme", id: themeId }),
+      TableName: DynamoDBActivityRepository.tableName,
+      Key: marshall({ pk: DynamoDBActivityRepository.primaryKey, id: themeId }),
       ProjectionExpression: "#lessons.#lessonId.#activities.#idOrder",
       ExpressionAttributeNames: {
         "#lessons": "lessons",
