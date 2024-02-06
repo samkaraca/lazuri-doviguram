@@ -30,7 +30,7 @@ export function MultipleChoiceExercise() {
                   }`}
                 >
                   <section aria-label="soru">
-                    <p>{questionText}</p>
+                    <p dangerouslySetInnerHTML={{ __html: questionText }} />
                     <div className={"choices"}>
                       {choices.map((choice, i) => {
                         return (
@@ -51,9 +51,10 @@ export function MultipleChoiceExercise() {
                               id={`choice-${index}-${i}`}
                               name={`choice-${index}`}
                             />
-                            <label htmlFor={`choice-${index}-${i}`}>
-                              {choice}
-                            </label>
+                            <label
+                              htmlFor={`choice-${index}-${i}`}
+                              dangerouslySetInnerHTML={{ __html: choice }}
+                            />
                           </div>
                         );
                       })}

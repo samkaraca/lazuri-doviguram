@@ -37,7 +37,14 @@ export function DragIntoBlanksExercise() {
                         {item.atoms.map((piece) => {
                           const { id, type } = piece;
                           if (type === "text") {
-                            return <p key={id}>{piece.value}</p>;
+                            return (
+                              <p
+                                key={id}
+                                dangerouslySetInnerHTML={{
+                                  __html: piece.value,
+                                }}
+                              />
+                            );
                           } else if (type === "blank") {
                             const reply = ExerciseServices.getReply(
                               id,

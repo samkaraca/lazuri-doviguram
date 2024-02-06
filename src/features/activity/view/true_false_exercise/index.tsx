@@ -38,7 +38,10 @@ export function TrueFalseExercise() {
                   key={id}
                 >
                   <section aria-label="soru">
-                    <p className={styles["question"]}>{questionText}</p>
+                    <p
+                      className={styles["question"]}
+                      dangerouslySetInnerHTML={{ __html: questionText }}
+                    />
                     <div className={styles["radio-buttons"]}>
                       <div className={styles["radio-button"]}>
                         <input

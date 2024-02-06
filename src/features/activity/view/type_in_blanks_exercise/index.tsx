@@ -22,7 +22,12 @@ export function TypeInBlanksExercise() {
                       const { id, type } = piece;
 
                       if (type === "text") {
-                        return <p key={id}>{piece.value}</p>;
+                        return (
+                          <p
+                            key={id}
+                            dangerouslySetInnerHTML={{ __html: piece.value }}
+                          />
+                        );
                       }
 
                       const reply = ExerciseServices.getReply(id, replies);

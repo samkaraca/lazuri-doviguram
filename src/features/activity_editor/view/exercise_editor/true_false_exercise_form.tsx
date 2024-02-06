@@ -2,12 +2,12 @@ import {
   Fab,
   FormControlLabel,
   IconButton,
-  Input,
   List,
   ListItem,
   Radio,
   RadioGroup,
   Stack,
+  TextField,
 } from "@mui/material";
 import { Add, Clear } from "@mui/icons-material";
 import useViewModelContext from "@/features/activity_editor/view_model";
@@ -64,7 +64,8 @@ export default function TrueFalseExerciseForm() {
                   </Stack>
                 }
               >
-                <Input
+                <TextField
+                  multiline
                   fullWidth
                   sx={{ marginRight: "13rem" }}
                   value={questionText}
