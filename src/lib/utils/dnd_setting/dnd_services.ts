@@ -74,13 +74,20 @@ export const stopDragging = (
   };
 };
 
+/**
+ * Creates the board item list from all exercise answer
+ * by removing the items that are already replied
+ */
 export const boardFrom = (
   exercise: IExercise,
   replies: IReply[]
 ): IAnswer[] => {
+  // get the values that are already replied
   const valueBlacklist = replies
     .filter((r) => r.value !== null && r.value !== undefined)
     .map((e) => e.value as string);
+
+  // remove the replied values from the exercise answers. the end result is the board
   const board = valueBlacklist.reduce(
     (acc, cur) => {
       const index = acc.findIndex((e) => e.value === cur);
@@ -89,5 +96,15 @@ export const boardFrom = (
     },
     [...exercise.answers]
   );
-  return board.map((e) => ({ ...e, id: nanoid() }));
+
+  // add unique ids to each board item
+  return shuffle(board).map((e) => ({ ...e, id: nanoid() }));
+};
+
+const shuffle = <T>(array: T[]): T[] => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 };
