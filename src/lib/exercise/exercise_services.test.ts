@@ -116,8 +116,8 @@ describe("exercise services", () => {
         { id: "2D", value: "y?" },
       ]);
     });
-    test("getRrepliesTemplate()", () => {
-      const repliesTemplate = ExerciseServices.getRrepliesTemplate(
+    test("getRepliesTemplate()", () => {
+      const repliesTemplate = ExerciseServices.getRepliesTemplate(
         sampleFillInBlanksExercise
       );
       expect(repliesTemplate).toStrictEqual([
@@ -184,8 +184,8 @@ describe("exercise services", () => {
         { id: "3", value: "A" },
       ]);
     });
-    test("getRrepliesTemplate()", () => {
-      const repliesTemplate = ExerciseServices.getRrepliesTemplate(
+    test("getRepliesTemplate()", () => {
+      const repliesTemplate = ExerciseServices.getRepliesTemplate(
         sampleMultipleChoiceExercise
       );
       expect(repliesTemplate).toStrictEqual([
@@ -235,9 +235,9 @@ describe("exercise services", () => {
         { id: "2", value: "Orange" },
       ]);
     });
-    test("getRrepliesTemplate()", () => {
+    test("getRepliesTemplate()", () => {
       const repliesTemplate =
-        ExerciseServices.getRrepliesTemplate(sampleQAExercise);
+        ExerciseServices.getRepliesTemplate(sampleQAExercise);
       expect(repliesTemplate).toStrictEqual([
         { id: "1", value: null },
         { id: "2", value: null },

@@ -42,7 +42,7 @@ export function reply(
   });
 }
 
-export function getRrepliesTemplate(exercise: IExercise): IReply[] {
+export function getRepliesTemplate(exercise: IExercise): IReply[] {
   return exercise.answers.map((a) => ({ id: a.id, value: null }));
 }
 
@@ -59,17 +59,23 @@ export function getLocalData(
   }
 }
 
+/**
+ * Checks the local storage for the activity with @param activityId. 
+ * If it exists and has been solved before, returns the replies from local storage.
+ * Otherwise, returns an empty  replies template.
+ */
 export function getUltimateReplies(
   activityId: string,
   activitySavedAt: number,
   exercise: IExercise
 ): { replies: IReply[]; beenSolved: boolean } {
   const localData = getLocalData(activityId);
+  // If the activity has been solved before but it has been updated since then, reset the local data.
   const localDataValid = localData && localData.savedAt > activitySavedAt;
   if (localDataValid && localData.replies) {
     return { replies: localData.replies, beenSolved: true };
   }
-  return { replies: getRrepliesTemplate(exercise), beenSolved: false };
+  return { replies: getRepliesTemplate(exercise), beenSolved: false };
 }
 
 export function getReply(

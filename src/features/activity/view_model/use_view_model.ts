@@ -1,4 +1,4 @@
-import { ViewModel } from "../model/view_model";
+import { IViewModel } from "../model/view_model";
 import { useEffect, useState } from "react";
 import IDraggable from "@/lib/utils/dnd_setting/draggable";
 import IActivity from "@/lib/activity/activity";
@@ -9,7 +9,7 @@ import * as DndService from "@/lib/utils/dnd_setting/dnd_services";
 export function useViewModel(
   activityData: IActivity,
   closeActivity?: () => void
-): ViewModel {
+): IViewModel {
   const [dndDraggedItem, setDndDraggedItem] = useState<{
     id: string;
     value: string;
@@ -65,7 +65,7 @@ export function useViewModel(
       replies: null,
       savedAt: Date.now(),
     });
-    const newReplies = ExerciseServices.getRrepliesTemplate(
+    const newReplies = ExerciseServices.getRepliesTemplate(
       activityData.exercise
     );
     setIsSolved(false);

@@ -1,9 +1,9 @@
 import { ReactNode, createContext, useContext } from "react";
 import { useViewModel } from "./use_view_model";
-import { ViewModel } from "../model/view_model";
+import { IViewModel } from "../model/view_model";
 import IActivity from "@/lib/activity/activity";
 
-const ViewModelContext = createContext<ViewModel | null>(null);
+const ViewModelContext = createContext<IViewModel | null>(null);
 const useViewModelContext = () => useContext(ViewModelContext);
 
 export function ViewModel({
