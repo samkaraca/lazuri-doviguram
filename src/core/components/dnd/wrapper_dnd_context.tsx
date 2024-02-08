@@ -1,5 +1,5 @@
 import { DndContext } from "@dnd-kit/core";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { BoardItemsBoard } from "./draggables_board";
 import styles from "./styles.module.scss";
 import IDraggable from "@/lib/utils/dnd_setting/draggable";
