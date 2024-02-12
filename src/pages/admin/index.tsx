@@ -1,6 +1,6 @@
 import { LandingPageView } from "@/features/landing_page_view";
-import ThemeAdminService from "@/lib/services/theme/theme_admin_service";
-import ThemeApiService from "@/lib/services/theme/theme_api_service";
+import { ThemeAdminService } from "@/api/admin_theme_api";
+import ThemeApiService from "@/backend/services/theme_service";
 import { defaultTheme } from "@/lib/theme/default_theme";
 import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
 import Head from "next/head";

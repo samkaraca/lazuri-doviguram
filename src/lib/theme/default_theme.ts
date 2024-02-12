@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { slugifyLaz } from "../utils/slugify_laz";
+import { slugifyLaz } from "../../utils/slugify_laz";
 import ITheme from "./theme";
 
 export const defaultTheme = (theme?: Partial<ITheme>) => {

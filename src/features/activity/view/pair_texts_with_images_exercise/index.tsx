@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
-import { Droppable } from "@/core/components/dnd/droppable";
-import { WrapperDndContext } from "@/core/components/dnd/wrapper_dnd_context";
-import { Draggable } from "@/core/components/dnd/draggable";
+import { Droppable } from "@/components/dnd/droppable";
+import { WrapperDndContext } from "@/components/dnd/wrapper_dnd_context";
+import { Draggable } from "@/components/dnd/draggable";
 import useViewModelContext from "../../view_model";
 import IQAExercise from "@/lib/exercise/qa_exercise/qa_exercise";
 import * as ExerciseServices from "@/lib/exercise/exercise_services";

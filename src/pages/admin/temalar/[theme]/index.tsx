@@ -2,7 +2,7 @@ import TP from "@/features/theme_page";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
-import ThemeAdminService from "@/lib/services/theme/theme_admin_service";
+import { ThemeAdminService } from "@/api/admin_theme_api";
 import ITheme from "@/lib/theme/theme";
 
 const AT = dynamic(() => import("@/features/admin_tools"), {

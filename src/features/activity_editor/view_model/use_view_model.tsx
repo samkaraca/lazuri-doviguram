@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { IViewModel } from "../model/view_model";
-import ActivityAdminService from "@/lib/services/activity/activity_admin_service";
+import { AdminActivityApi } from "@/api/admin_activity_api";
 import IActivity from "@/lib/activity/activity";
 import IExercise from "@/lib/exercise/exercise";
 
@@ -9,7 +9,7 @@ export function useViewModel(
   lessonId: string,
   activityData: IActivity
 ): IViewModel {
-  const adminService = useRef(new ActivityAdminService());
+  const adminService = useRef(new AdminActivityApi());
   const [type, setType] = useState<IViewModel["type"]>(activityData.type);
   const [title, setTitle] = useState(activityData.title);
   const [explanation, setExplanation] = useState(activityData.explanation);

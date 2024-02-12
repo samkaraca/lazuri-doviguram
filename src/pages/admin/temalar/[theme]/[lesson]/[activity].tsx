@@ -1,12 +1,12 @@
 import { ActivityEditor } from "@/features/activity_editor";
 import IActivity from "@/lib/activity/activity";
-import ActivityAdminService from "@/lib/services/activity/activity_admin_service";
+import { AdminActivityApi } from "@/api/admin_activity_api";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function ActivityEditorPage() {
   const pathname = usePathname();
-  const adminService = useRef(new ActivityAdminService());
+  const adminService = useRef(new AdminActivityApi());
   const [pathnames, setPathnames] = useState<[string, string, string]>();
   const [activityData, setActivityData] = useState<IActivity>();
 

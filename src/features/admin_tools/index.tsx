@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { LessonSideBar } from "./lesson_side_bar";
 import { ThemeSideBar } from "./theme_side_bar";
-import { InteractiveFeedbacks } from "@/core/components/interactive_feedbacks";
+import { InteractiveFeedbacks } from "@/components/interactive_feedbacks";
 import { useAdminViewModelContext } from "../theme_page/view_model/context_providers/admin_view_model";
 
 export default function AdminTools() {

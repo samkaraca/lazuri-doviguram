@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { DynamoDBThemeRepository } from "@/lib/repositories/theme/dynamodb_theme_repository";
-import { DynamoDBLessonRepository } from "@/lib/repositories/lesson/dynamodb_lesson_repository";
-import LessonApiService from "@/lib/services/lesson/lesson_api_service";
-import ThemeApiService from "@/lib/services/theme/theme_api_service";
+import { DynamoDBThemeRepository } from "@/backend/repositories/theme/dynamodb_theme_repository";
+import { DynamoDBLessonRepository } from "@/backend/repositories/lesson/dynamodb_lesson_repository";
+import LessonApiService from "@/backend/services/lesson_service";
+import ThemeApiService from "@/backend/services/theme_service";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const themeRepo = new DynamoDBThemeRepository();

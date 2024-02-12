@@ -1,8 +1,8 @@
 import { Clear } from "@mui/icons-material";
 import { IconButton, List, ListItem, TextField } from "@mui/material";
 import useViewModelContext from "@/features/activity_editor/view_model";
-import { AddFab } from "@/core/components/add_fab";
-import { ActivityListItemPaper } from "@/core/components/list_item_paper";
+import { AddFab } from "@/components/add_fab";
+import { ActivityListItemPaper } from "@/components/list_item_paper";
 import { nanoid } from "nanoid";
 import * as AdminFIBEServices from "@/lib/exercise/fill_in_blanks_exercise/admin_fibe_services";
 

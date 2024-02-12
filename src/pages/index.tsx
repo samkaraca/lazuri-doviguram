@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { LandingPageView } from "../features/landing_page_view";
-import { DynamoDBThemeRepository } from "@/lib/repositories/theme/dynamodb_theme_repository";
+import { DynamoDBThemeRepository } from "@/backend/repositories/theme/dynamodb_theme_repository";
 import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
-import ThemeApiService from "@/lib/services/theme/theme_api_service";
+import ThemeApiService from "@/backend/services/theme_service";
 
 export default function LandingPage({
   themeMetas,

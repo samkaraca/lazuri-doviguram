@@ -1,0 +1,1 @@
+This folder is dedicated to the backend of the application, specifically for the API routes of the Next.js app.

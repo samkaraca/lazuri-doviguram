@@ -1,6 +1,6 @@
-import { WrapperDndContext } from "@/core/components/dnd/wrapper_dnd_context";
-import { Droppable } from "@/core/components/dnd/droppable";
-import { Draggable } from "@/core/components/dnd/draggable";
+import { WrapperDndContext } from "@/components/dnd/wrapper_dnd_context";
+import { Droppable } from "@/components/dnd/droppable";
+import { Draggable } from "@/components/dnd/draggable";
 import useViewModelContext from "../../view_model";
 import IFillInBlanksExercise from "@/lib/exercise/fill_in_blanks_exercise/fill_in_blanks_exercise";
 import * as ExerciseServices from "@/lib/exercise/exercise_services";

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { Add, Clear } from "@mui/icons-material";
 import useViewModelContext from "@/features/activity_editor/view_model";
-import { ActivityListItemPaper } from "@/core/components/list_item_paper";
+import { ActivityListItemPaper } from "@/components/list_item_paper";
 import { nanoid } from "nanoid";
 import * as AdminBEServices from "@/lib/exercise/qa_exercise/admin_qae_services";
 import IQAExercise from "@/lib/exercise/qa_exercise/qa_exercise";

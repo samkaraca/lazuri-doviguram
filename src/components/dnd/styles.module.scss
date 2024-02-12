@@ -1,0 +1,74 @@
+@use "../../styles/global-variables.scss" as gv;
+
+$board-item-height: 1.8rem;
+
+.exercise-content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 3rem;
+}
+
+.board-items-board {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 1rem;
+  min-height: 10rem;
+  background-color: #ddd;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.board-item {
+  height: $board-item-height;
+  width: 10rem;
+  min-width: 10rem;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  background-color: steelblue;
+  border-radius: 7.7px;
+  overflow: hidden;
+  cursor: pointer;
+
+  &.error {
+    background-color: gv.$error-color;
+  }
+
+  &.success {
+    background-color: gv.$success-color;
+  }
+
+  p {
+    line-height: 1.8rem !important;
+    text-align: center;
+    word-break: keep-all;
+    overflow: hidden;
+    flex-grow: 1;
+    margin: 0;
+  }
+}
+
+.droppable {
+  box-sizing: content-box;
+  display: inline-block;
+  width: 10rem;
+  height: $board-item-height;
+  vertical-align: middle;
+  border: 1px solid gv.$neutral-color;
+  border-radius: 9px;
+
+  &.over {
+    box-shadow: 0 0 0.2rem 0.05rem gv.$neutral-color;
+  }
+
+  &.success {
+    border: 1px solid gv.$success-color;
+  }
+
+  &.error {
+    border: 1px solid gv.$error-color;
+  }
+}

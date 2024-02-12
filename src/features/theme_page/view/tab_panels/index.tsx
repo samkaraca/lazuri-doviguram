@@ -7,7 +7,7 @@ import {
 } from "@mui/icons-material";
 import { BaseViewModel } from "../../model/base_view_model";
 import IActivity from "@/lib/activity/activity";
-import ILocalExercise from "@/lib/repositories/local_exercise_repository/local_exercise";
+import ILocalExercise from "@/backend/repositories/local_exercise_repository/local_exercise";
 
 export function TabPanels() {
   const { lessons, activeLesson, openActivity, localExerciseDatas } =

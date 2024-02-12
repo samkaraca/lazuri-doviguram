@@ -1,9 +1,9 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import styles from "./styles.module.scss";
 import useViewModelContext from "../view_model";
-import { MediaTester } from "@/core/components/media_tester";
+import { MediaTester } from "@/components/media_tester";
 import YouTube from "react-youtube";
-import { NextImageContainer } from "@/core/components/next_image_container";
+import { NextImageContainer } from "@/components/next_image_container";
 import getYouTubeID from "get-youtube-id";
 import ExerciseEditor from "./exercise_editor";
 import IActivity from "@/lib/activity/activity";

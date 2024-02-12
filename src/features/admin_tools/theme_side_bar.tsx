@@ -1,4 +1,4 @@
-import { MediaTester } from "@/core/components/media_tester";
+import { MediaTester } from "@/components/media_tester";
 import styles from "./theme_side_bar.module.scss";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
@@ -9,7 +9,7 @@ import {
 import { useAdminViewModelContext } from "../theme_page/view_model/context_providers/admin_view_model";
 import { useBaseViewModelContext } from "../theme_page/view_model/context_providers/base_view_model";
 import { TextField } from "@mui/material";
-import { Testable } from "@/lib/types/testable";
+import { Testable } from "@/lib/testable";
 
 export function ThemeSideBar({
   isOpen,

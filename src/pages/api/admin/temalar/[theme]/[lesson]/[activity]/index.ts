@@ -1,5 +1,5 @@
-import { DynamoDBActivityRepository } from "@/lib/repositories/activity/dynamo_db_activity_repository";
-import ActivityApiService from "@/lib/services/activity/activity_api_service";
+import { DynamoDBActivityRepository } from "@/backend/repositories/activity/dynamo_db_activity_repository";
+import ActivityApiService from "@/backend/services/activity_service";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {

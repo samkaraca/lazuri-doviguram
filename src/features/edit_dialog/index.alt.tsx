@@ -5,7 +5,7 @@ import YouTube from "react-youtube";
 import getYouTubeID from "get-youtube-id";
 import styles from "./styles.module.scss";
 import { poppins } from "@/pages/_app";
-import { Testable } from "@/lib/types/testable";
+import { Testable } from "@/lib/testable";
 
 export interface IDialog {
   isOpen: boolean;

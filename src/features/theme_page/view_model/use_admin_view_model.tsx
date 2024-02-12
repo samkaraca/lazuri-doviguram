@@ -3,10 +3,10 @@ import { AdminViewModel } from "../model/admin_view_model";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { defaultLesson } from "@/lib/lesson/default_lesson";
-import { ApiResponse } from "@/lib/types/api_response";
+import { ApiResponse } from "@/lib/api_response";
 import { defaultActivity } from "@/lib/activity/default_activity";
-import { slugifyLaz } from "@/lib/utils/slugify_laz";
-import ThemeAdminService from "@/lib/services/theme/theme_admin_service";
+import { slugifyLaz } from "@/utils/slugify_laz";
+import { ThemeAdminService } from "@/api/admin_theme_api";
 import ILesson from "@/lib/lesson/lesson";
 
 export function useAdminViewModel(): AdminViewModel {

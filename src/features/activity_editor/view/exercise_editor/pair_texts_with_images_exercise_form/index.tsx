@@ -10,7 +10,7 @@ import { nanoid } from "nanoid";
 import { Fab } from "@mui/material";
 import { AltEditDialog } from "@/features/edit_dialog/index.alt";
 import useViewModelContext from "@/features/activity_editor/view_model";
-import { Testable } from "@/lib/types/testable";
+import { Testable } from "@/lib/testable";
 import * as AdminBEServices from "@/lib/exercise/qa_exercise/admin_qae_services";
 import IQAExercise from "@/lib/exercise/qa_exercise/qa_exercise";
 
