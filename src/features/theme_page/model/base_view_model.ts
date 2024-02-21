@@ -1,6 +1,6 @@
 import IActivity from "@/lib/activity/activity";
 import ILesson from "@/lib/lesson/lesson";
-import ILocalExercise from "@/backend/repositories/local_exercise_repository/local_exercise";
+import ILocalExercise from "@/api/local_exercise_repository/local_exercise";
 import { Dispatch, SetStateAction } from "react";
 
 export interface BaseViewModel {

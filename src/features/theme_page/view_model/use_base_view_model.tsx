@@ -3,8 +3,8 @@ import { BaseViewModel } from "../model/base_view_model";
 import IActivity from "@/lib/activity/activity";
 import ILesson from "@/lib/lesson/lesson";
 import ITheme from "@/lib/theme/theme";
-import createLocalExerciseRepository from "@/backend/repositories/local_exercise_repository/local_exercise_repository_implementation";
-import ILocalExercise from "@/backend/repositories/local_exercise_repository/local_exercise";
+import createLocalExerciseRepository from "@/api/local_exercise_repository/local_exercise_repository_implementation";
+import ILocalExercise from "@/api/local_exercise_repository/local_exercise";
 
 export function useBaseViewModel(theme: ITheme): BaseViewModel {
   const [id, setId] = useState(theme.id);
