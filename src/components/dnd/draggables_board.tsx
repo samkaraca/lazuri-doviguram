@@ -1,6 +1,6 @@
 import { Draggable } from "@/components/dnd/draggable";
 import styles from "./styles.module.scss";
-import IDraggable from "@/utils/dnd_setting/draggable";
+import IDraggable from "@/lib/dnd_setting/draggable";
 
 export function BoardItemsBoard({
   board,

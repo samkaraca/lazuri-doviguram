@@ -1,7 +1,7 @@
 import IActivity from "../lib/activity/activity";
 import ILesson from "../lib/lesson/lesson";
 import ITheme from "../lib/theme/theme";
-import { ApiResponse } from "../lib/api_response";
+import { ApiResponse } from "./api_response";
 import ApiService from "../backend/services/theme_service";
 
 export class ThemeAdminService {

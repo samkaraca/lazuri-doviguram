@@ -1,4 +1,4 @@
-import { DynamoDBClientSingleton } from "../../../utils/dynamo_db_client_singleton";
+import { DynamoDBClientSingleton } from "../../utils/dynamo_db_client_singleton";
 import {
   DeleteItemCommand,
   GetItemCommand,

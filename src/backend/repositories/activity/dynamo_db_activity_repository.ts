@@ -2,7 +2,7 @@ import { GetItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import IActivityRepository from "./activity_repository";
 import { DBActivity } from "@/backend/types/db_activity";
-import { DynamoDBClientSingleton } from "@/utils/dynamo_db_client_singleton";
+import { DynamoDBClientSingleton } from "@/backend/utils/dynamo_db_client_singleton";
 
 const dynamoDB = DynamoDBClientSingleton.getInstance();
 

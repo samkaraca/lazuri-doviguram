@@ -2,7 +2,7 @@ import { DndContext } from "@dnd-kit/core";
 import { ReactNode } from "react";
 import { BoardItemsBoard } from "./draggables_board";
 import styles from "./styles.module.scss";
-import IDraggable from "@/utils/dnd_setting/draggable";
+import IDraggable from "@/lib/dnd_setting/draggable";
 
 export function WrapperDndContext({
   board,

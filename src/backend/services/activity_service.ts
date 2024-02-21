@@ -1,6 +1,6 @@
 import IActivity from "@/lib/activity/activity";
 import IActivityRepository from "@/backend/repositories/activity/activity_repository";
-import { ApiResponse } from "@/lib/api_response";
+import { ApiResponse } from "@/api/api_response";
 
 export default class ActivityBackendService {
   constructor(private readonly activityRepo: IActivityRepository) {}

@@ -1,5 +1,5 @@
 import { GetItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
-import { DynamoDBClientSingleton } from "../../../utils/dynamo_db_client_singleton";
+import { DynamoDBClientSingleton } from "../../utils/dynamo_db_client_singleton";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { DBLesson } from "../../types/db_lesson";
 import ILessonRepository from "./lesson_repository";

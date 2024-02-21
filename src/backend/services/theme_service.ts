@@ -1,7 +1,7 @@
 import { IThemeRepository } from "@/backend/repositories/theme/theme_repository";
 import ITheme from "@/lib/theme/theme";
 import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
-import { ApiResponse } from "@/lib/api_response";
+import { ApiResponse } from "@/api/api_response";
 import {
   convertThemeDBToUser,
   convertThemeUserToDB,

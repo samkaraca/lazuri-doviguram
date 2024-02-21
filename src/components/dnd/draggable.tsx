@@ -1,7 +1,7 @@
 import { useDraggable } from "@dnd-kit/core";
 import styles from "./styles.module.scss";
 import { CSSProperties } from "react";
-import IDraggable from "@/utils/dnd_setting/draggable";
+import IDraggable from "@/lib/dnd_setting/draggable";
 
 export function Draggable({
   item,
