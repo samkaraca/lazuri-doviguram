@@ -7,7 +7,7 @@ import {
   convertThemeUserToDB,
 } from "../utils/db_converters";
 
-export default class ThemeBackendService {
+export class BackendThemeService {
   constructor(private readonly themeRepository: IThemeRepository) {}
 
   getThemeMetas = async (): Promise<ApiResponse<ThemeMetaDTO[]>> => {

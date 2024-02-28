@@ -6,8 +6,10 @@ import { defaultLesson } from "@/lib/lesson/default_lesson";
 import { ApiResponse } from "@/api/api_response";
 import { defaultActivity } from "@/lib/activity/default_activity";
 import { slugifyLaz } from "@/utils/slugify_laz";
-import { ThemeAdminService } from "@/api/admin_theme_api";
+import { AdminThemeApi } from "@/api/admin_theme_api";
 import ILesson from "@/lib/lesson/lesson";
+import { AdminLessonApi } from "@/api/admin_lesson_api";
+import { AdminActivityApi } from "@/api/admin_activity_api";
 
 export function useAdminViewModel(): AdminViewModel {
   const {
@@ -25,7 +27,9 @@ export function useAdminViewModel(): AdminViewModel {
     setActiveLesson,
   } = useBaseViewModelContext()!;
   const { replace } = useRouter();
-  const adminService = useRef(new ThemeAdminService());
+  const adminThemeApi = useRef(new AdminThemeApi());
+  const adminLessonApi = useRef(new AdminLessonApi());
+  const adminActivityApi = useRef(new AdminActivityApi());
   const [stalling, setStalling] = useState(false);
   const [snackbar, setSnackbar] = useState<{
     severity: "error" | "success" | "warning" | "info";
@@ -68,7 +72,7 @@ export function useAdminViewModel(): AdminViewModel {
       const newId = slugifyLaz(newTitle);
       withFeedback(
         () =>
-          adminService.current.relocateTheme(id, {
+          adminThemeApi.current.relocateTheme(id, {
             id: newId,
             title: newTitle,
             explanation: newExplanation,
@@ -89,7 +93,7 @@ export function useAdminViewModel(): AdminViewModel {
     } else {
       withFeedback(
         () =>
-          adminService.current.saveTheme({
+          adminThemeApi.current.saveTheme({
             id,
             explanation: newExplanation,
             image: newImage,
@@ -106,7 +110,7 @@ export function useAdminViewModel(): AdminViewModel {
 
   const deleteTheme = async () => {
     withFeedback(
-      () => adminService.current.deleteTheme(id),
+      () => adminThemeApi.current.deleteTheme(id),
       (res) => replace("/admin")
     );
   };
@@ -114,7 +118,7 @@ export function useAdminViewModel(): AdminViewModel {
   const saveLesson = async (lesson: Omit<ILesson, "activities">) => {
     if (activeLesson === null) return;
     await withFeedback(
-      () => adminService.current.saveLesson(id, lesson),
+      () => adminLessonApi.current.saveLesson(id, lesson),
       () => {
         setLessons((prev) => {
           const newLessons = [...prev];
@@ -128,7 +132,7 @@ export function useAdminViewModel(): AdminViewModel {
   const createLesson = async () => {
     const lesson = defaultLesson();
     await withFeedback(
-      () => adminService.current.createLesson(id, lesson),
+      () => adminLessonApi.current.createLesson(id, lesson),
       (res) => {
         setLessons((prev) => [...prev, lesson]);
         if (activeLesson === null) {
@@ -142,7 +146,7 @@ export function useAdminViewModel(): AdminViewModel {
     if (activeLesson === null) return;
     const lessonId = lessons[activeLesson].id;
     await withFeedback(
-      () => adminService.current.deleteLesson(id, lessonId),
+      () => adminLessonApi.current.deleteLesson(id, lessonId),
       (res) => {
         const newLessons = lessons.filter((l) => l.id !== lessonId);
         let newActiveLesson: number | null = activeLesson;
@@ -164,7 +168,7 @@ export function useAdminViewModel(): AdminViewModel {
     const activity = defaultActivity();
     const lessonId = lessons[activeLesson].id;
     withFeedback(
-      () => adminService.current.createActivity(id, lessonId, activity),
+      () => adminActivityApi.current.createActivity(id, lessonId, activity),
       () => {
         setLessons((prev) => {
           return prev.map((l) => {
@@ -181,7 +185,7 @@ export function useAdminViewModel(): AdminViewModel {
     if (activeLesson === null) return;
     const lessonId = lessons[activeLesson].id;
     withFeedback(
-      () => adminService.current.deleteActivity(id, lessonId, activityId),
+      () => adminActivityApi.current.deleteActivity(id, lessonId, activityId),
       () => {
         setLessons((prev) => {
           const newLessons = [...prev] as any;

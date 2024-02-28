@@ -2,7 +2,7 @@ import IActivity from "@/lib/activity/activity";
 import IActivityRepository from "@/backend/repositories/activity/activity_repository";
 import { ApiResponse } from "@/api/api_response";
 
-export default class ActivityBackendService {
+export class BackendActivityService {
   constructor(private readonly activityRepo: IActivityRepository) {}
 
   async createActivity(themeId: string, lessonId: string, activity: IActivity) {

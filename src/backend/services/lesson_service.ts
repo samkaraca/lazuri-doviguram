@@ -2,7 +2,7 @@ import ILessonRepository from "@/backend/repositories/lesson/lesson_repository";
 import ILesson from "../../lib/lesson/lesson";
 import { convertLessonUserToDB } from "../utils/db_converters";
 
-export default class LessonBackendService {
+export class BackendLessonService {
   constructor(private readonly lessonRepo: ILessonRepository) {}
 
   createLesson = async (themeId: string, lesson: ILesson) => {

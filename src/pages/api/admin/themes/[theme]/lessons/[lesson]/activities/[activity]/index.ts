@@ -1,10 +1,13 @@
 import { DynamoDBActivityRepository } from "@/backend/repositories/activity/dynamo_db_activity_repository";
-import ActivityApiService from "@/backend/services/activity_service";
+import { BackendActivityService } from "@/backend/services/activity_service";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const activityRepo = new DynamoDBActivityRepository();
-  const activityApiService = new ActivityApiService(activityRepo);
+  const activityApiService = new BackendActivityService(activityRepo);
   const { theme, lesson, activity } = req.query as {
     theme: string;
     lesson: string;
@@ -18,6 +21,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       activity
     );
     return res.status(200).json(rawData);
+  } else if (req.method === "PUT") {
+    const repRes = await activityApiService.saveActivity(
+      theme,
+      lesson,
+      req.body.activity
+    );
+    return res.status(200).send(repRes);
   } else if (req.method === "DELETE") {
     const repRes = await activityApiService.deleteActivity(
       theme,
@@ -29,5 +39,3 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   return res.status(501).json({ error: "Unsopported request method" });
 }
-
-export default handler;

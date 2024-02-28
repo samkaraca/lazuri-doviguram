@@ -1,80 +1,14 @@
-import IActivity from "../lib/activity/activity";
 import ILesson from "../lib/lesson/lesson";
 import ITheme from "../lib/theme/theme";
 import { ApiResponse } from "./api_response";
-import ApiService from "../backend/services/theme_service";
+import { BackendThemeService } from "../backend/services/theme_service";
 
-export class ThemeAdminService {
-  deleteActivity = async (
-    themeId: string,
-    lessonId: string,
-    activityId: string
-  ) => {
-    const resObj = await fetch(
-      `/api/admin/temalar/${themeId}/${lessonId}/${activityId}`,
-      {
-        method: "DELETE",
-      }
-    );
-    return (await resObj.json()) as ApiResponse;
-  };
-
-  createActivity = async (
-    themeId: string,
-    lessonId: string,
-    activity: IActivity
-  ) => {
-    const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        type: "createActivity",
-        activity,
-      }),
-    });
-    return (await resObj.json()) as ApiResponse;
-  };
-
-  deleteLesson = async (themeId: string, lessonId: string) => {
-    const resObj = await fetch(`/api/admin/temalar/${themeId}/${lessonId}`, {
-      method: "DELETE",
-    });
-    return (await resObj.json()) as ApiResponse;
-  };
-
-  createLesson = async (themeId: string, lesson: ILesson) => {
-    const resObj = await fetch(`/api/admin/temalar/${themeId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        type: "createLesson",
-        lesson,
-      }),
-    });
-    return (await resObj.json()) as ApiResponse;
-  };
-
-  saveLesson = async (themeId: string, lesson: Omit<ILesson, "activities">) => {
-    const resObj = await fetch(`/api/admin/temalar/${themeId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        type: "saveLesson",
-        lesson,
-      }),
-    });
-    return (await resObj.json()) as ApiResponse;
-  };
-
+export class AdminThemeApi {
   fetchTheme = async (pathName: string) => {
-    const resObj = await fetch(`/api/admin/temalar/${pathName}`);
-    const res = await (resObj.json() as ReturnType<ApiService["getTheme"]>);
+    const resObj = await fetch(`/api/admin/themes/${pathName}`);
+    const res = await (resObj.json() as ReturnType<
+      BackendThemeService["getTheme"]
+    >);
     if (res.status === "success" && res.data) {
       return res.data;
     }
@@ -84,38 +18,41 @@ export class ThemeAdminService {
   saveTheme = async (
     theme: Pick<ITheme, "id" | "explanation" | "image" | "youtubeVideoUrl">
   ) => {
-    const resObj = await fetch(`/api/admin/temalar`, {
-      method: "PUT",
-      body: JSON.stringify({
-        type: "saveTheme",
-        theme,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const resObj = await fetch(
+      `/api/admin/themes/${theme.id}?type=save-theme`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          theme,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return (await resObj.json()) as ApiResponse;
   };
 
   relocateTheme = async (oldThemeId: string, theme: ITheme) => {
-    const resObj = await fetch(`/api/admin/temalar/${oldThemeId}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        type: "relocateTheme",
-        theme,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const resObj = await fetch(
+      `/api/admin/themes/${oldThemeId}?type=relocate-theme`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          theme,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return (await resObj.json()) as ApiResponse;
   };
 
   createTheme = async (theme: ITheme) => {
-    const resObj = await fetch(`/api/admin/temalar`, {
-      method: "PUT",
+    const resObj = await fetch(`/api/admin/themes`, {
+      method: "POST",
       body: JSON.stringify({
-        type: "createTheme",
         theme,
       }),
       headers: {
@@ -126,7 +63,7 @@ export class ThemeAdminService {
   };
 
   deleteTheme = async (themeId: string) => {
-    const resObj = await fetch(`/api/admin/temalar/${themeId}`, {
+    const resObj = await fetch(`/api/admin/themes/${themeId}`, {
       method: "DELETE",
     });
     return (await resObj.json()) as ApiResponse;

@@ -1,20 +1,20 @@
 import { LandingPageView } from "@/features/landing_page_view";
-import { ThemeAdminService } from "@/api/admin_theme_api";
-import ThemeApiService from "@/backend/services/theme_service";
+import { AdminThemeApi } from "@/api/admin_theme_api";
+import { BackendThemeService } from "@/backend/services/theme_service";
 import { defaultTheme } from "@/lib/theme/default_theme";
 import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 
 export default function AdminPage() {
-  const adminService = useRef(new ThemeAdminService());
+  const adminThemeApi = useRef(new AdminThemeApi());
   const [themeMetas, setThemeMetas] = useState<ThemeMetaDTO[]>();
   const [stalling, setStalling] = useState(false);
 
   const fetchThemeMetas = async () => {
-    const resObj = await fetch(`/api/admin/temalar?r=theme-metas`);
+    const resObj = await fetch(`/api/admin/themes?type=theme-metas`);
     const res = await (resObj.json() as ReturnType<
-      ThemeApiService["getThemeMetas"]
+      BackendThemeService["getThemeMetas"]
     >);
     if (res.status === "success" && res.data) {
       setThemeMetas(res.data);
@@ -27,7 +27,7 @@ export default function AdminPage() {
 
   const createTheme = async () => {
     setStalling(true);
-    const res = await adminService.current.createTheme(defaultTheme());
+    const res = await adminThemeApi.current.createTheme(defaultTheme());
     if (res.status === "success") await fetchThemeMetas();
     setStalling(false);
   };
