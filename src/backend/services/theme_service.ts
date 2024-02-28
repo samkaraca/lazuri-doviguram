@@ -51,7 +51,7 @@ export class BackendThemeService {
     }
   };
 
-  deleteTheme = async (themeId: string) => {
+  deleteTheme = async (themeId: string): Promise<ApiResponse> => {
     try {
       await this.themeRepository.deleteTheme(themeId);
       return { status: "success", message: "Tema başarıyla silindi." };
@@ -77,7 +77,7 @@ export class BackendThemeService {
     }
   };
 
-  createTheme = async (theme: ITheme) => {
+  createTheme = async (theme: ITheme): Promise<ApiResponse> => {
     try {
       const themeToCreate = { ...theme, pk: "theme" } as any;
       await this.themeRepository.createTheme(
@@ -95,7 +95,7 @@ export class BackendThemeService {
 
   saveTheme = async (
     theme: Pick<ITheme, "id" | "explanation" | "image" | "youtubeVideoUrl">
-  ) => {
+  ): Promise<ApiResponse> => {
     try {
       await this.themeRepository.saveTheme(theme);
       return {

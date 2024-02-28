@@ -5,7 +5,11 @@ import { ApiResponse } from "@/api/api_response";
 export class BackendActivityService {
   constructor(private readonly activityRepo: IActivityRepository) {}
 
-  async createActivity(themeId: string, lessonId: string, activity: IActivity) {
+  async createActivity(
+    themeId: string,
+    lessonId: string,
+    activity: IActivity
+  ): Promise<ApiResponse> {
     try {
       const activityToCreate = { ...activity } as any;
       delete activityToCreate.id;
@@ -25,7 +29,11 @@ export class BackendActivityService {
     }
   }
 
-  async saveActivity(themeId: string, lessonId: string, activity: IActivity) {
+  async saveActivity(
+    themeId: string,
+    lessonId: string,
+    activity: IActivity
+  ): Promise<ApiResponse> {
     try {
       const activityToSave = { ...activity } as any;
       delete activityToSave.id;
@@ -42,7 +50,11 @@ export class BackendActivityService {
     }
   }
 
-  async deleteActivity(themeId: string, lessonId: string, activityId: string) {
+  async deleteActivity(
+    themeId: string,
+    lessonId: string,
+    activityId: string
+  ): Promise<ApiResponse> {
     try {
       await this.activityRepo.deleteActivity(themeId, lessonId, activityId);
       return { status: "success", message: "Aktivite başarıyla silindi." };

@@ -1,4 +1,3 @@
-import ILesson from "../lib/lesson/lesson";
 import ITheme from "../lib/theme/theme";
 import { ApiResponse } from "./api_response";
 import { BackendThemeService } from "../backend/services/theme_service";

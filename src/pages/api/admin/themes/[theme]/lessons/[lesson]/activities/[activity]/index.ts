@@ -1,13 +1,14 @@
+import { ApiResponse } from "@/api/api_response";
 import { DynamoDBActivityRepository } from "@/backend/repositories/activity/dynamo_db_activity_repository";
 import { BackendActivityService } from "@/backend/services/activity_service";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ApiResponse>
 ) {
   const activityRepo = new DynamoDBActivityRepository();
-  const activityApiService = new BackendActivityService(activityRepo);
+  const backendActivityService = new BackendActivityService(activityRepo);
   const { theme, lesson, activity } = req.query as {
     theme: string;
     lesson: string;
@@ -15,27 +16,29 @@ export default async function handler(
   };
 
   if (req.method === "GET") {
-    const rawData = await activityApiService.getActivity(
+    const rawData = await backendActivityService.getActivity(
       theme,
       lesson,
       activity
     );
-    return res.status(200).json(rawData);
+    res.status(200).json(rawData);
   } else if (req.method === "PUT") {
-    const repRes = await activityApiService.saveActivity(
+    const repRes = await backendActivityService.saveActivity(
       theme,
       lesson,
       req.body.activity
     );
-    return res.status(200).send(repRes);
+    res.status(200).json(repRes);
   } else if (req.method === "DELETE") {
-    const repRes = await activityApiService.deleteActivity(
+    const repRes = await backendActivityService.deleteActivity(
       theme,
       lesson,
       activity
     );
-    return res.status(204).send(repRes);
+    res.status(200).json(repRes);
+  } else {
+    res
+      .status(405)
+      .json({ status: "error", message: "Unsopported request method" });
   }
-
-  return res.status(405).json({ error: "Unsopported request method" });
 }

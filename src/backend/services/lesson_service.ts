@@ -1,11 +1,15 @@
 import ILessonRepository from "@/backend/repositories/lesson/lesson_repository";
 import ILesson from "../../lib/lesson/lesson";
 import { convertLessonUserToDB } from "../utils/db_converters";
+import { ApiResponse } from "@/api/api_response";
 
 export class BackendLessonService {
   constructor(private readonly lessonRepo: ILessonRepository) {}
 
-  createLesson = async (themeId: string, lesson: ILesson) => {
+  createLesson = async (
+    themeId: string,
+    lesson: ILesson
+  ): Promise<ApiResponse> => {
     try {
       await this.lessonRepo.createLesson(
         themeId,
@@ -22,7 +26,10 @@ export class BackendLessonService {
     }
   };
 
-  saveLesson = async (themeId: string, lesson: Omit<ILesson, "activities">) => {
+  saveLesson = async (
+    themeId: string,
+    lesson: Omit<ILesson, "activities">
+  ): Promise<ApiResponse> => {
     try {
       const lessonToSave = { ...lesson } as any;
       delete lessonToSave.id;
@@ -34,7 +41,10 @@ export class BackendLessonService {
     }
   };
 
-  deleteLesson = async (themeId: string, lessonId: string) => {
+  deleteLesson = async (
+    themeId: string,
+    lessonId: string
+  ): Promise<ApiResponse> => {
     try {
       await this.lessonRepo.deleteLesson(themeId, lessonId);
       return { status: "success", message: "Ders başarıyla silindi." };
