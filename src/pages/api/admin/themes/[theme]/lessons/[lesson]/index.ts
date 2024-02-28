@@ -15,8 +15,8 @@ export default async function handler(
     return res.status(200).send(repRes);
   } else if (req.method === "DELETE") {
     const repRes = await lessonApiService.deleteLesson(theme, lesson);
-    return res.status(200).send(repRes);
+    return res.status(204).send(repRes);
   }
 
-  return res.status(501).json({ error: "Unsopported request method" });
+  return res.status(405).json({ error: "Unsopported request method" });
 }

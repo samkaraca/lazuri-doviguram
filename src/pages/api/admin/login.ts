@@ -10,10 +10,17 @@ export default async function handler(
     const jwtSecretKey = process.env.JWT_SECRET_KEY;
     const password = req.body.password;
 
-    if (!jwtSecretKey)
-      return res.status(500).send("Environment variable missing.");
+    if (!jwtSecretKey) {
+      console.error("JWT_SECRET_KEY is not set in the environment variables");
 
-    if (!password) return res.status(400).send("Password missing.");
+      return res.status(500).json({
+        error: "Internal server error. Please contact the administrator.",
+      });
+    }
+
+    if (!password) {
+      return res.status(400).json({ error: "Password is required" });
+    }
 
     if (password === jwtSecretKey) {
       const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
@@ -24,11 +31,11 @@ export default async function handler(
 
       setCookie("token", jwt, { req, res, maxAge: 60 * 60 * 24 * 360 });
 
-      return res.status(200).send("Successful!");
+      return res.status(200).json({ message: "Logged in" });
     }
 
-    return res.status(401).send("Wrong password.");
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
-  return res.status(400).send("API route not found.");
+  return res.status(405).json({ error: "Unsopported request method" });
 }

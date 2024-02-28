@@ -24,11 +24,11 @@ export default async function handler(
       return res.status(200).send(repRes);
     }
 
-    return res.status(501).json({ error: "Unsopported action" });
+    return res.status(400).json({ error: "Unsopported action" });
   } else if (req.method === "DELETE") {
     const repRes = await themeApiService.deleteTheme(theme);
-    return res.status(200).json(repRes);
+    return res.status(204).json(repRes);
   }
 
-  return res.status(501).json({ error: "Unsopported request method" });
+  return res.status(405).json({ error: "Unsopported request method" });
 }

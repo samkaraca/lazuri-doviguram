@@ -12,8 +12,8 @@ export default async function handler(
 
   if (req.method === "POST") {
     const repRes = await lessonApiService.createLesson(theme, req.body.lesson);
-    return res.status(200).send(repRes);
+    return res.status(201).send(repRes);
   }
 
-  return res.status(501).json({ error: "Unsopported request method" });
+  return res.status(405).json({ error: "Unsopported request method" });
 }

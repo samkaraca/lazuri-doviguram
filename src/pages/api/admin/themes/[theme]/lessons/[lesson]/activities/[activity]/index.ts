@@ -34,8 +34,8 @@ export default async function handler(
       lesson,
       activity
     );
-    return res.status(200).send(repRes);
+    return res.status(204).send(repRes);
   }
 
-  return res.status(501).json({ error: "Unsopported request method" });
+  return res.status(405).json({ error: "Unsopported request method" });
 }
