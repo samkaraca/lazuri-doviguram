@@ -22,7 +22,7 @@ $board-item-height: 1.8rem;
 
 .board-item {
   height: $board-item-height;
-  width: 10rem;
+  width: max-content;
   min-width: 10rem;
   text-align: center;
   font-size: 0.9rem;
@@ -47,14 +47,14 @@ $board-item-height: 1.8rem;
     word-break: keep-all;
     overflow: hidden;
     flex-grow: 1;
-    margin: 0;
+    margin-inline: 0.7rem !important;
   }
 }
 
 .droppable {
   box-sizing: content-box;
   display: inline-block;
-  width: 10rem;
+  min-width: 10rem;
   height: $board-item-height;
   vertical-align: middle;
   border: 1px solid gv.$neutral-color;
