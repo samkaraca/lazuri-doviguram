@@ -88,7 +88,8 @@ export function ThemeSideBar({
       adminTestfulThemeImage.status === "success"
         ? adminTestfulThemeImage.value
         : image,
-      adminTestfulThemeYoutubeVideoUrl.status === "success"
+      adminTestfulThemeYoutubeVideoUrl.value === "" ||
+        adminTestfulThemeYoutubeVideoUrl.status === "success"
         ? adminTestfulThemeYoutubeVideoUrl.value
         : youtubeVideoUrl
     );

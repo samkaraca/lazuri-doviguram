@@ -1,5 +1,5 @@
 import { useBaseViewModelContext } from "./context_providers/base_view_model";
-import { AdminViewModel } from "../model/admin_view_model";
+import { IAdminViewModel } from "../model/admin_view_model";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { defaultLesson } from "@/lib/lesson/default_lesson";
@@ -11,7 +11,7 @@ import ILesson from "@/lib/lesson/lesson";
 import { AdminLessonApi } from "@/api/admin_lesson_api";
 import { AdminActivityApi } from "@/api/admin_activity_api";
 
-export function useAdminViewModel(): AdminViewModel {
+export function useAdminViewModel(): IAdminViewModel {
   const {
     id,
     title,

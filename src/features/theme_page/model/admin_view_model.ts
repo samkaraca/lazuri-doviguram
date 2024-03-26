@@ -1,14 +1,14 @@
 import ILesson from "@/lib/lesson/lesson";
 import { Dispatch, SetStateAction } from "react";
 
-export interface AdminViewModel {
+export interface IAdminViewModel {
   stalling: boolean;
   snackbar: {
     severity: "error" | "success" | "warning" | "info";
     message: string;
     visible: boolean;
   };
-  setSnackbar: Dispatch<SetStateAction<AdminViewModel["snackbar"]>>;
+  setSnackbar: Dispatch<SetStateAction<IAdminViewModel["snackbar"]>>;
   createLesson: () => Promise<void>;
   saveLesson: (lesson: Omit<ILesson, "activities">) => Promise<void>;
   deleteLesson: () => Promise<void>;
