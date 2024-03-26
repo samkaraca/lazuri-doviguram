@@ -61,6 +61,7 @@ export function useBaseViewModel(theme: ITheme): BaseViewModel {
     if (activityId === null) {
       delete query["alistirma"];
     } else {
+      query["ders"] = ((activeLesson as number) + 1).toString();
       query["alistirma"] = activityId;
     }
 
@@ -92,7 +93,7 @@ export function useBaseViewModel(theme: ITheme): BaseViewModel {
         openActivity(activeActivityId, activity);
       }
     }
-  }, []);
+  }, [router.isReady]);
 
   const getLocalExerciseDatas = () => {
     if (activeLesson === null) return;
