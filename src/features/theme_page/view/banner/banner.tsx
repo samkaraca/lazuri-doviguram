@@ -3,10 +3,22 @@ import getYouTubeID from "get-youtube-id";
 import styles from "./banner.module.scss";
 import { useBaseViewModelContext } from "../../view_model/context_providers/base_view_model";
 import { BaseViewModel } from "../../model/base_view_model";
+import { useEffect, useState } from "react";
 
 export function Banner() {
-  const { title, explanation, image, youtubeVideoUrl } =
+  const [lessonCount, setLessonCount] = useState(0);
+  const [activityCount, setActivityCount] = useState(0);
+  const { title, explanation, image, youtubeVideoUrl, lessons } =
     useBaseViewModelContext() as BaseViewModel;
+
+  useEffect(() => {
+    const lessonCount = lessons.length;
+    const activityCount = lessons.reduce((acc, lesson) => {
+      return acc + lesson.activities.length;
+    }, 0);
+    setLessonCount(lessonCount);
+    setActivityCount(activityCount);
+  }, [lessons]);
 
   return (
     <div className={styles["banner"]}>
@@ -18,12 +30,16 @@ export function Banner() {
         <div className={`${styles["content"]}`}>
           <h1>{title}</h1>
           <h3>{explanation}</h3>
-          <h5>4 ders • 16 aktivite</h5>
-          <YouTube
-            iframeClassName={styles["iframe"]}
-            className={styles["youtube"]}
-            videoId={getYouTubeID(youtubeVideoUrl) ?? undefined}
-          />
+          <h5>
+            {lessonCount} ders • {activityCount} aktivite
+          </h5>
+          {youtubeVideoUrl && (
+            <YouTube
+              iframeClassName={styles["iframe"]}
+              className={styles["youtube"]}
+              videoId={getYouTubeID(youtubeVideoUrl) ?? undefined}
+            />
+          )}
         </div>
       </div>
     </div>
