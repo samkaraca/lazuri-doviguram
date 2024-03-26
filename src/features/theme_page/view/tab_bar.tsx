@@ -3,8 +3,9 @@ import { useBaseViewModelContext } from "../view_model/context_providers/base_vi
 import { BaseViewModel } from "../model/base_view_model";
 
 export function TabBar() {
-  const { lessons, activeLesson, setActiveLesson } =
+  const { lessons, changeActiveLesson, activeLesson } =
     useBaseViewModelContext() as BaseViewModel;
+
   if (activeLesson === null) return null;
 
   return (
@@ -14,7 +15,7 @@ export function TabBar() {
       allowScrollButtonsMobile
       centered
       value={activeLesson}
-      onChange={(e, newValue) => setActiveLesson(newValue)}
+      onChange={(e, newValue) => changeActiveLesson(newValue)}
       sx={{ maxWidth: "100%", width: "max-content", margin: "0 auto" }}
     >
       {lessons.map(({ id }, i: number) => {

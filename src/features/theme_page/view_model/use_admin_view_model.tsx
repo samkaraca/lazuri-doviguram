@@ -24,7 +24,7 @@ export function useAdminViewModel(): IAdminViewModel {
     setImage,
     setYoutubeVideoUrl,
     setLessons,
-    setActiveLesson,
+    changeActiveLesson,
   } = useBaseViewModelContext()!;
   const { replace } = useRouter();
   const adminThemeApi = useRef(new AdminThemeApi());
@@ -136,7 +136,7 @@ export function useAdminViewModel(): IAdminViewModel {
       (res) => {
         setLessons((prev) => [...prev, lesson]);
         if (activeLesson === null) {
-          setActiveLesson(0);
+          changeActiveLesson(0);
         }
       }
     );
@@ -158,7 +158,7 @@ export function useAdminViewModel(): IAdminViewModel {
           newActiveLesson = 0;
         }
         setLessons(() => newLessons);
-        setActiveLesson(() => newActiveLesson);
+        changeActiveLesson(newActiveLesson);
       }
     );
   };

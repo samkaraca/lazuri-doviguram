@@ -26,8 +26,8 @@ export interface BaseViewModel {
   setYoutubeVideoUrl: Dispatch<
     SetStateAction<BaseViewModel["youtubeVideoUrl"]>
   >;
+  changeActiveLesson: (lesson: number | null) => void;
   setLessons: Dispatch<SetStateAction<BaseViewModel["lessons"]>>;
-  setActiveLesson: Dispatch<SetStateAction<BaseViewModel["activeLesson"]>>;
   openActivity: (activityId: string, activity: IActivity) => void;
   closeActivity: () => void;
 }
