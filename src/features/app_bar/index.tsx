@@ -20,7 +20,18 @@ export function AppBar({ home }: { home: "/admin" | "/" }) {
             {JSON.parse(process.env.NEXT_PUBLIC_NAVIGATION_ITEMS!).map(
               (item: any) => {
                 return (
-                  <a className="simple" href={item.link} key={item.title}>
+                  <a
+                    className="simple"
+                    target={item.targetBlank ? "_blank" : "_self"}
+                    href={
+                      (item.link.startsWith("/")
+                        ? home === "/"
+                          ? ""
+                          : home
+                        : "") + item.link
+                    }
+                    key={item.title}
+                  >
                     {item.title}
                   </a>
                 );

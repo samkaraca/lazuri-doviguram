@@ -15,7 +15,7 @@ export function ThemesSection({
   return (
     <article id="temalar" className={styles["themes"]}>
       <div>
-        <h4>Temel Lazca</h4>
+        <h4>{process.env.NEXT_PUBLIC_THEMES_HEADLINE}</h4>
         <section aria-label="temalar">
           <ol className={styles["cards"]}>
             {themePreviews.map((preview) => {
