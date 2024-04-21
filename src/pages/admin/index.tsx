@@ -49,7 +49,9 @@ export default function AdminPage() {
       </Head>
       <LandingPageView
         home="/admin"
-        themePreviews={themeMetas}
+        themePreviews={themeMetas.sort((a, b) =>
+          a.createdAt > b.createdAt ? 1 : -1
+        )}
         createNewThemeButton={
           <button
             disabled={stalling}

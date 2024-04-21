@@ -28,7 +28,9 @@ export async function getStaticProps() {
   if (res.status === "success" && res.data) {
     return {
       props: {
-        themeMetas: res.data,
+        themeMetas: res.data.sort((a, b) =>
+          a.createdAt > b.createdAt ? 1 : -1
+        ),
       },
     };
   }

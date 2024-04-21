@@ -83,9 +83,7 @@ export default function EditorForm() {
           <YouTube
             style={{
               visibility: "hidden",
-              position: "absolute",
-              top: "999vh",
-              left: "999vw",
+              height: 0,
             }}
             videoId={
               getYouTubeID(youtubeVideoUrl.value) ??
