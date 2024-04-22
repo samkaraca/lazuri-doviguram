@@ -56,7 +56,7 @@
 
   p {
     font-size: 1rem;
-    max-width: 40rem;
+    max-width: 100%;
   }
 }
 
@@ -74,9 +74,14 @@
 }
 
 .eu {
+  font-size: 85%;
   grid-area: eu;
-  width: 20rem;
-  max-width: 100%;
+  width: 100%;
+  img {
+    float: left;
+    width: 8rem;
+    margin-right: 2rem;
+  }
 }
 
 @media (max-width: gv.$bp-md-alt-2) {

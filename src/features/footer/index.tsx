@@ -31,7 +31,15 @@ export function Footer() {
           <h3>Adres</h3>
           <p>{process.env.NEXT_PUBLIC_FOOTER_ADDRESS}</p>
         </section>
-        <img className={styles["eu"]} src="/eu.png" alt="" />
+        <section className={styles["eu"]}>
+          <img className={styles["eu"]} src="/eu.jpg" alt="The flag of EU" />
+          <p>
+            Bu site, Avrupa Birliği finansal desteği ile Laz-Çerkes Sivil Toplum
+            Ağı Projesi kapsamında hazırlanmıştır. İçeriğinden yalnızca Laz
+            Enstitüsü sorumlu olup, hiçbir biçimde Avrupa Birliği&apos;nin
+            görüşlerini yansıttığı şeklinde yorumlanamaz ©2023
+          </p>
+        </section>
       </div>
     </footer>
   );

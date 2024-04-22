@@ -72,3 +72,11 @@ div.row-group {
     font-size: 75%; /* this is the base font size for screens smaller than 400px */
   }
 }
+
+// For safari, you can use the following code to make the
+// text color of the links inherit the color of the parent element:
+a[href^="tel"],
+a[href^="mailto"] {
+  color: inherit; // inherit text color of parent element
+  text-decoration: none; // (optional) remove underline
+}
