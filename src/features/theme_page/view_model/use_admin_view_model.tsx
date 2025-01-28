@@ -7,11 +7,14 @@ import { ApiResponse } from "@/api/api_response";
 import { defaultActivity } from "@/lib/activity/default_activity";
 import { slugifyLaz } from "@/utils/slugify_laz";
 import ILesson from "@/lib/lesson/lesson";
-import { AdminLessonApi } from "@/api/admin_lesson_api";
-import { AdminActivityApi } from "@/api/admin_activity_api";
 import { useAdminDeleteTheme } from "@/api/theme/useAdminDeleteTheme";
 import { useAdminUpdateTheme } from "@/api/theme/useAdminUpdateTheme";
 import { useAdminRelocateTheme } from "@/api/theme/useAdminRelocateTheme";
+import { useAdminCreateLesson } from "@/api/lesson/useAdminCreateLesson";
+import { useAdminUpdateLesson } from "@/api/lesson/useAdminUpdateLesson";
+import { useAdminDeleteLesson } from "@/api/lesson/useAdminDeleteLesson";
+import { useAdminCreateActivity } from "@/api/activity/useAdminCreateActivity";
+import { useAdminDeleteActivity } from "@/api/activity/useAdminDeleteActivity";
 
 export function useAdminViewModel(): IAdminViewModel {
   const {
@@ -32,8 +35,11 @@ export function useAdminViewModel(): IAdminViewModel {
   const { mutateAsync: adminRelocateTheme } = useAdminRelocateTheme();
   const { mutateAsync: adminUpdateTheme } = useAdminUpdateTheme();
   const { mutateAsync: adminDeleteTheme } = useAdminDeleteTheme();
-  const adminLessonApi = useRef(new AdminLessonApi());
-  const adminActivityApi = useRef(new AdminActivityApi());
+  const { mutateAsync: adminDeleteLesson } = useAdminDeleteLesson();
+  const { mutateAsync: adminUpdateLesson } = useAdminUpdateLesson();
+  const { mutateAsync: adminCreateLesson } = useAdminCreateLesson();
+  const { mutateAsync: adminCreateActivity } = useAdminCreateActivity();
+  const { mutateAsync: adminDeleteActivity } = useAdminDeleteActivity();
   const [stalling, setStalling] = useState(false);
   const [snackbar, setSnackbar] = useState<{
     severity: "error" | "success" | "warning" | "info";
@@ -127,7 +133,7 @@ export function useAdminViewModel(): IAdminViewModel {
   const saveLesson = async (lesson: Omit<ILesson, "activities">) => {
     if (activeLesson === null) return;
     await withFeedback(
-      () => adminLessonApi.current.saveLesson(id, lesson),
+      () => adminUpdateLesson({ themeId: id, lesson }),
       () => {
         setLessons((prev) => {
           const newLessons = [...prev];
@@ -141,7 +147,7 @@ export function useAdminViewModel(): IAdminViewModel {
   const createLesson = async () => {
     const lesson = defaultLesson();
     await withFeedback(
-      () => adminLessonApi.current.createLesson(id, lesson),
+      () => adminCreateLesson({ themeId: id, lesson }),
       (res) => {
         setLessons((prev) => [...prev, lesson]);
         if (activeLesson === null) {
@@ -155,7 +161,7 @@ export function useAdminViewModel(): IAdminViewModel {
     if (activeLesson === null) return;
     const lessonId = lessons[activeLesson].id;
     await withFeedback(
-      () => adminLessonApi.current.deleteLesson(id, lessonId),
+      () => adminDeleteLesson({ themeId: id, lessonId }),
       (res) => {
         const newLessons = lessons.filter((l) => l.id !== lessonId);
         let newActiveLesson: number | null = activeLesson;
@@ -177,7 +183,7 @@ export function useAdminViewModel(): IAdminViewModel {
     const activity = defaultActivity();
     const lessonId = lessons[activeLesson].id;
     withFeedback(
-      () => adminActivityApi.current.createActivity(id, lessonId, activity),
+      () => adminCreateActivity({ themeId: id, lessonId, activity }),
       () => {
         setLessons((prev) => {
           return prev.map((l) => {
@@ -194,7 +200,7 @@ export function useAdminViewModel(): IAdminViewModel {
     if (activeLesson === null) return;
     const lessonId = lessons[activeLesson].id;
     withFeedback(
-      () => adminActivityApi.current.deleteActivity(id, lessonId, activityId),
+      () => adminDeleteActivity({ themeId: id, lessonId, activityId }),
       () => {
         setLessons((prev) => {
           const newLessons = [...prev] as any;

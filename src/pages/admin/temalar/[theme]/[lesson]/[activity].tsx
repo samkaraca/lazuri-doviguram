@@ -1,41 +1,21 @@
 import { ActivityEditor } from "@/features/activity_editor";
-import IActivity from "@/lib/activity/activity";
-import { AdminActivityApi } from "@/api/admin_activity_api";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useMemo } from "react";
+import { useRouter } from "next/router";
+import { useAdminActivity } from "@/api/activity/useAdminActivity";
 
 export default function ActivityEditorPage() {
-  const pathname = usePathname();
-  const adminService = useRef(new AdminActivityApi());
-  const [pathnames, setPathnames] = useState<[string, string, string]>();
-  const [activityData, setActivityData] = useState<IActivity>();
+  const { query } = useRouter();
+  const [themeId, lessonId, activityId] = useMemo(() => {
+    return [query.theme as string, query.lesson as string, query.activity as string];
+  }, [query]);
+  const { data: activityData } = useAdminActivity({ themeId, lessonId, activityId });
 
-  const fetchActivity = async (
-    themeId: string,
-    lessonId: string,
-    activityId: string
-  ) => {
-    setActivityData(
-      await adminService.current.fetchActivity(themeId, lessonId, activityId)
-    );
-  };
-
-  useEffect(() => {
-    if (!pathname) return;
-    const splitPathname = pathname.split("/");
-    const themeId = splitPathname[splitPathname.length - 3];
-    const lessonId = splitPathname[splitPathname.length - 2];
-    const activityId = splitPathname[splitPathname.length - 1];
-    setPathnames([themeId, lessonId, activityId]);
-    fetchActivity(themeId, lessonId, activityId);
-  }, [pathname]);
-
-  if (activityData && pathnames) {
+  if (activityData?.data && themeId && lessonId && activityId) {
     return (
       <ActivityEditor
-        themeId={pathnames[0]}
-        lessonId={pathnames[1]}
-        activityData={activityData}
+        themeId={themeId}
+        lessonId={lessonId}
+        activityData={activityData.data}
       />
     );
   }
