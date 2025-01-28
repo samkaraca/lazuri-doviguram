@@ -1,3 +1,4 @@
+import { useAdminLogin } from "@/api/admin/useAdminLogin";
 import {
   Box,
   Button,
@@ -11,24 +12,19 @@ import { useState } from "react";
 export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { mutateAsync: login } = useAdminLogin();
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
         setError("");
-        fetch("/api/admin/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ password }),
-        }).then((res) => {
-          if (res.ok) {
+        login({ password }).then((res) => {
+          if (res.status === "success") {
             location.href = "/admin";
-          } else {
-            setError(res.statusText);
           }
+        }).catch((error) => {
+          setError(error.message);
         });
       }}
     >
