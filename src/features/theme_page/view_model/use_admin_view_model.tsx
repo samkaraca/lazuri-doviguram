@@ -6,10 +6,12 @@ import { defaultLesson } from "@/lib/lesson/default_lesson";
 import { ApiResponse } from "@/api/api_response";
 import { defaultActivity } from "@/lib/activity/default_activity";
 import { slugifyLaz } from "@/utils/slugify_laz";
-import { AdminThemeApi } from "@/api/admin_theme_api";
 import ILesson from "@/lib/lesson/lesson";
 import { AdminLessonApi } from "@/api/admin_lesson_api";
 import { AdminActivityApi } from "@/api/admin_activity_api";
+import { useAdminDeleteTheme } from "@/api/theme/useAdminDeleteTheme";
+import { useAdminUpdateTheme } from "@/api/theme/useAdminUpdateTheme";
+import { useAdminRelocateTheme } from "@/api/theme/useAdminRelocateTheme";
 
 export function useAdminViewModel(): IAdminViewModel {
   const {
@@ -27,7 +29,9 @@ export function useAdminViewModel(): IAdminViewModel {
     changeActiveLesson,
   } = useBaseViewModelContext()!;
   const { replace } = useRouter();
-  const adminThemeApi = useRef(new AdminThemeApi());
+  const { mutateAsync: adminRelocateTheme } = useAdminRelocateTheme();
+  const { mutateAsync: adminUpdateTheme } = useAdminUpdateTheme();
+  const { mutateAsync: adminDeleteTheme } = useAdminDeleteTheme();
   const adminLessonApi = useRef(new AdminLessonApi());
   const adminActivityApi = useRef(new AdminActivityApi());
   const [stalling, setStalling] = useState(false);
@@ -72,14 +76,17 @@ export function useAdminViewModel(): IAdminViewModel {
       const newId = slugifyLaz(newTitle);
       withFeedback(
         () =>
-          adminThemeApi.current.relocateTheme(id, {
-            id: newId,
-            title: newTitle,
-            explanation: newExplanation,
-            image: newImage,
-            youtubeVideoUrl: newYoutubeVideoUrl,
-            createdAt,
-            lessons,
+          adminRelocateTheme({
+            oldThemeId: id,
+            theme: {
+              id: newId,
+              title: newTitle,
+              explanation: newExplanation,
+              image: newImage,
+              youtubeVideoUrl: newYoutubeVideoUrl,
+              createdAt,
+              lessons,
+            },
           }),
         (res) => {
           setId(newId);
@@ -93,11 +100,13 @@ export function useAdminViewModel(): IAdminViewModel {
     } else {
       withFeedback(
         () =>
-          adminThemeApi.current.saveTheme({
-            id,
-            explanation: newExplanation,
-            image: newImage,
-            youtubeVideoUrl: newYoutubeVideoUrl,
+          adminUpdateTheme({
+            theme: {
+              id,
+              explanation: newExplanation,
+              image: newImage,
+              youtubeVideoUrl: newYoutubeVideoUrl,
+            },
           }),
         (res) => {
           setExplanation(newExplanation);
@@ -110,7 +119,7 @@ export function useAdminViewModel(): IAdminViewModel {
 
   const deleteTheme = async () => {
     withFeedback(
-      () => adminThemeApi.current.deleteTheme(id),
+      () => adminDeleteTheme({ themeId: id }),
       (res) => replace("/admin")
     );
   };

@@ -1,13 +1,15 @@
 import { LandingPageView } from "@/features/landing_page_view";
-import { AdminThemeApi } from "@/api/admin_theme_api";
 import { BackendThemeService } from "@/backend/services/theme_service";
 import { defaultTheme } from "@/lib/theme/default_theme";
 import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
+import { useAdminCreateTheme } from "@/api/theme/useAdminCreateTheme";
+import { AdminThemeApi } from "@/api/admin_theme_api";
 
 export default function AdminPage() {
-  const adminThemeApi = useRef(new AdminThemeApi());
+
+  const { mutateAsync: adminCreateTheme } = useAdminCreateTheme();
   const [themeMetas, setThemeMetas] = useState<ThemeMetaDTO[]>();
   const [stalling, setStalling] = useState(false);
 
@@ -27,7 +29,7 @@ export default function AdminPage() {
 
   const createTheme = async () => {
     setStalling(true);
-    const res = await adminThemeApi.current.createTheme(defaultTheme());
+    const res = await adminCreateTheme({ theme: defaultTheme() });
     if (res.status === "success") await fetchThemeMetas();
     setStalling(false);
   };
