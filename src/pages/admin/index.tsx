@@ -1,14 +1,11 @@
 import { LandingPageView } from "@/features/landing_page_view";
-import { BackendThemeService } from "@/backend/services/theme_service";
 import { defaultTheme } from "@/lib/theme/default_theme";
-import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAdminCreateTheme } from "@/api/theme/useAdminCreateTheme";
 import { useAdminThemeMetas } from "@/api/theme/useAdminThemeMetas";
 
 export default function AdminPage() {
-
   const { mutateAsync: adminCreateTheme } = useAdminCreateTheme();
   const { data: themeMetas, refetch } = useAdminThemeMetas();
   const [stalling, setStalling] = useState(false);

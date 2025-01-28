@@ -11,7 +11,7 @@ export const useAdminUpdateTheme = () => {
         }: {
             theme: Pick<ITheme, "id" | "explanation" | "image" | "youtubeVideoUrl">;
         }) => {
-            const { data } = await apiAdmin.put(`/themes/${theme.id}?type=save-theme`, theme);
+            const { data } = await apiAdmin.put(`/themes/${theme.id}?type=save-theme`, { theme });
             return data as ApiResponse;
         },
     });

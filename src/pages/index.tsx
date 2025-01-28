@@ -1,8 +1,7 @@
 import Head from "next/head";
 import { LandingPageView } from "../features/landing_page_view";
-import { DynamoDBThemeRepository } from "@/backend/repositories/theme/dynamodb_theme_repository";
 import { ThemeMetaDTO } from "@/lib/theme/theme_meta_dto";
-import { BackendThemeService } from "@/backend/services/theme_service";
+import { getThemeMetas } from "@/backend/services/theme/getThemeMetas";
 
 export default function LandingPage({
   themeMetas,
@@ -21,9 +20,7 @@ export default function LandingPage({
 }
 
 export async function getStaticProps() {
-  const themeRepo = new DynamoDBThemeRepository();
-  const adminThemeRepoService = new BackendThemeService(themeRepo);
-  const res = await adminThemeRepoService.getThemeMetas();
+  const res = await getThemeMetas();
 
   if (res.status === "success" && res.data) {
     return {

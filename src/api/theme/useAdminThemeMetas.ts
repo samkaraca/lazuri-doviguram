@@ -1,4 +1,4 @@
-import { BackendThemeService } from "@/backend/services/theme_service";
+import { getThemeMetas } from "@/backend/services/theme/getThemeMetas";
 import { apiAdmin } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
@@ -8,7 +8,7 @@ export const useAdminThemeMetas = () => {
         queryFn: async () => {
             const { data } = await apiAdmin.get("/themes?type=theme-metas");
             const res = data as Awaited<
-                ReturnType<BackendThemeService["getThemeMetas"]>
+                ReturnType<typeof getThemeMetas>
             >;
             return res.data;
         },
