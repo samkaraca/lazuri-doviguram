@@ -22,7 +22,7 @@ export default function ActivityEditorPage() {
 
   return (
     <div className="admin-waiting-room">
-      <h1>Merhaba Admin!</h1>
+      <h1 className="font-bold text-4xl">Merhaba Admin!</h1>
       <p>Aktivite Yükleniyor...</p>
     </div>
   );

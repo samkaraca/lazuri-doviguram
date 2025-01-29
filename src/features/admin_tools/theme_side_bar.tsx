@@ -145,7 +145,7 @@ export function ThemeSideBar({
           className={`content`}
         >
           <header>
-            <h3>Tema Editörü</h3>
+            <h3 className="font-bold text-2xl">Tema Editörü</h3>
           </header>
           <div className={"main"}>
             {isModified() && (

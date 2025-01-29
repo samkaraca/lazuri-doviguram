@@ -173,7 +173,7 @@ export function LessonSideBar({
         style={{ display: isOpen ? undefined : "none" }}
       >
         <header>
-          <h3>Ders Editörü</h3>
+          <h3 className="font-bold text-2xl">Ders Editörü</h3>
           <button onClick={createLesson} className="simple">
             Yeni ders ekle
           </button>

@@ -11,11 +11,11 @@ export function ActivityBody() {
   return (
     <>
       <header className={styles["header"]}>
-        <h2 className={styles["title"]}>{title}</h2>
+        <h2 className={styles["title"] + " font-bold text-4xl"}>{title}</h2>
       </header>
       {explanation && (
         <div className={styles["explanation"]}>
-          <h3 className={styles["text"]}>{explanation}</h3>
+          <h3 className={styles["text"] + " font-bold text-[1.7rem]"}>{explanation}</h3>
           <div className={styles["line"]} />
         </div>
       )}

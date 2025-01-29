@@ -4,7 +4,7 @@ export function WelcomeSection() {
   return (
     <section className={styles["welcome"]}>
       <div>
-        <h1>{process.env.NEXT_PUBLIC_WELCOME_HEADLINE}</h1>
+        <h1 className="font-bold">{process.env.NEXT_PUBLIC_WELCOME_HEADLINE}</h1>
         <p>{process.env.NEXT_PUBLIC_WELCOME_TEXT}</p>
         <button
           className="simple"

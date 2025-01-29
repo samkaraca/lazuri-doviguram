@@ -19,7 +19,7 @@ export function TabPanels() {
           return (
             activeLesson === i && (
               <div key={_id} className={styles["panel"]}>
-                <h2>{title}</h2>
+                <h2 className="font-bold text-4xl">{title}</h2>
                 <p style={{ maxWidth: "45em" }}>{explanation}</p>
                 <ActivitiesContainer
                   localExerciseDatas={localExerciseDatas}

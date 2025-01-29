@@ -20,7 +20,7 @@ export default function AdminPage() {
   if (!themeMetas) {
     return (
       <div className="admin-waiting-room">
-        <h1>Merhaba Admin!</h1>
+        <h1 className="font-bold text-4xl">Merhaba Admin!</h1>
         <p>Ana Sayfa Yükleniyor...</p>
       </div>
     );
