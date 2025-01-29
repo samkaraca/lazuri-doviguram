@@ -1,4 +1,4 @@
 export interface LessonMetaDTO {
-  id: string;
+  _id: string;
   title: string;
 }

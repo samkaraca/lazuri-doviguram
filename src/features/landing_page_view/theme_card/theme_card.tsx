@@ -27,10 +27,10 @@ export function ThemeCard({
           </header>
           <ol>
             {lessons.map((lesson) => {
-              const { id, title } = lesson;
+              const { _id, title } = lesson;
 
               return (
-                <li key={id}>
+                <li key={_id}>
                   <Label />
                   <h3>{title}</h3>
                 </li>

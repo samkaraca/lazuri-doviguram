@@ -16,29 +16,30 @@ export const getThemeMetas = async (): Promise<ApiResponse<ThemeMetaDTO[]>> => {
                 },
             },
             {
+                $sort: { createdAt: 1 }
+            },
+            {
                 $project: {
-                    _id: 0,
                     slug: 1,
                     title: 1,
                     image: 1,
                     createdAt: 1,
-                    lessons: 1,
+                    lessons: {
+                        $sortArray: { input: "$lessons", sortBy: { createdAt: 1 } }
+                    }
                 },
             },
-            {
-                $sort: {
-                    createdAt: 1
-                }
-            }
         ]);
 
-        const sortedThemes = themes.map(theme => ({
-            ...theme,
-            lessons: theme.lessons.sort((a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-        }));
-
         return {
-            status: "success", message: "", data: sortedThemes
+            status: "success", message: "", data: themes.map(theme => ({
+                ...theme,
+                _id: theme._id.toString(),
+                lessons: theme.lessons.map((lesson: any) => ({
+                    _id: lesson._id.toString(),
+                    title: lesson.title,
+                })),
+            }))
         };
     } catch (error) {
         console.error("ThemeApiService -> getThemeMetas: ", error);
