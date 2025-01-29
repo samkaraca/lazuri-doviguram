@@ -29,3 +29,23 @@ export const uploadImage = async ({
 
     return `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${uploadParams.Key}`;
 };
+
+export const uploadSoundFile = async ({
+    soundBuffer,
+    format,
+}: {
+    soundBuffer: Buffer;
+    format: string;
+}) => {
+    const uploadParams = {
+        Bucket: process.env.CF_R2_BUCKET_NAME,
+        Key: `uploads/sounds/${Date.now()}-${nanoid()}.${format}`,
+        Body: soundBuffer,
+        ContentType: `audio/${format}`,
+    };
+
+    const command = new PutObjectCommand(uploadParams);
+    await s3Client.send(command);
+
+    return `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${uploadParams.Key}`;
+};

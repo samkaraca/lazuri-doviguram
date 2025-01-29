@@ -29,28 +29,8 @@ export function useViewModel(
         status: "idle",
       }
   );
-  const [image, setImage] = useState<IViewModel["image"]>(
-    activityData.image
-      ? {
-        value: activityData.image,
-        status: "success",
-      }
-      : {
-        value: "",
-        status: "idle",
-      }
-  );
-  const [audio, setAudio] = useState<IViewModel["audio"]>(
-    activityData.audio
-      ? {
-        value: activityData.audio,
-        status: "success",
-      }
-      : {
-        value: "",
-        status: "idle",
-      }
-  );
+  const [image, setImage] = useState<string>(activityData.image || "");
+  const [audio, setAudio] = useState<string>(activityData.audio || "");
   const [exercise, setExercise] = useState<IExercise>(activityData.exercise);
 
   const changeActivityType = (newActivityType: IViewModel["type"]) => {
@@ -78,9 +58,9 @@ export function useViewModel(
           textContent,
           savedAt: Date.now(),
           type,
-          audio: audio.status === "success" ? audio.value : activityData.audio,
+          audio,
           exercise,
-          image: image.status === "success" ? image.value : activityData.image,
+          image,
           youtubeVideoUrl:
             youtubeVideoUrl.status === "success"
               ? youtubeVideoUrl.value

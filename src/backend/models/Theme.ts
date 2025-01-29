@@ -35,8 +35,6 @@ export const activitySchema = new Schema({
 });
 
 themeSchema.index({ slug: 1 }, { unique: true });
-lessonSchema.index({ themeId: 1 }, { unique: true });
-activitySchema.index({ lessonId: 1 }, { unique: true });
 
 export const Activity = models.Activity || model("Activity", activitySchema);
 export const Lesson = models.Lesson || model("Lesson", lessonSchema);
