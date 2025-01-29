@@ -4,14 +4,15 @@ import ITheme from "./theme";
 
 export const defaultTheme = (theme?: Partial<ITheme>) => {
   const id = nanoid(7);
+  const title = "Yeni Tema"
 
   return {
     ...{
-      title: "Yeni Tema",
+      title,
       explanation: "Tema açıklaması...",
       youtubeVideoUrl: "https://youtu.be/dlyQJ9fctfM",
       lessons: [],
-      slug: slugifyLaz(id),
+      slug: slugifyLaz(title),
       createdAt: Date.now(),
     },
     ...theme,

@@ -7,7 +7,8 @@ import {
   Upload,
   WarningAmber,
 } from "@mui/icons-material";
-import { Button, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
+import { Button } from "@/components/ui/button"
 import { useAdminUpdateTheme } from "@/api/theme/useAdminUpdateTheme";
 import { slugifyLaz } from "@/utils/slugify_laz";
 import { useAdminTheme } from "@/api/theme/useAdminTheme";
@@ -15,6 +16,8 @@ import { useRouter } from "next/router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAdminDeleteTheme } from "@/api/theme/useAdminDeleteTheme";
 import { OptionalStringValueProperty } from "@/features/activity_editor/model/view_model";
+import { useUploadImage } from "@/api/useUploadImage";
+import { Loader2Icon, UploadCloudIcon, Trash2Icon } from "lucide-react";
 
 interface ClientTheme {
   title: string;
@@ -40,6 +43,7 @@ export function ThemeSideBar({
   const { mutateAsync: adminDeleteTheme } = useAdminDeleteTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const uploadImageMutation = useUploadImage();
 
   // Unified client theme state
   const [clientTheme, setClientTheme] = useState<ClientTheme>({
@@ -78,15 +82,14 @@ export function ThemeSideBar({
     );
   }, [dbTheme, clientTheme]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setClientTheme(prev => ({
-        ...prev,
-        imageFile: file,
-        image: URL.createObjectURL(file),
-      }));
-    }
+  const handleImageUpload = (file: File) => {
+    uploadImageMutation.mutate(file, {
+      onSuccess: (data) => {
+        if (data.status === 'success') {
+          setClientTheme(prev => ({ ...prev, image: data.data.url }));
+        }
+      },
+    });
   };
 
   const handleRemoveImage = () => {
@@ -119,7 +122,7 @@ export function ThemeSideBar({
         slug: slugifyLaz(clientTheme.title),
         title: clientTheme.title,
         explanation: clientTheme.explanation,
-        image: clientTheme.imageFile ?? (clientTheme.image === null ? null : undefined),
+        image: clientTheme.image || null,
         youtubeVideoUrl: clientTheme.youtubeVideoUrl.status === "success" ? clientTheme.youtubeVideoUrl.value : undefined
       }
     });
@@ -188,40 +191,35 @@ export function ThemeSideBar({
             <div className="input-container">
               <label>Tema Fotoğrafı</label>
               <div className="image-upload-container flex flex-col gap-4">
-                <div className="image-preview relative">
-                  <img
-                    src={clientTheme.image ?? "/default-theme.jpg"}
-                    alt="Theme preview"
-                    className="object-contain w-full h-[256px]"
-                  />
-                  {clientTheme.image && (
-                    <button
-                      onClick={handleRemoveImage}
-                      className="remove-image absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full shadow-md transition-colors"
-                      type="button"
-                    >
-                      <DeleteOutline className="w-5 h-5" />
-                    </button>
-                  )}
-                </div>
-                <div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                  <Button
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      handleImageUpload(file);
+                    }
+                  }}
+                />
+                {!clientTheme.image && (
+                  <button
+                    className="rounded-md flex justify-center items-center gap-2 h-[256px] w-full bg-gray-200 hover:bg-gray-300"
                     onClick={() => fileInputRef.current?.click()}
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                    startIcon={<Upload />}
+                    disabled={uploadImageMutation.status === 'pending'}
                   >
-                    Fotoğraf seç
-                  </Button>
-                </div>
+                    {uploadImageMutation.status === 'pending' ? <div className="flex items-center gap-2"><Loader2Icon className="animate-spin" /> Fotoğraf yükleniyor...</div> : <div className="flex items-center gap-2"><UploadCloudIcon /> Fotoğraf Yükle</div>}
+                  </button>
+                )}
+                {clientTheme.image && (
+                  <div className="flex flex-col items-end relative">
+                    <img src={clientTheme.image} alt="Theme preview" className="rounded-md w-full h-[256px] object-contain bg-gray-200" />
+                    <Button variant="destructive" size="icon" onClick={handleRemoveImage} className="absolute top-1 right-1">
+                      <Trash2Icon />
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
             <MediaTester

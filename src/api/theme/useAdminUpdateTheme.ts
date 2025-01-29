@@ -19,22 +19,19 @@ export const useAdminUpdateTheme = () => {
                 slug: string;
                 title: string;
                 explanation: string;
-                image?: File | null;
+                image?: string | null;
                 youtubeVideoUrl?: string;
             };
         }) => {
-            const form = new FormData();
-            form.append("title", title);
-            form.append("slug", slug);
-            form.append("explanation", explanation);
-            if (image instanceof File) {
-                form.append("image", image);
-            } else if (image === null) {
-                form.append("image", 'null');
-            }
-            if (youtubeVideoUrl) form.append("youtubeVideoUrl", youtubeVideoUrl);
+            const payload = {
+                slug,
+                title,
+                explanation,
+                image,
+                youtubeVideoUrl,
+            };
 
-            const { data } = await apiAdmin.putForm(`/themes/${oldThemeSlug}`, form);
+            const { data } = await apiAdmin.put(`/themes/${oldThemeSlug}`, payload);
             return data as ApiResponse;
         },
     });
