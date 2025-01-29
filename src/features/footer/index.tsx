@@ -13,7 +13,7 @@ export function Footer() {
           <p>{process.env.NEXT_PUBLIC_FOOTER_TEXT}</p>
         </section>
         <section className={styles["site-map"]} aria-label="site haritası">
-          <h3>{process.env.NEXT_PUBLIC_PROJECT_NAME}</h3>
+          <h3 className="font-bold text-lg">{process.env.NEXT_PUBLIC_PROJECT_NAME}</h3>
           <nav>
             {JSON.parse(process.env.NEXT_PUBLIC_NAVIGATION_ITEMS!).map(
               (item: any) => {
@@ -28,7 +28,7 @@ export function Footer() {
           </nav>
         </section>
         <section className={styles["address"]} aria-label="adres">
-          <h3>Adres</h3>
+          <h3 className="font-bold text-lg">Adres</h3>
           <p>{process.env.NEXT_PUBLIC_FOOTER_ADDRESS}</p>
         </section>
         <section className={styles["eu"]}>
