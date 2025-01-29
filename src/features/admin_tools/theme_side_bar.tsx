@@ -70,7 +70,9 @@ export function ThemeSideBar({
     return (
       dbTheme.title !== clientTheme.title ||
       dbTheme.explanation !== clientTheme.explanation ||
-      dbTheme.image !== clientTheme.image ||
+      (dbTheme.image && clientTheme.image && dbTheme.image !== clientTheme.image) ||
+      (!dbTheme.image && clientTheme.image) ||
+      (dbTheme.image && !clientTheme.image) ||
       (clientTheme.youtubeVideoUrl.status === "success" &&
         dbTheme.youtubeVideoUrl !== clientTheme.youtubeVideoUrl.value)
     );
@@ -111,7 +113,7 @@ export function ThemeSideBar({
   };
 
   const save = useCallback(async () => {
-    await adminUpdateTheme({
+    const { status } = await adminUpdateTheme({
       oldThemeSlug: query.theme as string,
       theme: {
         slug: slugifyLaz(clientTheme.title),
@@ -122,7 +124,7 @@ export function ThemeSideBar({
       }
     });
 
-    if (query.theme !== slugifyLaz(clientTheme.title)) {
+    if (status === "success" && query.theme !== slugifyLaz(clientTheme.title)) {
       router.replace(`/admin/temalar/${slugifyLaz(clientTheme.title)}`);
     }
     await queryClient.invalidateQueries({ queryKey: [`themes/${slugifyLaz(clientTheme.title)}`] });

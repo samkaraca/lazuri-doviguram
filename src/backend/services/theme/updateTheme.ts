@@ -31,6 +31,11 @@ export const updateTheme = async (
             return { status: "error", message: "Tema bulunamadı" };
         }
 
+        const existingTheme = await Theme.findOne({ slug: fields.slug?.[0] });
+        if (existingTheme && existingTheme._id.toString() !== theme._id.toString()) {
+            return { status: "error", message: "Bu isimde bir tema zaten mevcut." };
+        }
+
         const updateData: Partial<ITheme> = {};
 
         // Handle text fields

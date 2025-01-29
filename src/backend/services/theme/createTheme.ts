@@ -4,17 +4,26 @@ import dbConnect from "@/backend/lib/db";
 import { Theme } from "@/backend/models/Theme";
 import { Types } from "mongoose";
 import { slugifyLaz } from "@/utils/slugify_laz";
+import { nanoid } from "nanoid";
 
 export const createTheme = async (theme: ITheme): Promise<ApiResponse> => {
     try {
         await dbConnect();
+        const existingTheme = await Theme.findOne({ slug: slugifyLaz(theme.title) });
+
+        if (existingTheme) {
+            const uniqueId = nanoid(3);
+            theme.title += `#${uniqueId}`;
+            theme.slug = slugifyLaz(theme.title);
+        }
+
         const newTheme = new Theme({
             _id: new Types.ObjectId(),
             title: theme.title,
             explanation: theme.explanation,
             image: theme.image,
             youtubeVideoUrl: theme.youtubeVideoUrl,
-            slug: slugifyLaz(theme.title),
+            slug: theme.slug,
             createdAt: theme.createdAt,
         });
         await newTheme.save();
