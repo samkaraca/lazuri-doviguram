@@ -5,8 +5,8 @@ import ILesson from "@/lib/lesson/lesson";
 
 export const useAdminUpdateLesson = () => {
     return useMutation({
-        mutationFn: async ({ themeId, lesson }: { themeId: string; lesson: Omit<ILesson, "activities"> }) => {
-            const { data } = await apiAdmin.put(`/themes/${themeId}/lessons/${lesson.id}`, { lesson });
+        mutationFn: async ({ themeSlug, lesson }: { themeSlug: string; lesson: Omit<ILesson, "activities"> }) => {
+            const { data } = await apiAdmin.put(`/themes/${themeSlug}/lessons/${lesson.id}`, { lesson });
             return data as ApiResponse;
         },
     });

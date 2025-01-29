@@ -4,8 +4,8 @@ import { useMutation } from "@tanstack/react-query";
 
 export const useAdminDeleteLesson = () => {
     return useMutation({
-        mutationFn: async ({ themeId, lessonId }: { themeId: string; lessonId: string }) => {
-            const { data } = await apiAdmin.delete(`/themes/${themeId}/lessons/${lessonId}`);
+        mutationFn: async ({ themeSlug, lessonId }: { themeSlug: string; lessonId: string }) => {
+            const { data } = await apiAdmin.delete(`/themes/${themeSlug}/lessons/${lessonId}`);
             return data as ApiResponse;
         },
     });

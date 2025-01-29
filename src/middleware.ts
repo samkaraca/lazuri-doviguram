@@ -24,6 +24,7 @@ export async function middleware(req: NextRequest) {
     if (isLoginPageRequest) return NextResponse.redirect(adminHomeUrl);
     return NextResponse.next();
   } catch (error) {
+    console.log(error);
     if (isApiRequest) return new NextResponse(null, { status: 401 });
     if (isLoginPageRequest) return NextResponse.next();
     return NextResponse.redirect(loginUrl);

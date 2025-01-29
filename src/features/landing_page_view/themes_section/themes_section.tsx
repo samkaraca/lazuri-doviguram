@@ -20,7 +20,7 @@ export function ThemesSection({
           <ol className={styles["cards"]}>
             {themePreviews.map((preview) => {
               return (
-                <ThemeCard home={home} key={preview.id} previewData={preview} />
+                <ThemeCard home={home} key={preview.slug} previewData={preview} />
               );
             })}
             {createNewThemeButton}

@@ -1,15 +1,14 @@
 import YouTube from "react-youtube";
 import getYouTubeID from "get-youtube-id";
 import styles from "./banner.module.scss";
-import { useBaseViewModelContext } from "../../view_model/context_providers/base_view_model";
-import { BaseViewModel } from "../../model/base_view_model";
 import { useEffect, useState } from "react";
-
+import { useViewModelContext } from "../../view_model/index";
+import { ViewModel } from "../../model/view_model";
 export function Banner() {
   const [lessonCount, setLessonCount] = useState(0);
   const [activityCount, setActivityCount] = useState(0);
   const { title, explanation, image, youtubeVideoUrl, lessons } =
-    useBaseViewModelContext() as BaseViewModel;
+    useViewModelContext() as ViewModel;
 
   useEffect(() => {
     const lessonCount = lessons.length;

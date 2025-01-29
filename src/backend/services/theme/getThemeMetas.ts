@@ -18,7 +18,7 @@ export const getThemeMetas = async (): Promise<ApiResponse<ThemeMetaDTO[]>> => {
             {
                 $project: {
                     _id: 0,
-                    id: "$_id",
+                    slug: 1,
                     title: 1,
                     image: 1,
                     createdAt: 1,
@@ -30,7 +30,6 @@ export const getThemeMetas = async (): Promise<ApiResponse<ThemeMetaDTO[]>> => {
         return {
             status: "success", message: "", data: themes.map(theme => ({
                 ...theme,
-                id: theme.id.toString(),
                 lessons: theme.lessons.map((lesson: any) => ({
                     id: lesson._id.toString(),
                     title: lesson.title,

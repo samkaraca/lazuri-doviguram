@@ -44,25 +44,25 @@ export function OptionButton({
       <>
         {typeof window === "object"
           ? createPortal(
-              <button
-                className={`simple-svg`}
-                onClick={onClick}
-                style={{
-                  ...{
-                    position: "sticky",
-                    top: buttonPosition.y,
-                  },
-                  ...(left
-                    ? { left: buttonPosition.x }
-                    : { right: buttonPosition.x }),
-                }}
-              >
-                {icon}
-              </button>,
-              document.body
-            )
+            <button
+              className={`simple-svg`}
+              onClick={onClick}
+              style={{
+                ...{
+                  position: "sticky",
+                  top: buttonPosition.y,
+                },
+                ...(left
+                  ? { left: buttonPosition.x }
+                  : { right: buttonPosition.x }),
+              }}
+            >
+              {icon}
+            </button>,
+            document.body
+          )
           : null}
-        {children(childRef)}
+        {children(childRef as RefObject<HTMLElement>)}
       </>
     );
   }

@@ -5,7 +5,7 @@ export default function SelectiveConsumer<T>({
   hook,
   observedParams,
 }: {
-  component: (hookParams: T) => JSX.Element | null;
+  component: (hookParams: T) => Element | null;
   hook: () => T;
   observedParams: (keyof T)[];
 }) {

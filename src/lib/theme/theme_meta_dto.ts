@@ -1,7 +1,7 @@
 import { LessonMetaDTO } from "../lesson/lesson_meta_dto";
 
 export interface ThemeMetaDTO {
-  id: string;
+  slug: string;
   title: string;
   image: string;
   lessons: LessonMetaDTO[];

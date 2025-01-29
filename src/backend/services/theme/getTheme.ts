@@ -2,14 +2,13 @@ import ITheme from "@/lib/theme/theme";
 import { ApiResponse } from "@/api/api_response";
 import dbConnect from "@/backend/lib/db";
 import { Theme } from "@/backend/models/Theme";
-import { Types } from "mongoose";
 
-export const getTheme = async (themeId: string): Promise<ApiResponse<ITheme>> => {
+export const getTheme = async (themeSlug: string): Promise<ApiResponse<ITheme>> => {
     try {
         await dbConnect();
         const theme = await Theme.aggregate([
             {
-                $match: { _id: new Types.ObjectId(themeId) },
+                $match: { slug: themeSlug },
             },
             {
                 $lookup: {
@@ -37,13 +36,12 @@ export const getTheme = async (themeId: string): Promise<ApiResponse<ITheme>> =>
             },
             {
                 $project: {
-                    _id: 0,
-                    id: "$_id",
                     title: 1,
                     explanation: 1,
                     image: 1,
                     youtubeVideoUrl: 1,
                     createdAt: 1,
+                    slug: 1,
                     lessons: {
                         $map: {
                             input: "$lessons",
@@ -69,7 +67,7 @@ export const getTheme = async (themeId: string): Promise<ApiResponse<ITheme>> =>
 
         const themeData = theme[0] ? {
             ...theme[0],
-            id: theme[0].id.toString(),
+            _id: theme[0]._id.toString(),
             lessons: theme[0].lessons.map((lesson: any) => ({
                 id: lesson.id.toString(),
                 title: lesson.title,

@@ -1,12 +1,11 @@
 import { ApiResponse } from "@/api/api_response";
 import dbConnect from "@/backend/lib/db";
 import { Theme } from "@/backend/models/Theme";
-import { Types } from "mongoose";
 
-export const deleteTheme = async (themeId: string): Promise<ApiResponse> => {
+export const deleteTheme = async ({ slug }: { slug: string }): Promise<ApiResponse> => {
     try {
         await dbConnect();
-        await Theme.deleteOne({ _id: new Types.ObjectId(themeId) });
+        await Theme.deleteOne({ slug });
         return { status: "success", message: "Tema başarıyla silindi." };
     } catch (error) {
         console.error("ThemeApiService -> deleteTheme: ", error);

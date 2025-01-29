@@ -1,17 +1,16 @@
-import { useBaseViewModelContext } from "../../view_model/context_providers/base_view_model";
 import styles from "./styles.module.scss";
 import {
   Inbox,
   RadioButtonUnchecked,
   TaskAltRounded,
 } from "@mui/icons-material";
-import { BaseViewModel } from "../../model/base_view_model";
 import IActivity from "@/lib/activity/activity";
-import ILocalExercise from "@/api/local_exercise_repository/local_exercise";
+import { ViewModel } from "../../model/view_model";
+import { useViewModelContext } from "../../view_model";
 
 export function TabPanels() {
   const { lessons, activeLesson, openActivity, localExerciseDatas } =
-    useBaseViewModelContext()!;
+    useViewModelContext() as ViewModel;
 
   return (
     <div className={styles["tab-panels"]}>
@@ -42,9 +41,11 @@ export function ActivitiesContainer({
   localExerciseDatas,
 }: {
   activities: IActivity[];
-  openActivity: BaseViewModel["openActivity"];
-  localExerciseDatas: Map<string, ILocalExercise | null>;
+  openActivity: ViewModel["openActivity"];
+  localExerciseDatas: ViewModel["localExerciseDatas"];
 }) {
+
+
   return (
     <section className={styles["activities"]} aria-label="aktiviteler">
       {activities.length === 0 ? (

@@ -7,13 +7,11 @@ export const defaultTheme = (theme?: Partial<ITheme>) => {
 
   return {
     ...{
-      id,
       title: "Yeni Tema",
       explanation: "Tema açıklaması...",
-      image: "default.jpg",
       youtubeVideoUrl: "https://youtu.be/dlyQJ9fctfM",
       lessons: [],
-      pathName: slugifyLaz(id),
+      slug: slugifyLaz(id),
       createdAt: Date.now(),
     },
     ...theme,

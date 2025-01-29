@@ -10,7 +10,7 @@ export default async function handler(
 
   if (req.method === "POST") {
     const repRes = await createLesson({
-      themeId: theme,
+      themeSlug: theme,
       lesson: req.body.lesson,
     });
     res.status(201).json(repRes);

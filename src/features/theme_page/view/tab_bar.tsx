@@ -1,10 +1,10 @@
 import { Tab, Tabs } from "@mui/material";
-import { useBaseViewModelContext } from "../view_model/context_providers/base_view_model";
-import { BaseViewModel } from "../model/base_view_model";
+import { useViewModelContext } from "../view_model/index";
+import { ViewModel } from "../model/view_model";
 
 export function TabBar() {
   const { lessons, changeActiveLesson, activeLesson } =
-    useBaseViewModelContext() as BaseViewModel;
+    useViewModelContext() as ViewModel;
 
   if (activeLesson === null) return null;
 

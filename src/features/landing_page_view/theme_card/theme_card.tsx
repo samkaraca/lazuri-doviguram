@@ -9,12 +9,12 @@ export function ThemeCard({
   previewData: ThemeMetaDTO;
   home: "/admin" | "/";
 }) {
-  const { image, lessons, title, id } = previewData;
+  const { image, lessons, title, slug } = previewData;
 
   return (
     <li>
       <a
-        href={`${home === "/" ? "" : home}/temalar/${id}`}
+        href={`${home === "/" ? "" : home}/temalar/${slug}`}
         className={`${styles["card"]} card-button`}
       >
         <img

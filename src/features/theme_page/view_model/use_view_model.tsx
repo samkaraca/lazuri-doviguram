@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { BaseViewModel } from "../model/base_view_model";
+import { ViewModel } from "../model/view_model";
 import IActivity from "@/lib/activity/activity";
 import ILesson from "@/lib/lesson/lesson";
 import ITheme from "@/lib/theme/theme";
@@ -7,8 +7,8 @@ import createLocalExerciseRepository from "@/api/local_exercise_repository/local
 import ILocalExercise from "@/api/local_exercise_repository/local_exercise";
 import { useRouter } from "next/router";
 
-export function useBaseViewModel(theme: ITheme): BaseViewModel {
-  const [id, setId] = useState(theme.id);
+export function useViewModel(theme: ITheme): ViewModel {
+  const [id, setId] = useState(theme._id);
   const [title, setTitle] = useState(theme.title);
   const [explanation, setExplanation] = useState(theme.explanation);
   const [image, setImage] = useState(theme.image);
@@ -19,17 +19,32 @@ export function useBaseViewModel(theme: ITheme): BaseViewModel {
   >(new Map());
   const localExerciseRepo = useRef(createLocalExerciseRepository());
 
+  // Update all states when theme changes
+  useEffect(() => {
+    setId(theme._id);
+    setTitle(theme.title);
+    setExplanation(theme.explanation);
+    setImage(theme.image);
+    setYoutubeVideoUrl(theme.youtubeVideoUrl);
+    setLessons(theme.lessons);
+  }, [theme]);
+
+  useEffect(() => {
+    console.log("ANANAA2iöçerde", theme);
+    console.log("ANANAA2iöçerde", explanation, theme.explanation);
+  }, [theme]);
+
   // LESSON ROUTER STATE
   const router = useRouter();
   const lessonQueryParam = router.query["ders"];
   const activeLesson =
     typeof lessonQueryParam === "string" &&
-    parseInt(lessonQueryParam) > 0 &&
-    parseInt(lessonQueryParam) <= lessons.length
+      parseInt(lessonQueryParam) > 0 &&
+      parseInt(lessonQueryParam) <= lessons.length
       ? parseInt(lessonQueryParam) - 1
       : lessons.length > 0
-      ? 0
-      : null;
+        ? 0
+        : null;
 
   const changeActiveLesson = (lesson: number | null) => {
     const query = { ...router.query };

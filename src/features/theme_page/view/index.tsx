@@ -1,6 +1,6 @@
 import { TabPanels } from "./tab_panels";
-import { useBaseViewModelContext } from "../view_model/context_providers/base_view_model";
-import { BaseViewModel } from "../model/base_view_model";
+import { useViewModelContext } from "../view_model/index";
+import { ViewModel } from "../model/view_model";
 import { AppBar } from "@/features/app_bar";
 import { Banner } from "./banner/banner";
 import Head from "next/head";
@@ -28,7 +28,7 @@ export function View({
     title,
     explanation,
     image,
-  } = useBaseViewModelContext() as BaseViewModel;
+  } = useViewModelContext() as ViewModel;
 
   return (
     <>

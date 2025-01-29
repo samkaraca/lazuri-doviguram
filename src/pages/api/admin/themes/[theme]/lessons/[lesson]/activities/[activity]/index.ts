@@ -8,7 +8,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
-  const { theme, lesson, activity } = req.query as {
+  const { activity } = req.query as {
     theme: string;
     lesson: string;
     activity: string;

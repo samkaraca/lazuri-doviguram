@@ -3,6 +3,7 @@ import ITheme from "@/lib/theme/theme";
 import dbConnect from "@/backend/lib/db";
 import { Theme } from "@/backend/models/Theme";
 import { Types } from "mongoose";
+import { slugifyLaz } from "@/utils/slugify_laz";
 
 export const createTheme = async (theme: ITheme): Promise<ApiResponse> => {
     try {
@@ -13,6 +14,7 @@ export const createTheme = async (theme: ITheme): Promise<ApiResponse> => {
             explanation: theme.explanation,
             image: theme.image,
             youtubeVideoUrl: theme.youtubeVideoUrl,
+            slug: slugifyLaz(theme.title),
             createdAt: theme.createdAt,
         });
         await newTheme.save();

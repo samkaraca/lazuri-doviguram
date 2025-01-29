@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import {
   DeleteForever,
   DeleteOutline,
@@ -7,9 +7,23 @@ import {
 } from "@mui/icons-material";
 import styles from "./lesson_side_bar.module.scss";
 import { TextField } from "@mui/material";
-import { useBaseViewModelContext } from "../theme_page/view_model/context_providers/base_view_model";
-import { useAdminViewModelContext } from "../theme_page/view_model/context_providers/admin_view_model";
-import { usePathname, useRouter } from "next/navigation";
+import { useAdminCreateLesson } from "@/api/lesson/useAdminCreateLesson";
+import { useAdminDeleteLesson } from "@/api/lesson/useAdminDeleteLesson";
+import { useAdminUpdateLesson } from "@/api/lesson/useAdminUpdateLesson";
+import { useAdminCreateActivity } from "@/api/activity/useAdminCreateActivity";
+import { useAdminDeleteActivity } from "@/api/activity/useAdminDeleteActivity";
+import { useAdminTheme } from "@/api/theme/useAdminTheme";
+import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
+import { defaultLesson } from "@/lib/lesson/default_lesson";
+import { useQueryClient } from "@tanstack/react-query";
+import ILesson from "@/lib/lesson/lesson";
+import IActivity from "@/lib/activity/activity";
+
+interface ClientLesson {
+  title: string;
+  explanation: string;
+}
 
 export function LessonSideBar({
   isOpen,
@@ -20,40 +34,137 @@ export function LessonSideBar({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   hide: boolean;
 }) {
+  const { push, query } = useRouter();
   const pathname = usePathname();
-  const { push } = useRouter();
-  const [modified, setModified] = useState(false);
-  const [adminLessonTitle, setAdminLessonTitle] = useState("");
-  const [adminLessonExplanation, setAdminLessonExplanation] = useState("");
-  const { lessons, activeLesson } = useBaseViewModelContext()!;
-  const {
-    saveLesson,
-    createLesson,
-    deleteLesson,
-    createActivity,
-    deleteActivity,
-  } = useAdminViewModelContext()!;
+  const queryClient = useQueryClient();
+  const { data: dbTheme } = useAdminTheme({ themeSlug: query.theme as string });
+  const { mutateAsync: adminCreateLesson } = useAdminCreateLesson();
+  const { mutateAsync: adminDeleteLesson } = useAdminDeleteLesson();
+  const { mutateAsync: adminUpdateLesson } = useAdminUpdateLesson();
+  const { mutateAsync: adminCreateActivity } = useAdminCreateActivity();
+  const { mutateAsync: adminDeleteActivity } = useAdminDeleteActivity();
 
+  // Get the active lesson index (1-based from query)
+  const activeLessonIndex = query.ders ? parseInt(query.ders as string) - 1 : (dbTheme?.lessons.length ? 0 : null);
+  const activeLesson = activeLessonIndex !== null && dbTheme?.lessons[activeLessonIndex]
+    ? dbTheme.lessons[activeLessonIndex]
+    : null;
+
+  // Unified client lesson state
+  const [clientLesson, setClientLesson] = useState<ClientLesson>({
+    title: "",
+    explanation: "",
+  });
+
+  // Initialize client lesson from database lesson
   useEffect(() => {
-    reset();
+    if (activeLesson) {
+      setClientLesson({
+        title: activeLesson.title,
+        explanation: activeLesson.explanation,
+      });
+    }
   }, [activeLesson]);
 
+  // Check if lesson has been modified
+  const isModified = useCallback(() => {
+    if (!activeLesson) return false;
+
+    return (
+      activeLesson.title !== clientLesson.title ||
+      activeLesson.explanation !== clientLesson.explanation
+    );
+  }, [activeLesson, clientLesson]);
+
   const reset = () => {
-    if (activeLesson === null) return;
-    const { title, explanation } = lessons[activeLesson];
-    setAdminLessonExplanation(explanation);
-    setAdminLessonTitle(title);
-    setModified(false);
+    if (activeLesson) {
+      setClientLesson({
+        title: activeLesson.title,
+        explanation: activeLesson.explanation,
+      });
+    }
   };
 
-  useEffect(() => {
-    if (activeLesson === null) return;
-    setModified(false);
-    const { id, title, explanation } = lessons[activeLesson];
-    if (title !== adminLessonTitle || explanation !== adminLessonExplanation) {
-      setModified(true);
-    }
-  }, [adminLessonExplanation, adminLessonTitle, lessons]);
+  const save = useCallback(async () => {
+    if (!activeLesson || !dbTheme) return;
+
+    await adminUpdateLesson({
+      themeSlug: dbTheme.slug,
+      lesson: {
+        id: activeLesson.id,
+        title: clientLesson.title,
+        explanation: clientLesson.explanation,
+      }
+    });
+
+    await queryClient.invalidateQueries({ queryKey: [`themes/${dbTheme.slug}`] });
+  }, [adminUpdateLesson, activeLesson, clientLesson, dbTheme, queryClient]);
+
+  const createActivity = useCallback(async () => {
+    if (!activeLesson || !dbTheme) return;
+
+    const newActivity: IActivity = {
+      id: "",
+      title: "Yeni aktivite",
+      explanation: "Aktivite açıklaması...",
+      textContent: "",
+      image: null,
+      youtubeVideoUrl: null,
+      audio: null,
+      savedAt: Date.now(),
+      type: "multiple-choice",
+      exercise: {
+        type: "multiple-choice-exercise",
+        template: [],
+        answers: []
+      }
+    };
+
+    await adminCreateActivity({
+      themeSlug: dbTheme.slug,
+      lessonId: activeLesson.id,
+      activity: newActivity
+    });
+
+    await queryClient.invalidateQueries({ queryKey: [`themes/${dbTheme.slug}`] });
+  }, [adminCreateActivity, activeLesson, dbTheme, queryClient]);
+
+  const deleteActivity = useCallback(async (activityId: string) => {
+    if (!activeLesson || !dbTheme) return;
+
+    await adminDeleteActivity({
+      themeSlug: dbTheme.slug,
+      lessonId: activeLesson.id,
+      activityId
+    });
+
+    await queryClient.invalidateQueries({ queryKey: [`themes/${dbTheme.slug}`] });
+  }, [adminDeleteActivity, activeLesson, dbTheme, queryClient]);
+
+  const createLesson = useCallback(async () => {
+    if (!dbTheme) return;
+
+    await adminCreateLesson({
+      themeSlug: dbTheme.slug,
+      lesson: defaultLesson()
+    });
+
+    await queryClient.invalidateQueries({ queryKey: [`themes/${dbTheme.slug}`] });
+  }, [adminCreateLesson, dbTheme, queryClient]);
+
+  const deleteLesson = useCallback(async () => {
+    if (!activeLesson || !dbTheme) return;
+
+    await adminDeleteLesson({
+      themeSlug: dbTheme.slug,
+      lessonId: activeLesson.id
+    });
+
+    await queryClient.invalidateQueries({ queryKey: [`themes/${dbTheme.slug}`] });
+    push(`/admin/temalar/${dbTheme.slug}`);
+  }, [adminDeleteLesson, activeLesson, dbTheme, queryClient, push]);
+
+  if (!dbTheme) return null;
 
   return (
     <aside className={`side-bar ${styles["lesson-side-bar"]}`}>
@@ -67,39 +178,29 @@ export function LessonSideBar({
             Yeni ders ekle
           </button>
         </header>
-        {activeLesson !== null && (
+        {activeLesson && (
           <div className="main">
-            {modified && (
+            {isModified() && (
               <div className={"warning"}>
                 <WarningAmber />
                 <div className={"content"}>
                   <span>Kaydedilmemiş değişiklikler var.</span>
                   <div className={"actions"}>
                     <button onClick={reset}>Geri al</button>
-                    <button
-                      onClick={() => {
-                        saveLesson({
-                          id: lessons[activeLesson].id,
-                          title: adminLessonTitle,
-                          explanation: adminLessonExplanation,
-                        });
-                      }}
-                    >
-                      Kaydet
-                    </button>
+                    <button onClick={save}>Kaydet</button>
                   </div>
                 </div>
               </div>
             )}
-            <h2>Ders {activeLesson + 1}</h2>
+            <h2>Ders {(activeLessonIndex ?? 0) + 1}</h2>
             <div className="input-container">
               <label htmlFor="admin-lesson-title-input">Ders Adı</label>
               <TextField
                 id="admin-lesson-title-input"
                 size="small"
                 placeholder="Ders 1..."
-                value={adminLessonTitle}
-                onChange={(e) => setAdminLessonTitle(e.target.value)}
+                value={clientLesson.title}
+                onChange={(e) => setClientLesson(prev => ({ ...prev, title: e.target.value }))}
               />
             </div>
             <div className="input-container">
@@ -112,8 +213,8 @@ export function LessonSideBar({
                 id="admin-lesson-explanation-input"
                 size="small"
                 placeholder="Bu derste aile üyeleri ile ilgili..."
-                value={adminLessonExplanation}
-                onChange={(e) => setAdminLessonExplanation(e.target.value)}
+                value={clientLesson.explanation}
+                onChange={(e) => setClientLesson(prev => ({ ...prev, explanation: e.target.value }))}
               />
             </div>
             <div className={`${styles["activity-list"]}`}>
@@ -121,34 +222,29 @@ export function LessonSideBar({
                 <h3>Aktiviteler</h3>
               </header>
               <ol className={`simple`}>
-                {activeLesson !== null &&
-                  lessons[activeLesson].activities.map(({ id, title }) => {
-                    return (
-                      <li key={id}>
-                        <div>
-                          <p>{title}</p>
-                          <div className={styles["group"]}>
-                            <button
-                              onClick={() =>
-                                push(
-                                  `${pathname}/${lessons[activeLesson].id}/${id}`
-                                )
-                              }
-                              className="simple"
-                            >
-                              <DesignServices />
-                            </button>
-                            <button
-                              onClick={() => deleteActivity(id)}
-                              className="simple error"
-                            >
-                              <DeleteForever />
-                            </button>
-                          </div>
-                        </div>
-                      </li>
-                    );
-                  })}
+                {activeLesson.activities.map(({ id, title }) => (
+                  <li key={id}>
+                    <div>
+                      <p>{title}</p>
+                      <div className={styles["group"]}>
+                        <button
+                          onClick={() =>
+                            push(`${pathname}/${activeLesson.id}/${id}`)
+                          }
+                          className="simple"
+                        >
+                          <DesignServices />
+                        </button>
+                        <button
+                          onClick={() => deleteActivity(id)}
+                          className="simple error"
+                        >
+                          <DeleteForever />
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                ))}
               </ol>
               <footer>
                 <button onClick={createActivity} className="simple">
@@ -158,7 +254,7 @@ export function LessonSideBar({
             </div>
           </div>
         )}
-        {activeLesson !== null && (
+        {activeLesson && (
           <footer>
             <div>
               <button onClick={deleteLesson} className="simple error">
@@ -174,7 +270,7 @@ export function LessonSideBar({
         onClick={() => setIsOpen((prev) => !prev)}
         className={"open-close open-close-right"}
       >
-        Ders
+        <span>Ders</span>
         <DesignServices />
       </button>
     </aside>

@@ -7,7 +7,7 @@ export const getThemeIds = async (): Promise<ApiResponse<string[]>> => {
         await dbConnect();
         const themes = await Theme.find({});
 
-        return { status: "success", message: "", data: themes.map(theme => theme._id.toString()) };
+        return { status: "success", message: "", data: themes.map(theme => theme.slug) };
     } catch (error) {
         console.error("ThemeApiService -> getThemeIds: ", error);
         return { status: "error", message: "" };

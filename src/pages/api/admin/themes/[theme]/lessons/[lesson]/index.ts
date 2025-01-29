@@ -7,7 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
-  const { theme, lesson } = req.query as { theme: string; lesson: string };
+  const { lesson } = req.query as { theme: string; lesson: string };
 
   if (req.method === "PUT") {
     const repRes = await updateLesson({

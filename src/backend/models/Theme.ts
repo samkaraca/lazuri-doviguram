@@ -5,8 +5,8 @@ export const themeSchema = new Schema({
     slug: { type: String, required: true },
     title: { type: String, required: true },
     explanation: { type: String, required: true },
-    image: { type: String, required: true },
-    youtubeVideoUrl: { type: String, required: true },
+    image: { type: String, required: false },
+    youtubeVideoUrl: { type: String, required: false },
     createdAt: { type: Number, required: true },
 });
 

@@ -11,8 +11,8 @@ export default function ThemePage() {
   const { query } = useRouter();
   const { data: adminTheme } = useAdminTheme({ themeSlug: query.theme as string });
 
-  if (adminTheme?.data) {
-    return <TP home="/admin" theme={adminTheme.data} adminTools={<AT />} />;
+  if (adminTheme) {
+    return <TP home="/admin" theme={adminTheme} adminTools={<AT />} />;
   }
 
   return (

@@ -3,12 +3,12 @@ import ILesson from "@/lib/lesson/lesson";
 import ILocalExercise from "@/api/local_exercise_repository/local_exercise";
 import { Dispatch, SetStateAction } from "react";
 
-export interface BaseViewModel {
+export interface ViewModel {
   // theme related
   id: string;
   title: string;
   explanation: string;
-  image: string;
+  image?: string | null;
   youtubeVideoUrl: string;
   lessons: ILesson[];
   createdAt: number;
@@ -19,15 +19,13 @@ export interface BaseViewModel {
   isActivityDialogOpen: boolean;
   localExerciseDatas: Map<string, ILocalExercise | null>;
   // setters
-  setId: Dispatch<SetStateAction<BaseViewModel["id"]>>;
-  setTitle: Dispatch<SetStateAction<BaseViewModel["title"]>>;
-  setExplanation: Dispatch<SetStateAction<BaseViewModel["explanation"]>>;
-  setImage: Dispatch<SetStateAction<BaseViewModel["image"]>>;
-  setYoutubeVideoUrl: Dispatch<
-    SetStateAction<BaseViewModel["youtubeVideoUrl"]>
-  >;
+  setId: Dispatch<SetStateAction<ViewModel["id"]>>;
+  setTitle: Dispatch<SetStateAction<ViewModel["title"]>>;
+  setExplanation: Dispatch<SetStateAction<ViewModel["explanation"]>>;
+  setImage: Dispatch<SetStateAction<ViewModel["image"]>>;
+  setYoutubeVideoUrl: Dispatch<SetStateAction<ViewModel["youtubeVideoUrl"]>>;
   changeActiveLesson: (lesson: number | null) => void;
-  setLessons: Dispatch<SetStateAction<BaseViewModel["lessons"]>>;
+  setLessons: Dispatch<SetStateAction<ViewModel["lessons"]>>;
   openActivity: (activityId: string, activity: IActivity) => void;
   closeActivity: () => void;
 }

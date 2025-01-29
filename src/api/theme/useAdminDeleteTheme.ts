@@ -4,8 +4,8 @@ import { ApiResponse } from "../api_response";
 
 export const useAdminDeleteTheme = () => {
     return useMutation({
-        mutationFn: async ({ themeId }: { themeId: string }) => {
-            const { data } = await apiAdmin.delete(`/themes/${themeId}`);
+        mutationFn: async ({ slug }: { slug: string }) => {
+            const { data } = await apiAdmin.delete(`/themes/${slug}`);
             return data as ApiResponse;
         },
     });
