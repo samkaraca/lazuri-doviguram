@@ -1,4 +1,5 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { nanoid } from "nanoid";
 
 export const s3Client = new S3Client({
@@ -52,4 +53,25 @@ export const uploadSoundFile = async ({
     await s3Client.send(command);
 
     return `${process.env.NEXT_PUBLIC_AUDIO_BASE_URL}/${fileName}`;
+};
+
+export const generatePresignedUrl = async (fileType: 'image' | 'audio', contentType: string) => {
+    const fileExtension = contentType.split('/')[1];
+    const fileName = `${Date.now()}-${nanoid()}.${fileExtension}`;
+    const key = `${fileType}s/${fileName}`; // 'images' or 'audios' folder
+
+    const putObjectCommand = new PutObjectCommand({
+        Bucket: process.env.CF_R2_BUCKET_NAME,
+        Key: key,
+        ContentType: contentType,
+    });
+
+    const presignedUrl = await getSignedUrl(s3Client, putObjectCommand, {
+        expiresIn: 3600, // URL expires in 1 hour
+    });
+
+    return {
+        presignedUrl,
+        fileUrl: `${fileType === 'image' ? process.env.NEXT_PUBLIC_IMAGE_BASE_URL : process.env.NEXT_PUBLIC_AUDIO_BASE_URL}/${fileName}`,
+    };
 };

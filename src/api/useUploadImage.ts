@@ -4,11 +4,29 @@ import { useMutation } from "@tanstack/react-query";
 export const useUploadImage = () => {
     return useMutation({
         mutationFn: async (image: File) => {
-            const formData = new FormData();
-            formData.append('image', image);
+            // First, get the pre-signed URL
+            const response = await apiAdmin.post('/images', null, {
+                headers: {
+                    'Content-Type': image.type,
+                }
+            });
 
-            const response = await apiAdmin.post('/images', formData);
-            return response.data;
+            const { presignedUrl, url } = response.data.data;
+
+            // Then upload directly to S3
+            await fetch(presignedUrl, {
+                method: 'PUT',
+                body: image,
+                headers: {
+                    'Content-Type': image.type,
+                }
+            });
+
+            return {
+                status: "success",
+                message: "Image uploaded successfully",
+                data: { url }
+            };
         },
     });
 }; 

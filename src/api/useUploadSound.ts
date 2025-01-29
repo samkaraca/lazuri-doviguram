@@ -4,11 +4,29 @@ import { useMutation } from "@tanstack/react-query";
 export const useUploadSound = () => {
     return useMutation({
         mutationFn: async (sound: File) => {
-            const formData = new FormData();
-            formData.append('sound', sound);
+            // First, get the pre-signed URL
+            const response = await apiAdmin.post('/sounds', null, {
+                headers: {
+                    'Content-Type': sound.type,
+                }
+            });
 
-            const response = await apiAdmin.post('/sounds', formData);
-            return response.data;
+            const { presignedUrl, url } = response.data.data;
+
+            // Then upload directly to S3
+            await fetch(presignedUrl, {
+                method: 'PUT',
+                body: sound,
+                headers: {
+                    'Content-Type': sound.type,
+                }
+            });
+
+            return {
+                status: "success",
+                message: "Sound uploaded successfully",
+                data: { url }
+            };
         },
     });
 };
