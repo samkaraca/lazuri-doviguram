@@ -51,7 +51,7 @@ export const updateTheme = async (
         if (title) updateData.title = title;
         if (slug) updateData.slug = slug;
         if (explanation) updateData.explanation = explanation;
-        if (youtubeVideoUrl) updateData.youtubeVideoUrl = youtubeVideoUrl;
+        if (youtubeVideoUrl || youtubeVideoUrl === null) updateData.youtubeVideoUrl = youtubeVideoUrl;
         if (image || image === null) updateData.image = image;
 
         await Theme.updateOne(

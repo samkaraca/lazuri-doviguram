@@ -1,10 +1,8 @@
-import { MediaTester } from "@/components/media_tester";
 import styles from "./theme_side_bar.module.scss";
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import {
   DeleteOutline,
   DesignServices,
-  Upload,
   WarningAmber,
 } from "@mui/icons-material";
 import { TextField } from "@mui/material";
@@ -15,15 +13,17 @@ import { useAdminTheme } from "@/api/theme/useAdminTheme";
 import { useRouter } from "next/router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAdminDeleteTheme } from "@/api/theme/useAdminDeleteTheme";
-import { OptionalStringValueProperty } from "@/features/activity_editor/model/view_model";
 import { useUploadImage } from "@/api/useUploadImage";
-import { Loader2Icon, UploadCloudIcon, Trash2Icon } from "lucide-react";
+import { Loader2Icon, UploadCloudIcon, Trash2Icon, SquarePlayIcon } from "lucide-react";
+import getYouTubeID from "get-youtube-id";
+import { YouTubeEmbed } from "@next/third-parties/google"
+import { Input } from "@/components/ui/input";
 
 interface ClientTheme {
   title: string;
   explanation: string;
   image: string | null;
-  youtubeVideoUrl: OptionalStringValueProperty;
+  youtubeVideoUrl: string | null;
   imageFile: File | null;
 }
 
@@ -50,7 +50,7 @@ export function ThemeSideBar({
     title: "",
     explanation: "",
     image: null,
-    youtubeVideoUrl: { status: "idle", value: "" },
+    youtubeVideoUrl: null,
     imageFile: null,
   });
 
@@ -61,7 +61,7 @@ export function ThemeSideBar({
         title: dbTheme.title,
         explanation: dbTheme.explanation,
         image: dbTheme.image ?? null,
-        youtubeVideoUrl: { status: "success", value: dbTheme.youtubeVideoUrl ?? "" },
+        youtubeVideoUrl: dbTheme.youtubeVideoUrl ?? null,
         imageFile: null,
       });
     }
@@ -77,8 +77,10 @@ export function ThemeSideBar({
       (dbTheme.image && clientTheme.image && dbTheme.image !== clientTheme.image) ||
       (!dbTheme.image && clientTheme.image) ||
       (dbTheme.image && !clientTheme.image) ||
-      (clientTheme.youtubeVideoUrl.status === "success" &&
-        dbTheme.youtubeVideoUrl !== clientTheme.youtubeVideoUrl.value)
+      (dbTheme.youtubeVideoUrl && clientTheme.youtubeVideoUrl && dbTheme.youtubeVideoUrl !== clientTheme.youtubeVideoUrl) ||
+      (!dbTheme.youtubeVideoUrl && clientTheme.youtubeVideoUrl) ||
+      (dbTheme.youtubeVideoUrl && !clientTheme.youtubeVideoUrl)
+
     );
   }, [dbTheme, clientTheme]);
 
@@ -109,7 +111,7 @@ export function ThemeSideBar({
         title: dbTheme.title,
         explanation: dbTheme.explanation,
         image: dbTheme.image ?? null,
-        youtubeVideoUrl: { status: "success", value: dbTheme.youtubeVideoUrl ?? "" },
+        youtubeVideoUrl: dbTheme.youtubeVideoUrl ?? null,
         imageFile: null,
       });
     }
@@ -123,7 +125,7 @@ export function ThemeSideBar({
         title: clientTheme.title,
         explanation: clientTheme.explanation,
         image: clientTheme.image || null,
-        youtubeVideoUrl: clientTheme.youtubeVideoUrl.status === "success" ? clientTheme.youtubeVideoUrl.value : undefined
+        youtubeVideoUrl: clientTheme.youtubeVideoUrl || null
       }
     });
 
@@ -222,13 +224,14 @@ export function ThemeSideBar({
                 )}
               </div>
             </div>
-            <MediaTester
-              label="Tema YouTube Video Linki"
-              placeholder="https://www.youtube.com/watch?v=VQGLYY1Q8yA"
-              media={clientTheme.youtubeVideoUrl}
-              type="youtube-video"
-              setMedia={(value) => setClientTheme(prev => ({ ...prev, youtubeVideoUrl: typeof value === 'function' ? value(prev.youtubeVideoUrl) : value }))}
-            />
+            <section>
+              <div className="border border-2 border-gray-200 rounded-md overflow-hidden">
+                {clientTheme.youtubeVideoUrl ? <YouTubeEmbed
+                  videoid={getYouTubeID(clientTheme.youtubeVideoUrl) ?? ""}
+                /> : <div className="flex items-center gap-2 w-full justify-center aspect-video !bg-gray-200"><SquarePlayIcon />Youtube videosu ekleyin</div>}
+              </div>
+              <Input placeholder="Youtube video linki..." className="mt-2" value={clientTheme.youtubeVideoUrl ?? ""} onChange={(e) => setClientTheme(x => ({ ...x, youtubeVideoUrl: e.target.value }))} />
+            </section>
           </div>
           <footer>
             <div>

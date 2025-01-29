@@ -20,7 +20,7 @@ export const useAdminUpdateTheme = () => {
                 title: string;
                 explanation: string;
                 image?: string | null;
-                youtubeVideoUrl?: string;
+                youtubeVideoUrl?: string | null;
             };
         }) => {
             const payload = {

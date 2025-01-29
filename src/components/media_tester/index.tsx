@@ -36,13 +36,12 @@ export function MediaTester({
         >
           <input
             required
-            className={`simple ${
-              status === "error"
+            className={`simple ${status === "error"
                 ? "error"
                 : status === "success"
-                ? "success"
-                : undefined
-            }`}
+                  ? "success"
+                  : undefined
+              }`}
             id="foto"
             type="text"
             placeholder={placeholder}
@@ -52,13 +51,12 @@ export function MediaTester({
             }
           />
           <button
-            className={`simple basic ${
-              status === "error"
+            className={`simple basic ${status === "error"
                 ? "error"
                 : status === "success"
-                ? "success"
-                : undefined
-            }`}
+                  ? "success"
+                  : undefined
+              }`}
             disabled={status !== "idle"}
           >
             Test
