@@ -6,6 +6,7 @@ import { uploadImage } from "@/backend/services/uploadImage";
 export const config = {
     api: {
         bodyParser: false, // Disable the default body parser for multipart form data
+        sizeLimit: '100mb',
     },
 };
 

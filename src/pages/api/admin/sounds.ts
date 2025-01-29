@@ -6,6 +6,7 @@ import { uploadSound } from "@/backend/services/uploadSound";
 export const config = {
     api: {
         bodyParser: false, // Disable the default body parser for multipart form data
+        sizeLimit: '100mb',
     },
 };
 

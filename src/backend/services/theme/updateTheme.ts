@@ -2,11 +2,6 @@ import { ApiResponse } from "@/api/api_response";
 import ITheme from "@/lib/theme/theme";
 import dbConnect from "@/backend/lib/db";
 import { Theme } from "@/backend/models/Theme";
-import { Types } from "mongoose";
-import { Fields } from "formidable";
-import { optimizeFixedSizeImage } from "@/backend/lib/optimizeFixedSizeImage";
-import { uploadImage } from "@/backend/lib/s3";
-import fs from "fs/promises";
 
 /**
  * @param {string} params.themeSlug - The slug of the theme to update
