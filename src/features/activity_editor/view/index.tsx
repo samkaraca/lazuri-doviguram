@@ -45,8 +45,8 @@ export default function View() {
               explanation,
               textContent,
               savedAt,
-              audio: audio.status === "success" ? audio.value : null,
-              image: image.status === "success" ? image.value : null,
+              audio,
+              image,
               youtubeVideoUrl:
                 youtubeVideoUrl.status === "success"
                   ? youtubeVideoUrl.value

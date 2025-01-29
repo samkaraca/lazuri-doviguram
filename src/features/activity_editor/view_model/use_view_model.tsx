@@ -3,6 +3,7 @@ import { IViewModel } from "../model/view_model";
 import IActivity from "@/lib/activity/activity";
 import IExercise from "@/lib/exercise/exercise";
 import { useAdminUpdateActivity } from "@/api/activity/useAdminUpdateActivity";
+import { toast } from "sonner";
 
 export function useViewModel(
   themeId: string,
@@ -48,6 +49,7 @@ export function useViewModel(
 
   const saveActivity = async () => {
     try {
+      toast("Etkinlik kaydediliyor...");
       await adminUpdateActivity({
         themeId,
         lessonId,
@@ -67,8 +69,10 @@ export function useViewModel(
               : activityData.youtubeVideoUrl,
         },
       });
+      toast.success("Etkinlik başarıyla kaydedildi!");
       localStorage.removeItem(activityData._id);
-    } catch (error) { }
+    } catch (error) {
+    }
   };
 
   return {
