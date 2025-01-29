@@ -17,9 +17,11 @@ export const uploadImage = async ({
     imageBuffer: Buffer;
     format: string;
 }) => {
+    const fileName = `${Date.now()}-${nanoid()}.${format}`;
+
     const uploadParams = {
         Bucket: process.env.CF_R2_BUCKET_NAME,
-        Key: `uploads/${Date.now()}-${nanoid()}.${format}`, // Always use jpg for consistency
+        Key: `images/${fileName}`, // Always use jpg for consistency
         Body: imageBuffer,
         ContentType: `image/${format}`,
     };
@@ -27,7 +29,7 @@ export const uploadImage = async ({
     const command = new PutObjectCommand(uploadParams);
     await s3Client.send(command);
 
-    return `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${uploadParams.Key}`;
+    return `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${fileName}`;
 };
 
 export const uploadSoundFile = async ({
@@ -37,9 +39,11 @@ export const uploadSoundFile = async ({
     soundBuffer: Buffer;
     format: string;
 }) => {
+    const fileName = `${Date.now()}-${nanoid()}.${format}`;
+
     const uploadParams = {
         Bucket: process.env.CF_R2_BUCKET_NAME,
-        Key: `uploads/sounds/${Date.now()}-${nanoid()}.${format}`,
+        Key: `audios/${fileName}`,
         Body: soundBuffer,
         ContentType: `audio/${format}`,
     };
@@ -47,5 +51,5 @@ export const uploadSoundFile = async ({
     const command = new PutObjectCommand(uploadParams);
     await s3Client.send(command);
 
-    return `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${uploadParams.Key}`;
+    return `${process.env.NEXT_PUBLIC_AUDIO_BASE_URL}/${fileName}`;
 };
