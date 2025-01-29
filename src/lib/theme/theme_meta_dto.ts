@@ -5,5 +5,5 @@ export interface ThemeMetaDTO {
   title: string;
   image: string;
   lessons: LessonMetaDTO[];
-  createdAt: number;
+  createdAt: Date;
 }

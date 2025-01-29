@@ -24,7 +24,6 @@ export const createTheme = async (theme: ITheme): Promise<ApiResponse> => {
             image: theme.image,
             youtubeVideoUrl: theme.youtubeVideoUrl,
             slug: theme.slug,
-            createdAt: theme.createdAt,
         });
         await newTheme.save();
 

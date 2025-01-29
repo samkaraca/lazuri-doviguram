@@ -13,7 +13,6 @@ export const defaultTheme = (theme?: Partial<ITheme>) => {
       youtubeVideoUrl: "https://youtu.be/dlyQJ9fctfM",
       lessons: [],
       slug: slugifyLaz(title),
-      createdAt: Date.now(),
     },
     ...theme,
   } as ITheme;

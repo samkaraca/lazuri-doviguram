@@ -8,7 +8,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
-  console.log("GELİDDİİİİ")
   const theme = req.query.theme as string;
 
   if (req.method === "GET") {

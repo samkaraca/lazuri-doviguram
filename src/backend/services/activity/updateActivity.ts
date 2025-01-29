@@ -11,7 +11,7 @@ export const updateActivity = async ({
 }): Promise<ApiResponse> => {
     try {
         await dbConnect();
-        console.log("activity", JSON.stringify(activity, null, 2));
+        
         const mongooseActivity = await Activity.updateOne({ _id: new Types.ObjectId(activity._id) }, {
             $set: {
                 audio: activity.audio,
@@ -25,7 +25,7 @@ export const updateActivity = async ({
                 type: activity.type,
             }
         });
-        console.log("mongooseActivity", mongooseActivity);
+
         return { status: "success", message: "Aktivite başarıyla kaydedildi." };
     } catch (error) {
         console.error("ActivityApiService -> saveActivity: ", error);

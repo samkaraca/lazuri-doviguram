@@ -15,7 +15,10 @@ export async function getStaticProps(context: GetServerSidePropsContext) {
   if (res.status === "success" && res.data) {
     return {
       props: {
-        themeData: res.data,
+        themeData: {
+          ...res.data,
+          createdAt: res.data.createdAt.toISOString(),
+        },
       },
       revalidate: 60 * 15,
     };

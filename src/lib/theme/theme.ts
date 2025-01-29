@@ -1,7 +1,7 @@
 import ILesson from "../lesson/lesson";
 
 export default interface ITheme {
-  createdAt: number;
+  createdAt: Date;
   _id: string;
   slug: string;
   title: string;

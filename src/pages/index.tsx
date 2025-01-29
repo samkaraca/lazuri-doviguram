@@ -26,8 +26,11 @@ export async function getStaticProps() {
     return {
       props: {
         themeMetas: res.data.sort((a, b) =>
-          a.createdAt > b.createdAt ? 1 : -1
-        ),
+          a.createdAt.getTime() > b.createdAt.getTime() ? 1 : -1
+        ).map((theme) => ({
+          ...theme,
+          createdAt: theme.createdAt.toISOString(),
+        })),
       },
     };
   }

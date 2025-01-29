@@ -10,7 +10,6 @@ export const deleteActivity = async ({
     try {
         await dbConnect();
         const mongooseActivity = await Activity.deleteOne({ _id: activityId });
-        console.log("mongooseActivity", mongooseActivity);
 
         return { status: "success", message: "Aktivite başarıyla silindi." };
     } catch (error) {

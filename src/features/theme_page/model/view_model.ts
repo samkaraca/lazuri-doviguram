@@ -11,7 +11,7 @@ export interface ViewModel {
   image?: string | null;
   youtubeVideoUrl: string;
   lessons: ILesson[];
-  createdAt: number;
+  createdAt: Date;
   // view related
   activeLesson: number | null;
   activeActivityId: string | null;

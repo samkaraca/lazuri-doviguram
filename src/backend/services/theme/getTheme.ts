@@ -44,7 +44,12 @@ export const getTheme = async (themeSlug: string): Promise<ApiResponse<ITheme>> 
                     slug: 1,
                     lessons: {
                         $map: {
-                            input: "$lessons",
+                            input: {
+                                $sortArray: {
+                                    input: "$lessons",
+                                    sortBy: { createdAt: 1 }
+                                }
+                            },
                             as: "lesson",
                             in: {
                                 _id: "$$lesson._id",
@@ -53,7 +58,12 @@ export const getTheme = async (themeSlug: string): Promise<ApiResponse<ITheme>> 
                                 themeId: "$$lesson.themeId",
                                 activities: {
                                     $filter: {
-                                        input: "$allActivities",
+                                        input: {
+                                            $sortArray: {
+                                                input: "$allActivities",
+                                                sortBy: { createdAt: 1 }
+                                            }
+                                        },
                                         as: "activity",
                                         cond: { $eq: ["$$activity.lessonId", "$$lesson._id"] }
                                     }

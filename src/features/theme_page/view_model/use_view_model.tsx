@@ -29,11 +29,6 @@ export function useViewModel(theme: ITheme): ViewModel {
     setLessons(theme.lessons);
   }, [theme]);
 
-  useEffect(() => {
-    console.log("ANANAA2iöçerde", theme);
-    console.log("ANANAA2iöçerde", explanation, theme.explanation);
-  }, [theme]);
-
   // LESSON ROUTER STATE
   const router = useRouter();
   const lessonQueryParam = router.query["ders"];
