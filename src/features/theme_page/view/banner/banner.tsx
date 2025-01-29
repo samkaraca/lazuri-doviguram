@@ -23,7 +23,7 @@ export function Banner() {
     <div className={styles["banner"]}>
       <div className={styles["banner-inner-container"]}>
         <img
-          src={`${process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_IMAGE_BASE_URL}/${image}`}
+          src={`${image ? image : "/default-theme.jpg"}`}
           alt="tema fotoğrafı"
         />
         <div className={`${styles["content"]}`}>

@@ -38,7 +38,7 @@ export function View({
         <meta property="og:description" content={explanation} key="desc" />
         <meta
           property="og:image"
-          content={`${process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_IMAGE_BASE_URL}/${image}`}
+          content={`${image ? image : "/default-theme.jpg"}`}
           key="image"
         />
       </Head>

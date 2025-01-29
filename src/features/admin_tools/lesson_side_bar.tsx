@@ -185,7 +185,7 @@ export function LessonSideBar({
                 <WarningAmber />
                 <div className={"content"}>
                   <span>Kaydedilmemiş değişiklikler var.</span>
-                  <div className={"actions"}>
+                  <div className={"actions text-black"}>
                     <button onClick={reset}>Geri al</button>
                     <button onClick={save}>Kaydet</button>
                   </div>

@@ -18,7 +18,7 @@ export function ThemeCard({
         className={`${styles["card"]} card-button`}
       >
         <img
-          src={`${process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_IMAGE_BASE_URL}/${image}`}
+          src={`${image ? image : "/default-theme.jpg"}`}
         />
         <div className={styles["content"]}>
           <header>
