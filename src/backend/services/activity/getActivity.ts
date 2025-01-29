@@ -2,6 +2,7 @@ import { ApiResponse } from "@/api/api_response";
 import IActivity from "@/lib/activity/activity";
 import dbConnect from "@/backend/lib/db";
 import { Activity } from "@/backend/models/Theme";
+import { Types } from "mongoose";
 
 export const getActivity = async ({
   activityId,
@@ -10,10 +11,9 @@ export const getActivity = async ({
 }): Promise<ApiResponse<IActivity>> => {
   try {
     await dbConnect();
-    const mongooseActivity = await Activity.findOne({ _id: activityId });
-    console.log("mongooseActivity", mongooseActivity);
+    const mongooseActivity = await Activity.findOne({ _id: new Types.ObjectId(activityId) });
     const activityData = {
-      id: mongooseActivity._id.toString(),
+      _id: mongooseActivity._id.toString(),
       title: mongooseActivity.title,
       explanation: mongooseActivity.explanation,
       textContent: mongooseActivity.textContent,

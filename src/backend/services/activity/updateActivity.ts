@@ -2,6 +2,7 @@ import { ApiResponse } from "@/api/api_response";
 import IActivity from "@/lib/activity/activity";
 import dbConnect from "@/backend/lib/db";
 import { Activity } from "@/backend/models/Theme";
+import { Types } from "mongoose";
 
 export const updateActivity = async ({
     activity,
@@ -10,10 +11,8 @@ export const updateActivity = async ({
 }): Promise<ApiResponse> => {
     try {
         await dbConnect();
-        const activityToSave = { ...activity } as any;
-        delete activityToSave.id;
-
-        const mongooseActivity = await Activity.updateOne({ _id: activity.id }, {
+        console.log("activity", JSON.stringify(activity, null, 2));
+        const mongooseActivity = await Activity.updateOne({ _id: new Types.ObjectId(activity._id) }, {
             $set: {
                 audio: activity.audio,
                 image: activity.image,

@@ -18,8 +18,8 @@ export function TabBar() {
       onChange={(e, newValue) => changeActiveLesson(newValue)}
       sx={{ maxWidth: "100%", width: "max-content", margin: "0 auto" }}
     >
-      {lessons.map(({ id }, i: number) => {
-        return <Tab key={id} label={`Ders ${i + 1}`} />;
+      {lessons.map(({ _id }, i: number) => {
+        return <Tab key={_id} label={`Ders ${i + 1}`} />;
       })}
     </Tabs>
   );

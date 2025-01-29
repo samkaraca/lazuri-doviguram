@@ -19,7 +19,7 @@ export default async function handler(
     res.status(200).json(rawData);
   } else if (req.method === "PUT") {
     const repRes = await updateActivity(
-      req.body.activity
+      { activity: req.body.activity }
     );
     res.status(200).json(repRes);
   } else if (req.method === "DELETE") {

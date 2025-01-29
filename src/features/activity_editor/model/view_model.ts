@@ -12,7 +12,7 @@ export type OptionalImage = OptionalStringValueProperty;
 export type OptionalAudio = OptionalStringValueProperty;
 
 export interface IViewModel {
-  id: string;
+  _id: string;
   savedAt: number;
   type: IActivity["type"];
   title: string;

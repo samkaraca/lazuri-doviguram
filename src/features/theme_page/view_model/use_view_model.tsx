@@ -102,7 +102,7 @@ export function useViewModel(theme: ITheme): ViewModel {
   useEffect(() => {
     if (activeActivityId !== null && activeLesson !== null) {
       const activity = lessons[activeLesson].activities.find(
-        (a) => a.id === activeActivityId
+        (a) => a._id === activeActivityId
       );
       if (activity) {
         openActivity(activeActivityId, activity);
@@ -114,7 +114,7 @@ export function useViewModel(theme: ITheme): ViewModel {
     if (activeLesson === null) return;
     const localExerciseDatasMap = new Map();
     lessons[activeLesson].activities.forEach((a) => {
-      localExerciseDatasMap.set(a.id, localExerciseRepo.current.get(a.id));
+      localExerciseDatasMap.set(a._id, localExerciseRepo.current.get(a._id));
     });
     setLocalExerciseDatas(localExerciseDatasMap);
   };

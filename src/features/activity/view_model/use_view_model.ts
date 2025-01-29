@@ -20,7 +20,7 @@ export function useViewModel(
 
   useEffect(() => {
     const { replies, beenSolved } = ExerciseServices.getUltimateReplies(
-      activityData.id,
+      activityData._id,
       activityData.savedAt,
       activityData.exercise
     );
@@ -51,7 +51,7 @@ export function useViewModel(
   };
 
   const finishActivity = () => {
-    ExerciseServices.saveLocally(activityData.id, {
+    ExerciseServices.saveLocally(activityData._id, {
       grade: ExerciseServices.getGrade(activityData.exercise, replies!),
       replies: replies!,
       savedAt: Date.now(),
@@ -60,7 +60,7 @@ export function useViewModel(
   };
 
   const reattemptToActivity = () => {
-    ExerciseServices.saveLocally(activityData.id, {
+    ExerciseServices.saveLocally(activityData._id, {
       grade: ExerciseServices.getGrade(activityData.exercise, replies!),
       replies: null,
       savedAt: Date.now(),

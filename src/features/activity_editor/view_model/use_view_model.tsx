@@ -72,7 +72,7 @@ export function useViewModel(
         themeId,
         lessonId,
         activity: {
-          id: activityData.id,
+          _id: activityData._id,
           title,
           explanation,
           textContent,
@@ -87,12 +87,12 @@ export function useViewModel(
               : activityData.youtubeVideoUrl,
         },
       });
-      localStorage.removeItem(activityData.id);
+      localStorage.removeItem(activityData._id);
     } catch (error) { }
   };
 
   return {
-    id: activityData.id,
+    _id: activityData._id,
     savedAt: activityData.savedAt,
     type,
     changeActivityType,

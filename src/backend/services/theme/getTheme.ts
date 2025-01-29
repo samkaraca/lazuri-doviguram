@@ -47,7 +47,7 @@ export const getTheme = async (themeSlug: string): Promise<ApiResponse<ITheme>> 
                             input: "$lessons",
                             as: "lesson",
                             in: {
-                                id: "$$lesson._id",
+                                _id: "$$lesson._id",
                                 title: "$$lesson.title",
                                 explanation: "$$lesson.explanation",
                                 themeId: "$$lesson.themeId",
@@ -69,11 +69,11 @@ export const getTheme = async (themeSlug: string): Promise<ApiResponse<ITheme>> 
             ...theme[0],
             _id: theme[0]._id.toString(),
             lessons: theme[0].lessons.map((lesson: any) => ({
-                id: lesson.id.toString(),
+                _id: lesson._id.toString(),
                 title: lesson.title,
                 explanation: lesson.explanation,
                 activities: lesson.activities.map((activity: any) => ({
-                    id: activity._id.toString(),
+                    _id: activity._id.toString(),
                     title: activity.title,
                     explanation: activity.explanation,
                     textContent: activity.textContent,

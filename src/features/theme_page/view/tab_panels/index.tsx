@@ -15,10 +15,10 @@ export function TabPanels() {
   return (
     <div className={styles["tab-panels"]}>
       <div>
-        {lessons.map(({ id, title, explanation, activities }, i) => {
+        {lessons.map(({ _id, title, explanation, activities }, i) => {
           return (
             activeLesson === i && (
-              <div key={id} className={styles["panel"]}>
+              <div key={_id} className={styles["panel"]}>
                 <h2>{title}</h2>
                 <p style={{ maxWidth: "45em" }}>{explanation}</p>
                 <ActivitiesContainer
@@ -45,7 +45,6 @@ export function ActivitiesContainer({
   localExerciseDatas: ViewModel["localExerciseDatas"];
 }) {
 
-
   return (
     <section className={styles["activities"]} aria-label="aktiviteler">
       {activities.length === 0 ? (
@@ -55,11 +54,11 @@ export function ActivitiesContainer({
         </div>
       ) : (
         <ol className={styles["activity-list"]}>
-          {activities.map(({ id, title }, i) => {
-            const localExerciseData = localExerciseDatas.get(id);
+          {activities.map(({ _id, title }, i) => {
+            const localExerciseData = localExerciseDatas.get(_id);
 
             return (
-              <li key={id} className={styles["activity-card"]}>
+              <li key={_id} className={styles["activity-card"]}>
                 <div className={styles["left-group"]}>
                   {localExerciseData ? (
                     <TaskAltRounded />
@@ -74,7 +73,7 @@ export function ActivitiesContainer({
                   </span>
                   <button
                     className={`simple lg ${styles["start"]}`}
-                    onClick={() => openActivity(id, activities[i])}
+                    onClick={() => openActivity(_id, activities[i])}
                   >
                     Başla
                   </button>

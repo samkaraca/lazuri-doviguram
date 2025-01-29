@@ -91,7 +91,7 @@ export function LessonSideBar({
     await adminUpdateLesson({
       themeSlug: dbTheme.slug,
       lesson: {
-        id: activeLesson.id,
+        _id: activeLesson._id,
         title: clientLesson.title,
         explanation: clientLesson.explanation,
       }
@@ -104,7 +104,7 @@ export function LessonSideBar({
     if (!activeLesson || !dbTheme) return;
 
     const newActivity: IActivity = {
-      id: "",
+      _id: "",
       title: "Yeni aktivite",
       explanation: "Aktivite açıklaması...",
       textContent: "",
@@ -122,7 +122,7 @@ export function LessonSideBar({
 
     await adminCreateActivity({
       themeSlug: dbTheme.slug,
-      lessonId: activeLesson.id,
+      lessonId: activeLesson._id,
       activity: newActivity
     });
 
@@ -134,7 +134,7 @@ export function LessonSideBar({
 
     await adminDeleteActivity({
       themeSlug: dbTheme.slug,
-      lessonId: activeLesson.id,
+      lessonId: activeLesson._id,
       activityId
     });
 
@@ -157,7 +157,7 @@ export function LessonSideBar({
 
     await adminDeleteLesson({
       themeSlug: dbTheme.slug,
-      lessonId: activeLesson.id
+      lessonId: activeLesson._id
     });
 
     await queryClient.invalidateQueries({ queryKey: [`themes/${dbTheme.slug}`] });
@@ -222,21 +222,21 @@ export function LessonSideBar({
                 <h3>Aktiviteler</h3>
               </header>
               <ol className={`simple`}>
-                {activeLesson.activities.map(({ id, title }) => (
-                  <li key={id}>
+                {activeLesson.activities.map(({ _id, title }) => (
+                  <li key={_id}>
                     <div>
                       <p>{title}</p>
                       <div className={styles["group"]}>
                         <button
                           onClick={() =>
-                            push(`${pathname}/${activeLesson.id}/${id}`)
+                            push(`${pathname}/${activeLesson._id}/${_id}`)
                           }
                           className="simple"
                         >
                           <DesignServices />
                         </button>
                         <button
-                          onClick={() => deleteActivity(id)}
+                          onClick={() => deleteActivity(_id)}
                           className="simple error"
                         >
                           <DeleteForever />

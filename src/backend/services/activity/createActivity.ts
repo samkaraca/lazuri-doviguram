@@ -13,8 +13,6 @@ export const createActivity = async ({
 }): Promise<ApiResponse> => {
     try {
         await dbConnect();
-        const activityToCreate = { ...activity } as any;
-        delete activityToCreate.id;
         const mongooseActivity = new Activity({
             _id: new Types.ObjectId(),
             lessonId: new Types.ObjectId(lessonId),
@@ -29,14 +27,7 @@ export const createActivity = async ({
             type: activity.type,
         });
         await mongooseActivity.save();
-        console.log("mongooseActivity", mongooseActivity);
 
-        // await this.activityRepo.createActivity(
-        //   themeId,
-        //   lessonId,
-        //   activity.id,
-        //   activityToCreate
-        // );
         return {
             status: "success",
             message: "Aktivite başarıyla oluşturuldu.",

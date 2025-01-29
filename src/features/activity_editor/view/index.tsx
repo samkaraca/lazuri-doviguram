@@ -6,7 +6,7 @@ import { Activity } from "@/features/activity";
 
 export default function View() {
   const {
-    id,
+    _id,
     audio,
     image,
     youtubeVideoUrl,
@@ -37,9 +37,9 @@ export default function View() {
         <EditorForm />
         <div className={styles["simple-container"]}>
           <Activity
-            closeActivity={() => {}}
+            closeActivity={() => { }}
             activityData={{
-              id,
+              _id,
               type,
               title,
               explanation,

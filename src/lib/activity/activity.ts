@@ -1,7 +1,7 @@
 import IExercise from "../exercise/exercise";
 
 export default interface IActivity {
-  id: string;
+  _id: string;
   title: string;
   explanation: string;
   textContent: string | null;
@@ -10,10 +10,10 @@ export default interface IActivity {
   audio: string | null;
   savedAt: number;
   type:
-    | "true-false"
-    | "type-in-blanks"
-    | "drag-into-blanks"
-    | "multiple-choice"
-    | "pair-texts-with-images";
+  | "true-false"
+  | "type-in-blanks"
+  | "drag-into-blanks"
+  | "multiple-choice"
+  | "pair-texts-with-images";
   exercise: IExercise;
 }
