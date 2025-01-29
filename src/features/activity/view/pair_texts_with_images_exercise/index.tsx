@@ -39,7 +39,7 @@ export function PairTextsWithImagesExercise() {
               <div className={`simple-card`} key={id}>
                 <img
                   alt="soru fotoğrafı"
-                  src={`${process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_IMAGE_BASE_URL}/${questionText}`}
+                  src={`${questionText}`}
                 />
                 {
                   <Droppable

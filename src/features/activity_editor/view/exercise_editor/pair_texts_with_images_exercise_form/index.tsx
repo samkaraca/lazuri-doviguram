@@ -1,23 +1,35 @@
 import styles from "./styles.module.scss";
 import {
   Add,
-  AddPhotoAlternate,
   Clear,
-  PhotoLibraryOutlined,
 } from "@mui/icons-material";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { nanoid } from "nanoid";
 import { Fab } from "@mui/material";
-import { AltEditDialog } from "@/features/edit_dialog/index.alt";
+import { Button } from "@/components/ui/button";
 import useViewModelContext from "@/features/activity_editor/view_model";
 import { Testable } from "@/lib/testable";
 import * as AdminBEServices from "@/lib/exercise/qa_exercise/admin_qae_services";
 import IQAExercise from "@/lib/exercise/qa_exercise/qa_exercise";
+import { useUploadImage } from "@/api/useUploadImage";
+import { Loader2Icon, UploadCloudIcon, Trash2Icon } from "lucide-react";
 
 export function PairTextsWithImagesExerciseForm() {
   const viewModel = useViewModelContext()!;
   const { setExercise } = viewModel;
   const exercise = viewModel.exercise as IQAExercise;
+
+  const uploadImageMutation = useUploadImage();
+
+  const handleImageUpload = (file: File, setQuestion: (newQuestion: string) => void) => {
+    uploadImageMutation.mutate(file, {
+      onSuccess: (data) => {
+        if (data.status === 'success') {
+          setQuestion(data.data.url);
+        }
+      },
+    });
+  };
 
   return (
     <div>
@@ -97,22 +109,51 @@ function TextDroppableImageCard({
     status: "idle",
   });
 
+  const uploadImageMutation = useUploadImage();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleImageUpload = (file: File, setQuestion: (newQuestion: string) => void) => {
+    uploadImageMutation.mutate(file, {
+      onSuccess: (data) => {
+        if (data.status === 'success') {
+          setQuestion(data.data.url);
+        }
+      },
+    });
+  };
+
   return (
     <>
       <div className={`simple-card ${styles["question-card"]}`}>
         {question && (
           <img
             alt="soru fotoğrafı"
-            src={`${process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_IMAGE_BASE_URL}/${question}`}
+            src={question}
+            className="rounded-md w-full object-contain bg-gray-200"
           />
         )}
         {!question && (
-          <button
-            className={`add ${styles["add-photo"]}`}
-            onClick={() => setIsOpen(true)}
-          >
-            <AddPhotoAlternate />
-          </button>
+          <>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  handleImageUpload(file, setQuestion);
+                }
+              }}
+            />
+            <button
+              className="rounded-md flex justify-center items-center gap-2 h-[156px] w-full bg-gray-200 hover:bg-gray-300"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadImageMutation.status === 'pending'}
+            >
+              {uploadImageMutation.status === 'pending' ? <div className="flex items-center gap-2"><Loader2Icon className="animate-spin" /> Fotoğraf yükleniyor...</div> : <div className="flex items-center gap-2"><UploadCloudIcon /> Fotoğraf Yükle</div>}
+            </button>
+          </>
         )}
         <input
           className={`simple`}
@@ -122,33 +163,18 @@ function TextDroppableImageCard({
           onChange={(e) => setAnswer(e.target.value)}
         />
         <div
-          className={`${styles["action-buttons"]} ${
-            styles[question ? "double" : "single"]
-          }`}
+          className={`${styles["action-buttons"]} ${styles[question ? "double" : "single"]}`}
         >
-          <button className="simple-svg remove" onClick={deleteItem}>
+          <Button size="icon" variant="destructive" onClick={deleteItem}>
             <Clear />
-          </button>
+          </Button>
           {question && (
-            <button className="simple-svg" onClick={() => setIsOpen(true)}>
-              <PhotoLibraryOutlined />
-            </button>
+            <Button size="icon" variant="secondary" onClick={() => setQuestion("")}>
+              <Trash2Icon />
+            </Button>
           )}
         </div>
       </div>
-      <AltEditDialog
-        type="image"
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        title="Soru resmi"
-        placeholder="resim ismi..."
-        content={content}
-        setContent={setContent}
-        saveContent={() => {
-          setIsOpen(false);
-          setQuestion(content.value);
-        }}
-      />
     </>
   );
 }

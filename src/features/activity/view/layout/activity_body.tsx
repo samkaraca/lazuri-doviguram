@@ -34,7 +34,7 @@ export function ActivityBody() {
           <img
             className={styles["image"]}
             alt="Aktivite ek fotoğraf"
-            src={`${process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_IMAGE_BASE_URL}/${image}`}
+            src={`${image}`}
           />
         )}
         {textContent && (
@@ -47,7 +47,7 @@ export function ActivityBody() {
           <audio
             className={styles["audio"]}
             controls
-            src={`${process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_AUDIO_BASE_URL}/${audio}`}
+            src={`${audio}`}
           />
         )}
       </div>
