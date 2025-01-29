@@ -1,9 +1,7 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Input } from "@/components/ui/input";
 import styles from "./styles.module.scss";
 import useViewModelContext from "../view_model";
-import { MediaTester } from "@/components/media_tester";
-import YouTube from "react-youtube";
-import { NextImageContainer } from "@/components/next_image_container";
 import getYouTubeID from "get-youtube-id";
 import ExerciseEditor from "./exercise_editor";
 import IActivity from "@/lib/activity/activity";
@@ -11,8 +9,11 @@ import { useUploadSound } from "@/api/useUploadSound";
 import { useRef } from "react";
 import { useUploadImage } from "@/api/useUploadImage";
 import { Button } from "@/components/ui/button";
-import { Loader2Icon, Trash2Icon, UploadCloudIcon } from "lucide-react";
+import { Loader2Icon, SquarePlayIcon, Trash2Icon, UploadCloudIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import { YouTubeEmbed } from "@next/third-parties/google";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 const activityTypeMap = {
   "true-false": "Doğru yanlış",
@@ -43,7 +44,6 @@ export default function EditorForm() {
   const uploadSoundMutation = useUploadSound();
   const uploadImageMutation = useUploadImage();
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const audioInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -93,7 +93,7 @@ export default function EditorForm() {
 
   return (
     <div
-      className={`${styles["simple-container"]} ${styles["editing-form-container"]}`}
+      className={`w-[46%] max-w-[60em] min-w-[22em] bg-white px-4 py-6 pb-10 flex flex-col divide-y space-y-4 divide-gray-200`}
     >
       <FormControl>
         <InputLabel id="activity-type-select-label">Aktivite türü</InputLabel>
@@ -114,59 +114,37 @@ export default function EditorForm() {
           })}
         </Select>
       </FormControl>
-      <div className="input-container" aria-label="başlık">
-        <label htmlFor="editor-form-activity-title">Başlık</label>
-        <input
-          className="simple"
+      <div className="pt-4 flex flex-col gap-2" aria-label="başlık">
+        <Label htmlFor="editor-form-activity-title">Başlık</Label>
+        <Input
           type="text"
           id="editor-form-activity-title"
           value={title}
+          className="w-full !text-lg h-10"
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
-      <div className="input-container" aria-label="açıklama">
-        <label htmlFor="editor-form-activity-explanation">Açıklama</label>
-        <input
-          className="simple"
+      <div className="pt-4 flex flex-col gap-2" aria-label="açıklama">
+        <Label htmlFor="editor-form-activity-explanation">Açıklama</Label>
+        <Input
           type="text"
           id="editor-form-activity-explanation"
           value={explanation}
+          className="w-full !text-lg h-10"
           onChange={(e) => setExplanation(e.target.value)}
         />
       </div>
-      <section aria-label="youtube video linki">
-        {(youtubeVideoUrl.status === "loading" ||
-          youtubeVideoUrl.status === "success") && (
-            <YouTube
-              style={{
-                visibility: "hidden",
-                height: 0,
-              }}
-              videoId={
-                getYouTubeID(youtubeVideoUrl.value) ??
-                (() => {
-                  setYoutubeVideoUrl((prev) => ({ ...prev, status: "error" }));
-                  return undefined;
-                })()
-              }
-              onError={() =>
-                setYoutubeVideoUrl((prev) => ({ ...prev, status: "error" }))
-              }
-              onReady={(r) =>
-                r.target.videoTitle
-                  ? setYoutubeVideoUrl((prev) => ({ ...prev, status: "success" }))
-                  : setYoutubeVideoUrl((prev) => ({ ...prev, status: "error" }))
-              }
-            />
-          )}
-        <MediaTester
-          label="Youtube Video URL"
-          placeholder="https://youtu.be/5UdYesdXFco"
-          media={youtubeVideoUrl}
-          setMedia={setYoutubeVideoUrl}
-        />
+      <section className="pt-4 flex flex-col gap-1">
+        <Label htmlFor="editor-form-activity-youtube">Youtube video</Label>
+        <div className="border border-2 border-gray-200 rounded-md overflow-hidden">
+          {youtubeVideoUrl ? <YouTubeEmbed
+            videoid={getYouTubeID(youtubeVideoUrl) ?? ""}
+          /> : <div className="flex items-center gap-2 w-full justify-center aspect-video !bg-gray-200"><SquarePlayIcon />Youtube videosu ekleyin</div>}
+        </div>
+        <Input placeholder="Youtube video linki..." className="mt-2" value={youtubeVideoUrl} onChange={(e) => setYoutubeVideoUrl(e.target.value)} />
       </section>
-      <section aria-label="fotoğraf ismi">
+      <section className="pt-4 flex flex-col gap-2" aria-label="fotoğraf ismi">
+        <Label htmlFor="editor-form-activity-image">Fotoğraf</Label>
         <input
           type="file"
           accept="image/*"
@@ -197,8 +175,8 @@ export default function EditorForm() {
           </div>
         )}
       </section>
-      <div className="input-container" aria-label="başlık">
-        <label htmlFor="editor-form-activity-content">İçerik</label>
+      <div className="pt-4 flex flex-col gap-2" aria-label="başlık">
+        <Label htmlFor="editor-form-activity-content">İçerik</Label>
         <Textarea
           className="simple"
           id="editor-form-activity-content"
@@ -207,7 +185,8 @@ export default function EditorForm() {
           onChange={(e) => setTextContent(e.target.value)}
         />
       </div>
-      <section aria-label="ses dosyası ismi">
+      <section className="pt-4 flex flex-col gap-2" aria-label="ses dosyası ismi">
+        <Label htmlFor="editor-form-activity-audio">Ses dosyası</Label>
         <input
           type="file"
           accept="audio/*"
@@ -230,19 +209,20 @@ export default function EditorForm() {
           </button>
         )}
         {audio && (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div className="flex items-center">
             <audio
               src={audio}
               className="flex-1"
               onError={() => setAudio("")}
               controls
             />
-            <button onClick={handleRemoveAudio} style={{ marginLeft: '10px' }}>
+            <button onClick={handleRemoveAudio} className="ml-2">
               Sesi Kaldır
             </button>
           </div>
         )}
       </section>
+      <Separator />
       <ExerciseEditor />
     </div>
   );

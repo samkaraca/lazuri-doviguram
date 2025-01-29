@@ -19,17 +19,7 @@ export function useViewModel(
   );
   const [youtubeVideoUrl, setYoutubeVideoUrl] = useState<
     IViewModel["youtubeVideoUrl"]
-  >(
-    activityData.youtubeVideoUrl
-      ? {
-        value: activityData.youtubeVideoUrl,
-        status: "success",
-      }
-      : {
-        value: "",
-        status: "idle",
-      }
-  );
+  >(activityData.youtubeVideoUrl || "");
   const [image, setImage] = useState<string>(activityData.image || "");
   const [audio, setAudio] = useState<string>(activityData.audio || "");
   const [exercise, setExercise] = useState<IExercise>(activityData.exercise);
@@ -63,10 +53,7 @@ export function useViewModel(
           audio,
           exercise,
           image,
-          youtubeVideoUrl:
-            youtubeVideoUrl.status === "success"
-              ? youtubeVideoUrl.value
-              : activityData.youtubeVideoUrl,
+          youtubeVideoUrl
         },
       });
       toast.success("Etkinlik başarıyla kaydedildi!");

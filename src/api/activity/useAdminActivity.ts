@@ -9,5 +9,6 @@ export const useAdminActivity = ({ themeId, lessonId, activityId }: { themeId: s
             const { data } = await apiAdmin.get(`/themes/${themeId}/lessons/${lessonId}/activities/${activityId}`);
             return data as ApiResponse;
         },
+        enabled: !!themeId && !!lessonId && !!activityId,
     });
 }

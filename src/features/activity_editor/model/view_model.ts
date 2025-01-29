@@ -20,7 +20,7 @@ export interface IViewModel {
   textContent: string;
   audio: string;
   image: string;
-  youtubeVideoUrl: OptionalYoutubeVideoUrl;
+  youtubeVideoUrl: string;
   setTitle: Dispatch<SetStateAction<IViewModel["title"]>>;
   changeActivityType: (newActivityType: IViewModel["type"]) => void;
   setExplanation: Dispatch<SetStateAction<IViewModel["explanation"]>>;

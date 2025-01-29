@@ -47,10 +47,7 @@ export default function View() {
               savedAt,
               audio,
               image,
-              youtubeVideoUrl:
-                youtubeVideoUrl.status === "success"
-                  ? youtubeVideoUrl.value
-                  : null,
+              youtubeVideoUrl,
               exercise,
             }}
           />
